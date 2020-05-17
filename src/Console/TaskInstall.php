@@ -53,7 +53,7 @@ class TaskInstall extends Command
     {
         //避免重复添加
         $appConfigPHPStr = file_get_contents(config_path('app.php'));
-        if (Str::contains($appConfigPHPStr, 'haxibiao\task\TaskServiceProvider::class')) {
+        if (Str::contains($appConfigPHPStr, 'TaskServiceProvider::class')) {
             return;
         }
 
@@ -61,7 +61,7 @@ class TaskInstall extends Command
 
         file_put_contents(config_path('app.php'), str_replace(
             "{$namespace}\\Providers\EventServiceProvider::class," . PHP_EOL,
-            "{$namespace}\\Providers\EventServiceProvider::class," . PHP_EOL . "        haxibiao\task\TaskServiceProvider::class," . PHP_EOL,
+            "{$namespace}\\Providers\EventServiceProvider::class," . PHP_EOL . "        haxibiao\\task\\TaskServiceProvider::class," . PHP_EOL,
             file_get_contents(config_path('app.php'))
         ));
     }
