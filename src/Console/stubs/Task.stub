@@ -1,0 +1,10 @@
+<?php
+
+namespace App;
+
+use haxibiao\task\Task as HXBTask;
+
+class Task extends HXBTask
+{
+
+}

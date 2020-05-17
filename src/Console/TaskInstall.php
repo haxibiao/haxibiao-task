@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 
 class TaskInstall extends Command
 {
+
     /**
      * The name and signature of the console command.
      *
@@ -47,6 +48,17 @@ class TaskInstall extends Command
 
         $this->comment("注册 TaskServiceProvider ...");
         $this->registerServiceProvider();
+
+        copy($this->resolveStubPath('/stubs/Task.stub'), app_path('Task.php'));
+        copy($this->resolveStubPath('/stubs/Nova/Task.stub'), app_path('Nova/Task.php'));
+        copy($this->resolveStubPath('/stubs/Nova/Filters/Task/TaskType.stub'), app_path('Nova/Filters/Task/TaskType.php'));
+        copy($this->resolveStubPath('/stubs/Nova/Filters/Task/TaskStatus.stub'), app_path('Nova/Filters/Task/TaskStatus.php'));
+
+    }
+
+    protected function resolveStubPath($stub)
+    {
+        return __DIR__ . $stub;
     }
 
     protected function registerServiceProvider()
@@ -57,7 +69,7 @@ class TaskInstall extends Command
             return;
         }
 
-        $namespace = Str::replaceLast('\\', '', $this->laravel->getNamespace());
+        $namespace = "App";
 
         file_put_contents(config_path('app.php'), str_replace(
             "{$namespace}\\Providers\EventServiceProvider::class," . PHP_EOL,
