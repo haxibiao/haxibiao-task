@@ -34,7 +34,7 @@ class TaskPublish extends Command
         ]);
 
         $this->call('vendor:publish', [
-            '--tag'   => 'task-migrations',
+            '--tag'   => 'task-db',
             '--force' => $this->option('force'),
         ]);
 

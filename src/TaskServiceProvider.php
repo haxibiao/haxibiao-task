@@ -38,8 +38,8 @@ class TaskServiceProvider extends ServiceProvider
             ], 'task-config');
 
             $this->publishes([
-                __DIR__ . '/../database/migrations' => database_path('migrations'),
-            ], 'task-migrations');
+                __DIR__ . '/../database' => database_path('./'),
+            ], 'task-db');
 
             $this->publishes([
                 __DIR__ . '/../graphql/task' => base_path('graphql/task'),
