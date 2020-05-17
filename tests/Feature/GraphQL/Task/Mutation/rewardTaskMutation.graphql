@@ -1,0 +1,19 @@
+# 任务中心领取奖励接口
+mutation rewardTaskMutation($id: ID!) {
+  rewardTask(id: $id) {
+    id
+
+    #更新任务状态为 已奖励
+    task_status
+
+    task_class
+    submit_name
+
+    progress_details
+    task_progress
+    reward_info {
+      gold
+      contribute
+    }
+  }
+}

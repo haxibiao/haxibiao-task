@@ -1,0 +1,34 @@
+{
+  "name": "haxibiao/task",
+  "description": "哈希表任务系统",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "ivan",
+      "email": "ivan@haxibiao.com"
+    }
+  ],
+  "require": {},
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-0": {
+      "haxibiao\\task\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "classmap": [
+      "tests/"
+    ]
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "haxibiao\\task\\TaskServiceProvider"
+      ],
+      "aliases": {
+        "Task": "haxibiao\\task\\Task"
+      }
+    }
+  }
+}
