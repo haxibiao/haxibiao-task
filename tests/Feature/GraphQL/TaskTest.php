@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Invitation;
+// use App\Invitation;
 use App\User;
 use haxibiao\task\Assignment;
 use haxibiao\task\Task;
@@ -16,7 +16,7 @@ class TaskTest extends TestCase
 
     protected $likes;
 
-    protected $invitations;
+    // protected $invitations;
 
     protected function setUp(): void
     {
@@ -29,9 +29,9 @@ class TaskTest extends TestCase
 
         // $this->likes = factory(Like::class, 1000)->create();
 
-        $this->invitations = factory(Invitation::class, 5)->create(
-            ['invited_in' => now()]
-        );
+        // $this->invitations = factory(Invitation::class, 5)->create(
+        //     ['invited_in' => now()]
+        // );
     }
 
     /* --------------------------------------------------------------------- */
@@ -199,7 +199,7 @@ class TaskTest extends TestCase
 
     protected function tearDown(): void
     {
-        $this->user->invitations()->forceDelete();
+        // $this->user->invitations()->forceDelete();
         parent::tearDown();
     }
 }
