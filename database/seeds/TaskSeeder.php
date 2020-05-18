@@ -98,7 +98,7 @@ class TaskSeeder extends Seeder
         Task::firstOrCreate([
             'name'           => '直播任务',
             'details'        => '直播观看人数10+，可领取奖励',
-            'type'           => Task::CUSTOM_TASK,
+            'type'           => Task::DAILY_TASK,
             'status'         => Task::ENABLE,
             'reward'         => array("gold" => "200"),
             'review_flow_id' => 9,
@@ -107,7 +107,7 @@ class TaskSeeder extends Seeder
         Task::firstOrCreate([
             'name'           => '作品获赞',
             'details'        => '作品获赞1000+，可领取奖励',
-            'type'           => Task::CUSTOM_TASK,
+            'type'           => Task::DAILY_TASK,
             'status'         => Task::ENABLE,
             'reward'         => array("gold" => "600"),
             'review_flow_id' => 10,

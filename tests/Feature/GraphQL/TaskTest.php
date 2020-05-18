@@ -160,13 +160,13 @@ class TaskTest extends TestCase
         $tasks = $response->original['data']['tasks'];
         $response->assertJsonFragment(['name' => "直播任务"]);
 
-        //校验存在已指派的邀请任务
-        $response->assertJsonFragment(['name' => "邀请任务"]);
         //奖励任务
         $variables = [
             'type' => 'CUSTOM_TASK',
         ];
         $response = $this->startGraphQL($query, $variables, $headers);
+        //校验存在已指派的邀请任务
+        $response->assertJsonFragment(['name' => "邀请任务"]);
 
         //所有，包含喝水睡觉任务....
         $variables = [
