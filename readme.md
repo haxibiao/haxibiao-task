@@ -16,7 +16,7 @@
 在`repositories`中添加 vcs 类型远程仓库指向 
 `http://code.haxibiao.cn/packages/haxibiao-task` 
 1. 执行`composer require haxibiao/task`
-2. 执行`php artisan task:install`
+2. 执行`php artisan task:install && composer dump`
 3. 执行`php artisan migrate`
 4. 执行`php artisan db:seed --class=TaskSeeder`
 5. 执行`php artisan db:seed --class=ReviewFlowsSeeder`

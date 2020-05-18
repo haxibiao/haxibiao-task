@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Invitation;
 use App\User;
-use App\UserLive;
 use haxibiao\task\Assignment;
 use haxibiao\task\Task;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -14,8 +13,6 @@ class TaskTest extends TestCase
 {
     use DatabaseTransactions;
     protected $user;
-
-    protected $lives;
 
     protected $likes;
 
@@ -28,10 +25,7 @@ class TaskTest extends TestCase
         //最新注册的10个用户里随机一个，方便发现新用户的体验问题...
         // $this->user = User::latest('id')->take(100)->get()->random();
 
-        $this->user  = User::find(2);
-        $this->lives = factory(UserLive::class)->create([
-            'count_users' => 10,
-        ]);
+        $this->user = User::find(2);
 
         // $this->likes = factory(Like::class, 1000)->create();
 
@@ -205,7 +199,6 @@ class TaskTest extends TestCase
 
     protected function tearDown(): void
     {
-        $this->user->lives()->forceDelete();
         $this->user->invitations()->forceDelete();
         parent::tearDown();
     }

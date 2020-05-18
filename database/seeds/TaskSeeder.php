@@ -1,6 +1,6 @@
 <?php
 
-use App\Task;
+use haxibiao\task\Task;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
