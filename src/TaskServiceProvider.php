@@ -42,7 +42,7 @@ class TaskServiceProvider extends ServiceProvider
             ], 'task-db');
 
             $this->publishes([
-                __DIR__ . '/../graphql/task' => base_path('graphql/task'),
+                __DIR__ . '/../graphql' => base_path('graphql'),
             ], 'task-graphql');
 
             $this->publishes([

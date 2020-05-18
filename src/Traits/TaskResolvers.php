@@ -9,7 +9,6 @@ use Carbon\Carbon;
 use GraphQL\Type\Definition\ResolveInfo;
 use haxibiao\task\Assignment;
 use haxibiao\task\Task;
-use haxibiao\task\UserTask;
 use Illuminate\Support\Arr;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
@@ -259,21 +258,7 @@ trait TaskResolvers
     //观看新手教程或采集视频教程任务状态变更
     public static function newUserReword($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $user = checkUser();
-        $type = $args['type'];
-        if ($type === 'newUser') {
-            $task             = Task::where("name", "观看新手视频教程")->first();
-            $userTask         = UserTask::where("task_id", $task->id)->where("user_id", $user->id)->first();
-            $userTask->status = UserTask::TASK_REACH;
-            $userTask->save();
-            return 1;
-        } else if ($type === 'douyin') {
-            $task             = Task::where("name", "观看采集视频教程")->first();
-            $userTask         = UserTask::where("task_id", $task->id)->where("user_id", $user->id)->first();
-            $userTask->status = UserTask::TASK_REACH;
-            $userTask->save();
-            return 1;
-        }
-        return -1;
+        //TODO: 新人教程任务，抖音采集学习任务
+        return 1;
     }
 }

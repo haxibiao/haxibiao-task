@@ -50,7 +50,10 @@ class TaskInstall extends Command
         $this->registerServiceProvider();
 
         copy($this->resolveStubPath('/stubs/Task.stub'), app_path('Task.php'));
+        copy($this->resolveStubPath('/stubs/Assignment.stub'), app_path('Assignment.php'));
+
         copy($this->resolveStubPath('/stubs/Nova/Task.stub'), app_path('Nova/Task.php'));
+
         copy($this->resolveStubPath('/stubs/Nova/Filters/Task/TaskType.stub'), app_path('Nova/Filters/Task/TaskType.php'));
         copy($this->resolveStubPath('/stubs/Nova/Filters/Task/TaskStatus.stub'), app_path('Nova/Filters/Task/TaskStatus.php'));
 

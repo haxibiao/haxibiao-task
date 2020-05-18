@@ -17,10 +17,11 @@
 `http://code.haxibiao.cn/packages/haxibiao-task` 
 1. 执行`composer require haxibiao/task`
 2. 执行`php artisan task:install && composer dump`
-3. 执行`php artisan migrate`
-4. 执行`php artisan db:seed --class=TaskSeeder`
-5. 执行`php artisan db:seed --class=ReviewFlowsSeeder`
-6. 完成
+3. 给app/User.php 添加 use PlayWithTasks
+4. 执行`php artisan migrate`
+5. 执行`php artisan db:seed --class=TaskSeeder`
+6. 执行`php artisan db:seed --class=ReviewFlowsSeeder`
+7. 完成
 
 ### 如何完成更新？
 > 远程仓库的composer package发生更新时如何进行更新操作呢？
