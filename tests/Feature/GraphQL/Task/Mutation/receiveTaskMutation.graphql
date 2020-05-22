@@ -1,4 +1,4 @@
-# 任务中心领取任务接口
+# 任务中心领取任务接口 - 不需要手动领取了
 mutation receiveTaskMutation($id: ID!) {
   receiveTask(id: $id) {
     id
