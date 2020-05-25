@@ -3,6 +3,7 @@
 namespace haxibiao\task\Traits;
 
 use App\Exceptions\GQLException;
+use App\Exceptions\UserException;
 use App\User;
 use Carbon\Carbon;
 use haxibiao\task\Assignment;
@@ -10,6 +11,7 @@ use haxibiao\task\Jobs\DelayRewaredTask;
 use haxibiao\task\Task;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 trait TaskRepo
 {
@@ -263,5 +265,57 @@ trait TaskRepo
             }
         }
         return $results;
+    }
+
+    public static function completeTask($user, $task_id)
+    {
+        // $user
+        $task = Task::find($task_id);
+        throw_if(is_null($task) || !$task->isCustomTask(), UserException::class, '任务完成失败!');
+        throw_if(!Str::contains($task->name, '试玩'), UserException::class, '该任务不是有效的试玩任务!');
+
+        $pivot = \App\Assignment::where([
+            'user_id' => $user->id,
+            'task_id' => $task->id,
+        ])->first();
+
+        throw_if(is_null($pivot), UserException::class, '请先领取任务!');
+        throw_if($pivot->status > Assignment::TASK_DONE, UserException::class, '完成失败,请勿重复完成!');
+
+        $pivot->fill(['status' => Assignment::TASK_REACH])->save();
+
+        return $task;
+    }
+
+    public static function replyTask(User $user, $task_id, $content)
+    {
+        $task = $user->tasks()->find($task_id);
+        //非自定义任务,不需要提交任务回复（应用商店好评需要）
+        if (empty($task) || !$task->isCustomTask()) {
+            if (is_prod_env()) {
+                throw new UserException('提交失败,请刷新后再试');
+            }
+        }
+
+        $content = json_encode($content, JSON_UNESCAPED_UNICODE);
+        if (!is_json($content)) {
+            throw new UserException('提交有误,请稍后再试');
+        }
+
+        $userTask = $task->pivot;
+        //防止重复提交,重复奖励
+        if ($userTask->status == Assignment::TASK_REVIEW) {
+            // throw new UserException('提交失败,请勿重复提交！');
+            return 1;
+        }
+
+        $userTask->content = $content;
+        $userTask->status  = Assignment::TASK_REVIEW;
+        $userTask->save();
+
+        //30秒后自动更改状态发放奖励
+        dispatch(new DelayRewaredTask($userTask->id))->delay(now()->addSecond(30))->onQueue('reward');
+
+        return 1;
     }
 }

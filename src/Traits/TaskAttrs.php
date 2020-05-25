@@ -93,7 +93,47 @@ trait TaskAttrs
     }
 
     /* --------------------------------------------------------------------- */
-    /* ----------- 下列函数可以随着GQL中TaskType的丢弃而移除 ---------------------- */
+    /* ------------------------- 答赚App独特的Attrs ------------------------- */
+    /* --------------------------------------------------------------------- */
+
+    /**
+     * @deprecated 3.x 后前端自己改json字段resolve
+     */
+    public function getRouterAttribute()
+    {
+        return Arr::get($this->resolve, 'router', '');
+    }
+
+    /**
+     * @deprecated 3.x 后前端自己改json字段resolve
+     */
+
+    public function getRouteAttribute()
+    {
+        $route = Arr::get($this->resolve, 'route');
+        return !empty($route) ? $route : $this->router;
+    }
+
+    /**
+     * @deprecated 3.x 后前端自己改json字段resolve
+     */
+
+    public function getPackageAttribute()
+    {
+        return Arr::get($this->resolve, 'package');
+    }
+
+    /**
+     * @deprecated 3.x 后前端自己改json字段resolve
+     */
+
+    public function getPostIdAttribute()
+    {
+        return Arr::get($this->resolve, 'post_id');
+    }
+
+    /* --------------------------------------------------------------------- */
+    /* ----------- 下列函数可以随着GQL中TaskType的丢弃而移除 ------------------- */
     /* --------------------------------------------------------------------- */
 
     /**

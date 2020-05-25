@@ -49,4 +49,17 @@ trait PlayWithTasks
         //目前只有一个发布类的任务
         return Task::whereName('视频发布满15个')->get();
     }
+
+    public function getAnswerTasksAttribute()
+    {
+        //答题类任务
+        return Task::where('name', 'like', '%每天答题%')->get();
+    }
+
+    public function getCategoryAnswerQuestionTasksAttribute()
+    {
+        //分类答题任务
+        return Task::whereName('新型肺炎防治答10题')->get();
+    }
+
 }

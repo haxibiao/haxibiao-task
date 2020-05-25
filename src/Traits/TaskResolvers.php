@@ -261,4 +261,25 @@ trait TaskResolvers
         //TODO: 新人教程任务，抖音采集学习任务
         return 1;
     }
+
+    //答复任务
+    public function replyTaskResolver($root, array $args, $context, $info)
+    {
+        $user    = getUser();
+        $task_id = Arr::get($args, 'task_id', null);
+        $content = Arr::get($args, 'content', null);
+
+        return Task::replyTask($user, $task_id, $content);
+    }
+
+    //完成任务
+    public function completeTaskResolver($root, array $args, $context, $info)
+    {
+        $user    = getUser();
+        $task_id = Arr::get($args, 'task_id', null);
+
+        return Task::completeTask($user, $task_id);
+    }
+
+
 }
