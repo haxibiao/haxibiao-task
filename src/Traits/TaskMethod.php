@@ -3,7 +3,10 @@
 namespace haxibiao\task\Traits;
 
 use App\Category;
+use App\CategoryUser;
 use App\Contribute;
+use App\User;
+use App\Withdraw;
 use Illuminate\Support\Str;
 
 trait TaskMethod
@@ -92,6 +95,15 @@ trait TaskMethod
         return [
             'status'        => !Str::contains($user->avatar, 'storage/avatar/avatar'),
             'current_count' => 0,
+        ];
+    }
+
+    //检测用户是否更换过昵称
+    public function checkUserIsUpdateName($user, $task, $assignment)
+    {
+        return [
+            'status' => $user->name != User::DEFAULT_USER_NAME,
+            'current_count' => 0
         ];
     }
 
@@ -195,92 +207,23 @@ trait TaskMethod
     }
 
 
-    //检测用户是否更换过头像
-    public function checkUserIsUpdateAvatar($user, $task, $assignment)
-    {
-        return [
-            'status'        => !empty($user->avatar) && !strstr($user->avatar, 'default'),
-            'current_count' => 0,
-        ];
-    }
 
-    //检测用户答题数200道
-    public function checkAnswerQuestionCount200($user, $task, $assignment)
-    {
-        return [
-            'status'        => $user->profile()->select('answers_count_today')->first()->answers_count_today >= 200,
-            'current_count' => 0
-        ];
-    }
 
-    //检测用户答题数100道
-    public function checkAnswerQuestionCount100($user, $task, $assignment)
-    {
-        return [
-            'status'        => $user->profile()->select('answers_count_today')->first()->answers_count_today >= 100,
-            'current_count' => 0
-        ];
-    }
-
-    //检测用户答题数50道
-    public function checkAnswerQuestionCount50($user, $task, $assignment)
-    {
-        return [
-            'status'        => $user->profile()->select('answers_count_today')->first()->answers_count_today >= 50,
-            'current_count' => 0
-        ];
-    }
-
-    //检测用户答题数1道
-    public function checkAnswerQuestionCount1($user, $task, $assignment)
-    {
-        return [
-            'status'        => $user->profile()->select('answers_count_today')->first()->answers_count_today >= 1,
-            'current_count' => 0
-        ];
-    }
-
-    //检测用户是否更换过昵称
-    public function checkUserIsUpdateName($user, $task, $assignment)
-    {
-        return [
-            'status'        => $user->name != '匿名答友',
-            'current_count' => 0
-        ];
-    }
-
-    //检查用户是否设置性别
-    public function checkUserIsUpdateGender($user, $task, $assignment)
-    {
-        return [
-            'status'        => $user->gender !== null,
-            'current_count' => 0
-        ];
-    }
-
-    //检查用户是否填写过年龄
-    public function checkAgeIsUpdate($user, $task, $assignment)
-    {
-        return [
-            'status'        => $user->profile()->select('age')->first()->age > 0,
-            'current_count' => 0
-        ];
-    }
 
     //检查新型肺炎防治答10题
     public function checkCategoryAnswerQuestion($user, $task, $assignment)
     {
-        $category = Category::find(5);
+        // 19 代表 Categories 表中的 ID，它属于'医学知识'
+        $category = Category::find(19);
         if (is_null($category)) {
             return [
                 'status'        => false,
                 'current_count' => 0
-                ];
+            ];
         }
-
         return [
             'status'        => CategoryUser::where('user_id', $user->id)
-                ->where('category_id', 5)
+                ->where('category_id', 19)
                 ->where('answers_count_today', '>=', 10)
                 ->where('last_answer_at', '>=', today())
                 ->exists(),
@@ -288,21 +231,74 @@ trait TaskMethod
         ];
     }
 
-    //检查今日比赛获胜5次
+
+
+    //今日比赛获胜次数
     public function checkTodayGameWinnersCount($user, $task, $assignment)
     {
+
+        $current_count =  $user->gameWinners()->today()->count();
+        $count = $task->max_count;
+        $status = $current_count >= $count;
         return [
-            'status'        => $user->gameWinners()->today()->count() >= 5,
-            'current_count' => 0
+            'status' => $status,
+            'current_count' => $current_count
         ];
     }
 
-    //检查观看学习视频50个
+
+    //今日浏览次数
     public function checkTodayVisitsCount($user, $task, $assignment)
     {
+        $count = $task->max_count;
+        $current_count = $user->visits()->ofType('videos')->today()->count();
+        $status = $current_count >= $count;
         return [
-            'status'        => $user->visits()->ofType('videos')->today()->count() >= 50,
-            'current_count' => 0
+            'status' => $status,
+            'current_count' => $current_count
+        ];
+    }
+
+
+    //检查新用户答题
+    public function checkNewUserAnswer($user, $task, $assignment)
+    {
+        $current_count  = $user->answers()->count();
+        $count = $task->max_count;
+        $status = $current_count >= $count;
+        return
+            [
+                'status'        => $status,
+                'current_count' => $current_count,
+            ];
+    }
+
+    //检查是否第一次提现
+    public function checkFirstWithdraw($user, $task, $assignment)
+    {
+        $status = !empty($user->withdraws()->whereStatus(Withdraw::SUCCESS_WITHDRAW)->first());
+        return
+            [
+                'status'        => $status,
+                'current_count' => 0,
+            ];
+    }
+
+
+
+    //检测用户答题数 //FIXME:感觉和新手答题数那个差不多
+    public function checkAnswerQuestionCount($user, $task, $assignment)
+    {
+        $status  = false;
+        $profile = $user->profile()->select('answers_count_today')->first();
+        $count = $task->max_count;
+        $current_count = $profile->answers_count_today;
+        if (!is_null($profile)) {
+            $status = $current_count >=  $count;
+        }
+        return [
+            'status' => $status,
+            'current_count' => $current_count
         ];
     }
 }
