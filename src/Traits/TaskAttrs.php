@@ -15,7 +15,7 @@ trait TaskAttrs
      */
     public function getTaskInfoAttribute()
     {
-        return $this->resolve;
+        return json_encode($this->resolve);
     }
 
     /**
@@ -28,6 +28,7 @@ trait TaskAttrs
         return [
             'gold'       => array_get($json, "gold"),
             'contribute' => array_get($json, "contribute"),
+            'ticket'     => array_get($json, "ticket"),
         ];
     }
 

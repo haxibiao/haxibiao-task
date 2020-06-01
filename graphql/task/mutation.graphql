@@ -20,16 +20,35 @@ extend type Mutation @middleware(checks: ["auth:api"]) {
   SleepReward(task_id: Int!): Assignment
     @field(resolver: "App\\Task@resolveSleepReward")
   """
-  任务中心领取任务
+  领取任务
   """
-  receiveTask(id: ID!): Task @field(resolver: "App\\Task@receiveTaskResolver")
+  receiveTask(task_id: Int!): Int @field(resolver: "App\\Task@resolveReceive")
   """
-  任务中心领取奖励
+  答复任务
   """
-  rewardTask(id: ID!): Task @field(resolver: "App\\Task@getReWardResolver")
+  replyTask(task_id: Int!): Int @field(resolver: "App\\Task@resolveReply")
   """
-  应用商店好评任务
+  完成任务
   """
-  highPraiseTask(id: ID, content: String): Boolean
-    @field(resolver: "App\\Task@highPraiseTaskResolver")
+  completeTask(task_id: Int!): Int @field(resolver: "App\\Task@resolveComplete")
+  """
+  领取奖励 - 答题里这样
+  """
+  taskReward(task_id: Int!): Task @field(resolver: "App\\Task@resolveReward")
+
+  """
+  兼容 有剑气 的 领取奖励 接口...
+  """
+  rewardTask(id: ID!): Task @field(resolver: "App\\Task@resolveReward")
+
+  """
+  应用商店好评任务回复
+  """
+  highPraiseTask(task_id: Int, content: String): Boolean
+    @field(resolver: "App\\Task@resolveHighPariseReply")
+}
+
+enum RewardType {
+  DOUYIN @enum(value: "douyin")
+  VIDEO @enum(value: "newUser")
 }

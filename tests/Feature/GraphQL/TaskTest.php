@@ -50,7 +50,7 @@ class TaskTest extends TestCase
             'Accept'        => 'application/json',
         ];
         $variables = [
-            'id' => '1',
+            'task_id' => '1',
         ];
         $this->startGraphQL($query, $variables, $headers);
     }
@@ -68,7 +68,7 @@ class TaskTest extends TestCase
         ];
 
         $variables = [
-            'id' => '1',
+            'task_id' => '1',
 
         ];
         $this->startGraphQL($query, $variables, $headers);
@@ -92,7 +92,7 @@ class TaskTest extends TestCase
 
         //提交好评
         $variables = [
-            'id'      => $task->id,
+            'task_id' => $task->id,
             'content' => '应用商店好评',
         ];
 

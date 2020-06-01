@@ -13,7 +13,7 @@ class CreateAssignmentsTable extends Migration
      */
     public function up()
     {
-        if (Schema::hasTable('tasks')) {
+        if (Schema::hasTable('assignments')) {
             return;
         }
 

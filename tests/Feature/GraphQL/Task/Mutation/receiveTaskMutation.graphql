@@ -1,18 +1,4 @@
 # 任务中心领取任务接口 - 不需要手动领取了
-mutation receiveTaskMutation($id: ID!) {
-  receiveTask(id: $id) {
-    id
-    name
-    details
-    type
-    #任务状态变为 - 已指派...不变...
-    task_status
-    submit_name
-    task_class
-    status
-    taskInfo {
-      method
-      router
-    }
-  }
+mutation receiveTaskMutation($task_id: Int!) {
+  receiveTask(task_id: $task_id)
 }

@@ -81,6 +81,10 @@ type RewardInfo {
   奖励贡献
   """
   contribute: Int
+  """
+  奖励精力
+  """
+  ticket: Int
 }
 
 type TaskInfo {
@@ -106,7 +110,7 @@ extend type Query @middleware(checks: ["auth:api"]) {
   """
   获取全部任务列表
   """
-  tasks(type: TaskType!): [Task!] @field(resolver: "App\\Task@resolveTasks")
+  tasks(type: TaskType): [Task!] @field(resolver: "App\\Task@resolveTasks")
 }
 
 enum TaskType {

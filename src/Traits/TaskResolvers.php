@@ -18,12 +18,12 @@ trait TaskResolvers
     /* ------------------------------- Query ----------------------------- */
     /* --------------------------------------------------------------------- */
     // 获取任务列表
-    public static function resolveTasks($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
+    public static function resolveTasks($root, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo = null)
     {
         $user = getUser();
 
         //单次查询一个分类的
-        $type = $args['type'];
+        $type = $args['type'] ?? 'All';
 
         $task_obj = $type == 'All' ? Task::all() : Task::whereType($type);
         $task_ids = $task_obj->pluck('id');
@@ -123,9 +123,9 @@ trait TaskResolvers
     /* ------------------------------- Mutation ----------------------------- */
     /* --------------------------------------------------------------------- */
 
-    public static function receiveTaskResolver($root, array $args, $context, $info)
+    public static function resolveReceive($root, array $args, $context = null, $info = null)
     {
-        $task = Task::where('id', $args['id'])
+        $task = Task::where('id', $args['task_id'])
             ->first();
         $user       = getUser();
         $assignment = Assignment::firstOrNew([
@@ -136,7 +136,7 @@ trait TaskResolvers
             $assignment->save();
             Action::createAction('tasks', $task->id, $user->id);
         }
-        return $task;
+        return 1;
     }
 
     // 所有喝水完成后的奖励
@@ -191,10 +191,10 @@ trait TaskResolvers
     }
 
     // 任务中心领取奖励接口
-    public static function getReWardResolver($root, array $args, $context, $info)
+    public static function resolveReward($root, array $args, $context = null, $info = null)
     {
         $user       = getUser();
-        $task       = Task::findOrFail($args['id']);
+        $task       = Task::findOrFail($args['task_id']);
         $assignment = Assignment::firstOrNew([
             'user_id' => $user->id,
             'task_id' => $task->id,
@@ -206,7 +206,7 @@ trait TaskResolvers
             $remark = sprintf('%s奖励', $task->name);
             Gold::makeIncome($user, $gold, $remark); //发放金币奖励
         }
-        return $task;
+        return 1;
     }
 
     // 喝水任务上报打卡接口 drinkWater,单次喝水成功后调用...
@@ -244,11 +244,11 @@ trait TaskResolvers
     }
 
     // 应用商店好评任务接口
-    public static function highPraiseTaskResolver($root, array $args, $context, $info)
+    public static function resolveHighPariseReply($root, array $args, $context, $info)
     {
         $user = checkUser();
 
-        $task = Task::find($args['id']);
+        $task = Task::find($args['task_id']);
         throw_if(is_null($task), GQLException::class, '任务不存在哦~,请稍后再试');
         throw_if(empty(trim($args['content'])), GQLException::class, '账号不能为空哦~');
 
@@ -263,7 +263,7 @@ trait TaskResolvers
     }
 
     //答复任务
-    public function replyTaskResolver($root, array $args, $context, $info)
+    public static function resolveReply($root, array $args, $context = null, $info = null)
     {
         $user    = getUser();
         $task_id = Arr::get($args, 'task_id', null);
@@ -273,13 +273,12 @@ trait TaskResolvers
     }
 
     //完成任务
-    public function completeTaskResolver($root, array $args, $context, $info)
+    public static function resolveComplete($root, array $args, $context = null, $info = null)
     {
         $user    = getUser();
         $task_id = Arr::get($args, 'task_id', null);
 
         return Task::completeTask($user, $task_id);
     }
-
 
 }
