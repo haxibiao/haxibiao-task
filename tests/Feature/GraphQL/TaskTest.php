@@ -7,9 +7,9 @@ use App\User;
 use haxibiao\task\Assignment;
 use haxibiao\task\Task;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\Feature\GraphQL\TestCase;
+use Tests\Feature\GraphQL\GraphQLTestCase;
 
-class TaskTest extends TestCase
+class TaskTest extends GraphQLTestCase
 {
     use DatabaseTransactions;
     protected $user;
