@@ -16,6 +16,7 @@ class TaskSeeder extends Seeder
         //正式上线后，不要再清空，要保留运营更新的 图文...
         DB::table('tasks')->truncate();
 
+        //新人任务
         Task::firstOrCreate([
             'name'           => '完善头像',
             'status'         => Task::ENABLE,
@@ -66,6 +67,7 @@ class TaskSeeder extends Seeder
             'review_flow_id' => 0,
         ]);
 
+        //自定义任务
         Task::firstOrCreate([
             'name'           => '应用商店好评',
             'details'        => '应用商店好评',

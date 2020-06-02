@@ -25,8 +25,16 @@ trait TaskResolvers
         //单次查询一个分类的
         $type = $args['type'] ?? 'All';
 
-        $task_obj = $type == 'All' ? Task::all() : Task::whereType($type);
-        $task_ids = $task_obj->pluck('id');
+        if ($type == 'All') {
+            if (getAppVersion() < "3.0") {
+                $qb = Task::where('type', '<>', 4); //贡献任务以前没进入后端任务列表
+            } else {
+                $qb = Task::all();
+            }
+        } else {
+            $qb = Task::whereType($type);
+        }
+        $task_ids = $qb->pluck('id');
         //确保指派数据正常
         Assignment::initAssignments($user);
 

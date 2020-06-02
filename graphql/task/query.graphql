@@ -10,16 +10,20 @@ type Task {
   """
   任务的模板(定义任务做什么事情，到什么程度)
   """
-  review_flow_id: Int!
+  review_flow_id: Int
 
   """
   任务的说明
   """
   details: String
   """
-  任务的类别(日常，新人...)
+  任务的分组Int
   """
   type: Int
+  """
+  任务的分组(日常，新人...)
+  """
+  group: String
   """
   任务的图标
   """
@@ -100,5 +104,6 @@ enum TaskType {
   NEW_USER_TASK @enum(value: "0")
   DAILY_TASK @enum(value: "1")
   CUSTOM_TASK @enum(value: "2")
+  CONTRIBUTE_TASK @enum(value: "4")
   All @enum(value: "All")
 }

@@ -41,10 +41,11 @@ class Task extends Model
     ];
 
     //任务类型
-    const NEW_USER_TASK = 0;
-    const DAILY_TASK    = 1;
-    const CUSTOM_TASK   = 2;
-    const TIME_TASK     = 3;
+    const NEW_USER_TASK   = 0;
+    const DAILY_TASK      = 1;
+    const CUSTOM_TASK     = 2;
+    const TIME_TASK       = 3;
+    const CONTRIBUTE_TASK = 4;
 
     //任务状态
     const ENABLE  = 1;

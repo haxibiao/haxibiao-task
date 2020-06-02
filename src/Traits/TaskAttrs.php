@@ -9,6 +9,27 @@ use Illuminate\Support\Facades\Storage;
 trait TaskAttrs
 {
 
+    public function getGroupAttribute()
+    {
+        switch ($this->type) {
+            case 0:
+                return "新人任务";
+                break;
+            case 1:
+                return "每日任务";
+                break;
+            case 3:
+                return "实时任务";
+                break;
+            case 4:
+                return "贡献任务";
+                break;
+            default:
+                return "自定义任务";
+                break;
+        }
+    }
+
     /**
      * 获取任务配置信息
      * @return mixed
