@@ -1,7 +1,6 @@
 # haxibiao/task
 
 > haxibiao/task 是哈希表内部系统架构重构出来的任务系统
-> 欢迎大家提交代码或提出建议
 
 ## 导语
 
@@ -19,8 +18,8 @@
 2. 执行`php artisan task:install && composer dump`
 3. 给app/User.php 添加 use PlayWithTasks
 4. 执行`php artisan migrate`
-5. 执行`php artisan db:seed --class=TaskSeeder`
-6. 执行`php artisan db:seed --class=ReviewFlowsSeeder`
+5. 执行`php artisan db:seed --class=ReviewFlowsSeeder` 先执行 (答赚的请用自己项目的Dati开头的Seeders)
+6. 执行`php artisan db:seed --class=TaskSeeder`
 7. 完成
 
 ### 如何完成更新？
