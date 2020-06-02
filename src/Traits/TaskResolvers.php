@@ -27,7 +27,7 @@ trait TaskResolvers
 
         if ($type == 'All') {
             if (getAppVersion() < "3.0") {
-                $qb = Task::where('type', '<>', 4); //贡献任务以前没进入后端任务列表
+                $qb = Task::where('type', '<>', Task::CONTRIBUTE_TASK); //贡献任务以前没进入后端任务列表
             } else {
                 $qb = Task::all();
             }
@@ -56,7 +56,7 @@ trait TaskResolvers
             }
 
             //过滤完成后需要不显示的任务 ↓ $record 保存的是 tasks 表主键
-            $notShowCompletedIds = [1, 3, 4, 6];
+            $notShowCompletedIds = Task::whereType(Task::NEW_USER_TASK)->pluck('id');
             if ($assignment->status == 3 && in_array($assignment->task_id, $notShowCompletedIds)) {
                 continue;
             }
