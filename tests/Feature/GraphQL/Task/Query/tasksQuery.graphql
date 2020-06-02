@@ -3,18 +3,16 @@ query tasks($type: TaskType!) {
   tasks(type: $type) {
     id
     name
-    user {
-      name
-      id
-    }
-    details
-    taskInfo {
-      method
-      router
-    }
-    type
-    task_status
+    assignment_status
+    assignment_progress
     progress_details
-    task_progress
+    type
+    details
+    reward_info {
+      gold
+      ticket
+      contribute
+    }
+    review_flow_id
   }
 }

@@ -1,10 +1,17 @@
 type Task {
   id: Int!
   user: User
+
   """
   任务的名称
   """
   name: String
+
+  """
+  任务的模板(定义任务做什么事情，到什么程度)
+  """
+  review_flow_id: Int!
+
   """
   任务的说明
   """
@@ -23,31 +30,18 @@ type Task {
   background_img: String
 
   """
-  任务的模板的可用状态
-  """
-  status: Int
-
-  """
   用户的指派的进度百分比（目前：喝水的杯子UI显示用）
   """
-  task_progress: Float
+  assignment_progress: Float @rename(attribute: "task_progress")
   """
   用户的指派的进度描述(1/8)
   """
   progress_details: String
 
   """
-  用户的指派的状态(1:已指派，2:已完成，3:已奖励)
+  指派的状态(1:已指派，2:已完成，3:已奖励)
   """
-  task_status: Int
-  """
-  任务的去做指令（去答题，去发视频，去直播）
-  """
-  submit_name: String
-  """
-  User,Post,Question...这样的任务对象类名，方便前端知道行动指令...(可以淘汰router)
-  """
-  task_class: String
+  assignment_status: Int @rename(attribute: "task_status")
   """
   睡觉任务的状态
   """
@@ -58,9 +52,9 @@ type Task {
   """
   reward_info: RewardInfo
   """
-  任务的前端路由信息在这
+  前端存nova里的 resolve 字段json
   """
-  taskInfo: TaskInfo @deprecated(reason: "后端数据不需要知道前端的路由名")
+  resolve: String @deprecated(reason: "3.x后前端逻辑依赖的数据不存nova")
 
   start_at: DateTime @deprecated(reason: "睡觉任务用的")
   end_at: DateTime @deprecated(reason: "睡觉任务用的")
@@ -87,17 +81,6 @@ type RewardInfo {
   ticket: Int
 }
 
-type TaskInfo {
-  """
-  任务校验方法
-  """
-  method: String
-  """
-  前端去做任务的页面路由名
-  """
-  router: String
-}
-
 extend type Query @middleware(checks: ["auth:api"]) {
   """
   喝水打卡任务列表
@@ -108,7 +91,7 @@ extend type Query @middleware(checks: ["auth:api"]) {
   """
   SleepTask: Task @field(resolver: "App\\Task@resolveSleepTask")
   """
-  获取全部任务列表
+  获取任务列表（type空取全部任务）
   """
   tasks(type: TaskType): [Task!] @field(resolver: "App\\Task@resolveTasks")
 }
