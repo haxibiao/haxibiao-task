@@ -7,6 +7,7 @@ use haxibiao\task\Assignment;
 use haxibiao\task\ReviewFlow;
 use haxibiao\task\Traits\TaskAttrs;
 use haxibiao\task\Traits\TaskMethod;
+use haxibiao\task\Traits\TaskOldAttrs;
 use haxibiao\task\Traits\TaskRepo;
 use haxibiao\task\Traits\TaskResolvers;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +16,7 @@ class Task extends Model
 {
     use TaskRepo;
     use TaskAttrs;
+    use TaskOldAttrs;
     use TaskResolvers;
     use TaskMethod;
 

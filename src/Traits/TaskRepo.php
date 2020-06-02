@@ -112,7 +112,7 @@ trait TaskRepo
                 $checkoutFunctions = $flow->check_functions;
                 if (is_array($checkoutFunctions)) {
                     foreach ($checkoutFunctions as $method) {
-                        if (!method_exists($this, $method)) {
+                        if (!method_exists(Task::class, $method)) {
                             break;
                         }
                         //执行检查

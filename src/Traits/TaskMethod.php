@@ -7,6 +7,7 @@ use App\CategoryUser;
 use App\Contribute;
 use App\User;
 use App\Withdraw;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 trait TaskMethod
@@ -102,8 +103,8 @@ trait TaskMethod
     public function checkUserIsUpdateName($user, $task, $assignment)
     {
         return [
-            'status' => $user->name != User::DEFAULT_USER_NAME,
-            'current_count' => 0
+            'status'        => $user->name != User::DEFAULT_USER_NAME,
+            'current_count' => 0,
         ];
     }
 
@@ -160,7 +161,7 @@ trait TaskMethod
      */
     public function checkRewardVideo($user, $task, $assignment)
     {
-        //FIXME: getTodayCountByType表示获取今日激励视频奖励次数...
+        //FIXME: getTodayCountByType表示获取今日激励视频奖励次数... 答题APP内部能用这个...
         $count = Contribute::getTodayCountByType(Contribute::REWARD_VIDEO_CONTRIBUTED_TYPE, $user);
         return [
             'status'        => $count >= $task->max_count,
@@ -206,99 +207,96 @@ trait TaskMethod
         ];
     }
 
-
-
-
-
     //检查新型肺炎防治答10题
     public function checkCategoryAnswerQuestion($user, $task, $assignment)
     {
-        // 19 代表 Categories 表中的 ID，它属于'医学知识'
-        $category = Category::find(19);
+        // 19 代表 Categories 表中的 ID，它属于'医学知识', 比如 答赚里：140 代表新型肺炎...
+        $category_id = Arr::get($task->resolve, 'category_id', 1);
+        $category    = Category::find($category_id);
         if (is_null($category)) {
             return [
                 'status'        => false,
-                'current_count' => 0
+                'current_count' => 0,
             ];
         }
+        $sum = CategoryUser::where('user_id', $user->id)
+            ->where('category_id', $category_id)
+            ->where('last_answer_at', '>=', today()) //要求是24小时内的了...
+            ->sum('answers_count_today');
+
         return [
-            'status'        => CategoryUser::where('user_id', $user->id)
-                ->where('category_id', 19)
-                ->where('answers_count_today', '>=', 10)
-                ->where('last_answer_at', '>=', today())
-                ->exists(),
-            'current_count' => 0
+            'status'        => $sum >= $task->max_count,
+            'current_count' => $sum,
         ];
     }
-
-
 
     //今日比赛获胜次数
     public function checkTodayGameWinnersCount($user, $task, $assignment)
     {
-
-        $current_count =  $user->gameWinners()->today()->count();
-        $count = $task->max_count;
-        $status = $current_count >= $count;
+        $current_count = $user->gameWinners()->today()->count();
+        $status        = $current_count >= $task->max_count;
         return [
-            'status' => $status,
-            'current_count' => $current_count
+            'status'        => $status,
+            'current_count' => $current_count,
         ];
     }
 
-
-    //今日浏览次数
+    //今日浏览次数(尊重resolve JSON里的 visits_type)
     public function checkTodayVisitsCount($user, $task, $assignment)
     {
-        $count = $task->max_count;
-        $current_count = $user->visits()->ofType('videos')->today()->count();
-        $status = $current_count >= $count;
+        $visits_type   = Arr::get($task->resolve, 'visits_type', 'videos');
+        $current_count = $user->visits()->ofType($visits_type)->today()->count();
+        $status        = $current_count >= $task->max_count;
         return [
-            'status' => $status,
-            'current_count' => $current_count
+            'status'        => $status,
+            'current_count' => $current_count,
         ];
-    }
-
-
-    //检查新用户答题
-    public function checkNewUserAnswer($user, $task, $assignment)
-    {
-        $current_count  = $user->answers()->count();
-        $count = $task->max_count;
-        $status = $current_count >= $count;
-        return
-            [
-                'status'        => $status,
-                'current_count' => $current_count,
-            ];
     }
 
     //检查是否第一次提现
     public function checkFirstWithdraw($user, $task, $assignment)
     {
-        $status = !empty($user->withdraws()->whereStatus(Withdraw::SUCCESS_WITHDRAW)->first());
+        $status = $user->withdraws()->whereStatus(Withdraw::SUCCESS_WITHDRAW)->exists();
         return
             [
-                'status'        => $status,
-                'current_count' => 0,
-            ];
+            'status'        => $status,
+            'current_count' => 0,
+        ];
     }
 
-
-
-    //检测用户答题数 //FIXME:感觉和新手答题数那个差不多
+    //检查用户答题数
     public function checkAnswerQuestionCount($user, $task, $assignment)
     {
+        $current_count = $user->answers()->where('created_at', '>', today())->count();
+        $status        = $current_count >= $task->max_count;
+        return
+            [
+            'status'        => $status,
+            'current_count' => $current_count,
+        ];
+    }
+
+    //检查用户是否更换过性别
+    public function checkUserIsUpdateGender($user, $task, $assignment)
+    {
+        return [
+            'status'        => $user->gender !== null,
+            'current_count' => 0,
+        ];
+    }
+
+    //检查用户是否填写过年龄
+    public function checkAgeIsUpdate($user, $task, $assignment)
+    {
+
         $status  = false;
-        $profile = $user->profile()->select('answers_count_today')->first();
-        $count = $task->max_count;
-        $current_count = $profile->answers_count_today;
+        $profile = $user->profile()->select('age')->first();
         if (!is_null($profile)) {
-            $status = $current_count >=  $count;
+            $status = $profile->age > 0;
         }
         return [
-            'status' => $status,
-            'current_count' => $current_count
+            'status'        => $status,
+            'current_count' => null,
         ];
     }
 }

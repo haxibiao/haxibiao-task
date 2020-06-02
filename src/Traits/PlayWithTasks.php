@@ -7,6 +7,7 @@ use haxibiao\task\Task;
 
 trait PlayWithTasks
 {
+
     public function tasks()
     {
         return $this->belongsToMany(Task::class, 'assignments')
