@@ -284,7 +284,7 @@ trait TaskRepo
 
         $pivot->fill(['status' => Assignment::TASK_REACH])->save();
 
-        return $task;
+        return 1;
     }
 
     public static function replyTask(User $user, $task_id, $content)

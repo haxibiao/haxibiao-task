@@ -39,7 +39,7 @@ extend type Mutation @middleware(checks: ["auth:api"]) {
   """
   兼容 有剑气 的 领取奖励 接口...
   """
-  rewardTask(id: ID!): Task @field(resolver: "App\\Task@resolveReward")
+  rewardTask($task_id: ID!): Task @field(resolver: "App\\Task@resolveReward")
 
   """
   应用商店好评任务回复
