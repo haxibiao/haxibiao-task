@@ -34,7 +34,7 @@ extend type Mutation @middleware(checks: ["auth:api"]) {
   """
   领取奖励 - 答题里这样
   """
-  taskReward(task_id: Int!): Task @field(resolver: "App\\Task@resolveReward")
+  taskReward(task_id: Int!): Int @field(resolver: "App\\Task@resolveReward")
 
   """
   兼容 有剑气 的 领取奖励 接口...
