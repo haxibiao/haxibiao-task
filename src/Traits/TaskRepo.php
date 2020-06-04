@@ -95,25 +95,14 @@ trait TaskRepo
     {
         $task       = $this;
         $assignment = $task->getAssignment($user->id);
-        // //每日任务: 重置刷新状态和进度
-        // if ($task->isDailyTask()) {
-        //     //新的一天开始
-        //     if ($assignment->updated_at < today()) {
-        //         $assignment->progress      = 0;
-        //         $assignment->completed_at  = null;
-        //         $assignment->resolve       = null;
-        //         $assignment->current_count = 0;
-        //         $assignment->status = 1;
-        //         $assignment->save();
-        //     }
-        // }
+
         if ($assignment->status < Assignment::TASK_REACH) {
             if ($flow = $task->reviewFlow) {
                 // 执行模版任务定义的检查方法s
                 $checkoutFunctions = $flow->check_functions;
                 if (is_array($checkoutFunctions)) {
                     foreach ($checkoutFunctions as $method) {
-                        if (!method_exists(Task::class, $method)) {
+                        if (!method_exists($this, $method)) {
                             break;
                         }
                         //执行检查

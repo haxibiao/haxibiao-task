@@ -2,8 +2,8 @@
 
 namespace haxibiao\task\Traits;
 
-use haxibiao\task\Assignment;
-use haxibiao\task\Task;
+use App\Assignment;
+use App\Task;
 
 trait PlayWithTasks
 {
@@ -18,7 +18,6 @@ trait PlayWithTasks
     public function assignments()
     {
         return $this->hasMany(Assignment::class);
-
     }
 
     //新手任务
@@ -62,5 +61,4 @@ trait PlayWithTasks
         //分类答题任务
         return Task::whereName('新型肺炎防治答10题')->get();
     }
-
 }
