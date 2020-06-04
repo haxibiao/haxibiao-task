@@ -299,4 +299,17 @@ trait TaskMethod
             'current_count' => 0,
         ];
     }
+
+
+    //答赚 - 是否修改头像
+    public function checkUserIsUpdateAvatar($user, $task, $assignment)
+    {
+
+        $user = getUser();
+        return
+            [
+                'status' => !empty($user->avatar),
+                'current_count' => 0
+            ];
+    }
 }
