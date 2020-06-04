@@ -54,7 +54,7 @@ trait TaskResolvers
             }
 
             //过滤完成后需要不显示的任务 ↓ $record 保存的是 tasks 表主键
-            $notShowCompletedIds = Task::whereType(Task::NEW_USER_TASK)->pluck('id');
+            $notShowCompletedIds = Task::whereType(Task::NEW_USER_TASK)->pluck('id')->toArray();
             if ($assignment->status == 3 && in_array($assignment->task_id, $notShowCompletedIds)) {
                 continue;
             }
