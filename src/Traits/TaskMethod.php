@@ -117,7 +117,7 @@ trait TaskMethod
     {
         return [
             'status'        => $user->phone,
-            'current_count' => null,
+            'current_count' => 0,
         ];
     }
 
@@ -131,7 +131,7 @@ trait TaskMethod
         $profile = $user->profile;
         return [
             'status'        => isset($profile->gender) && $profile->birthday,
-            'current_count' => null,
+            'current_count' => 0,
         ];
     }
 
@@ -259,9 +259,9 @@ trait TaskMethod
         $status = $user->withdraws()->whereStatus(Withdraw::SUCCESS_WITHDRAW)->exists();
         return
             [
-            'status'        => $status,
-            'current_count' => 0,
-        ];
+                'status'        => $status,
+                'current_count' => 0,
+            ];
     }
 
     //检查用户答题数
@@ -271,9 +271,9 @@ trait TaskMethod
         $status        = $current_count >= $task->max_count;
         return
             [
-            'status'        => $status,
-            'current_count' => $current_count,
-        ];
+                'status'        => $status,
+                'current_count' => $current_count,
+            ];
     }
 
     //检查用户是否更换过性别
@@ -296,7 +296,7 @@ trait TaskMethod
         }
         return [
             'status'        => $status,
-            'current_count' => null,
+            'current_count' => 0,
         ];
     }
 }
