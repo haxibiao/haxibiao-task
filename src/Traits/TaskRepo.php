@@ -271,11 +271,11 @@ trait TaskRepo
             throw new UserException('好评任务已经做过了哦~');
         }
 
-        $assignment->status = Assignment::TASK_REVIEW;
+        $assignment->status = Assignment::TASK_REVIEW; //提交回复后从未开始到审核中
         $assignment->save();
 
         //无需审核，1分钟后任务自动完成
-        dispatch(new DelayRewaredTask($assignment->id))->delay(now()->addMinute(1));
+        dispatch(new DelayRewaredTask($assignment->id));
         return 1;
     }
 
@@ -297,11 +297,12 @@ trait TaskRepo
             }
 
             $assignment->content = $content;
-            $assignment->status  = Assignment::TASK_REVIEW;
+            $assignment->status  = Assignment::TASK_REVIEW; //提交回复后从未开始到审核中
+
             $assignment->save();
 
             //30秒后自动更改状态发放奖励
-            dispatch(new DelayRewaredTask($assignment->id))->delay(now()->addSecond(30))->onQueue('reward');
+            dispatch(new DelayRewaredTask($assignment->id));
         }
 
         return 1;

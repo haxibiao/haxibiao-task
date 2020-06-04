@@ -2,6 +2,7 @@
 
 namespace haxibiao\task\Traits;
 
+use App\Assignment;
 use haxibiao\task\Task;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
@@ -140,7 +141,7 @@ trait TaskAttrs
             return $this->assignment->status;
         }
         // 没有指派任务，用户应该可以自己领取
-        return 0;
+        return Assignment::TASK_UNDONE;
         // return 1; //已指派
     }
 

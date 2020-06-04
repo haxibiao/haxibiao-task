@@ -41,14 +41,14 @@ class Assignment extends Model
     /**
      * @deprecated 已弃用
      */
-    const TASK_FAILED = -1; //失败 - 已弃用
+    const TASK_FAILED = -1; //失败
+
     /**
      * @deprecated 已弃用
      */
-    const TASK_UNDONE = 0; //未完成 - 已弃用
-
+    const TASK_UNDONE = 0; //未开始 - 未完成
     const TASK_REVIEW = 1; //进行中 - 已指派
-    const TASK_REACH  = 2; //未领取奖励 - 已完成
+    const TASK_REACH  = 2; //未领取 - 已达标
     const TASK_DONE   = 3; //完成 - 已奖励
 
     public function user()
