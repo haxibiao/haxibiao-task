@@ -2,6 +2,7 @@
 
 namespace haxibiao\task\Traits;
 
+use App\Exceptions\GQLException;
 use App\Exceptions\UserException;
 use Carbon\Carbon;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -201,7 +202,12 @@ trait TaskResolvers
         // 此处的task_id代表喝的是第几杯水,兼容以前的设计
         $position = $args['id'];
 
-        $task       = Task::where('name', 'DrinkWaterAll')->first();
+        $task = Task::where('name', 'DrinkWaterAll')->first();
+
+        if (is_null($task)){
+            return new UserException('喝水任务好像不见咯，请刷新后重试');
+        }
+
         $assignment = $task->getAssignment($userId);
 
         // $resolve存放喝水的信息,如[1,2]代表喝了第一杯和第二杯

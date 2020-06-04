@@ -4,6 +4,8 @@ namespace Tests\Feature\GraphQL;
 
 // use App\Invitation;
 use App\User;
+use App\UserProfile;
+use App\UserTask;
 use haxibiao\task\Assignment;
 use haxibiao\task\Task;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -12,9 +14,16 @@ use Tests\Feature\GraphQL\GraphQLTestCase;
 class TaskTest extends GraphQLTestCase
 {
     use DatabaseTransactions;
+
     protected $user;
 
     protected $likes;
+
+    protected $task;
+
+    protected $userTask;
+
+    protected $userProfile;
 
     // protected $invitations;
 
@@ -25,18 +34,53 @@ class TaskTest extends GraphQLTestCase
         //最新注册的10个用户里随机一个，方便发现新用户的体验问题...
         // $this->user = User::latest('id')->take(100)->get()->random();
 
-        $this->user = User::find(2);
+        $this->user = factory(User::class)->create([
+            'api_token' => str_random(60),
+        ]);
 
         // $this->likes = factory(Like::class, 1000)->create();
 
         // $this->invitations = factory(Invitation::class, 5)->create(
         //     ['invited_in' => now()]
         // );
+
+        $this->userProfile = factory(UserProfile::class)->create([
+            'user_id' => $this->user->id,
+            'keep_signin_days' => 1,
+        ]);
+
+        $this->task = factory(Task::class)->create([
+            'type' => 2,
+        ]);
+
+        //FIXME 这里Factory有一个BUG，返回不了ID
+        $this->userTask = factory(UserTask::class)->create([
+            'user_id' => $this->user->id,
+            'task_id' => $this->task->id,
+        ]);
     }
 
     /* --------------------------------------------------------------------- */
     /* ------------------------------- Mutation ----------------------------- */
     /* --------------------------------------------------------------------- */
+
+    /**
+     * 新用户奖励接口
+     * @group task
+     */
+    public function testNewUserRewordMutation()
+    {
+        $token   = $this->user->api_token;
+        $query   = file_get_contents(__DIR__ . '/task/Mutation/newUserRewardMutation.graphql');
+        $headers = [
+            'Authorization' => 'Bearer ' . $token,
+            'Accept'        => 'application/json',
+        ];
+        $variables = [
+            'rewardType' => 'VIDEO',
+        ];
+        $this->runGQL($query, $variables, $headers);
+    }
 
     /**
      * 领取任务
@@ -51,7 +95,7 @@ class TaskTest extends GraphQLTestCase
             'Accept'        => 'application/json',
         ];
         $variables = [
-            'id' => '1',
+            'id' => 1,
         ];
         $this->runGQL($query, $variables, $headers);
     }
@@ -129,6 +173,68 @@ class TaskTest extends GraphQLTestCase
         //assert json has error
         //assert text has "任务未完成..."
     }
+
+    /**
+     * 答复任务
+     * @group task
+     */
+    public function testReplyTaskMutation()
+    {
+        $token = $this->user->api_token;
+        $headers = [
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ];
+
+        //重置任务为待完成状态
+        $this->user->tasks()->detach($this->task->id);
+        $this->user->tasks()->attach($this->task->id, ['status' => Task::NEW_USER_TASK]);
+
+        $taskRewardMutation = file_get_contents(__DIR__ . '/Task/Mutation/ReplyTaskMutation.graphql');
+        $variables = [
+            'id' => $this->task->id,
+        ];
+        $this->runGuestGQL($taskRewardMutation, $variables, $headers);
+    }
+
+    /**
+     * 完成任务
+     * @group task
+     */
+    public function testCompleteTaskMutation()
+    {
+        $token = $this->user->api_token;
+        $headers = [
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ];
+
+        $taskRewardMutation = file_get_contents(__DIR__ . '/Task/Mutation/CompleteTaskMutation.graphql');
+        $variables = [
+            'id' => $this->task->id,
+        ];
+        $this->runGuestGQL($taskRewardMutation, $variables, $headers);
+    }
+
+    /**
+     * 喝水任务上报打卡
+     * @deprecated 根据DatiTaskSeed可以看出暂时没有喝水任务
+     * @group task
+     */
+//    public function testDrinkWaterMutation()
+//    {
+//        $token   = $this->user->api_token;
+//        $query   = file_get_contents(__DIR__ . '/task/Mutation/drinkWaterMutation.graphql');
+//        $headers = [
+//            'Authorization' => 'Bearer ' . $token,
+//            'Accept'        => 'application/json',
+//        ];
+//        $variables = [
+//            // FIXME: 喝水任务虽然要求传递一个 id 的参数，但是并没有使用它
+//            'id' => 2,
+//        ];
+//        $this->runGQL($query, $variables, $headers);
+//    }
 
     /* --------------------------------------------------------------------- */
     /* ------------------------------- Query ----------------------------- */
@@ -208,6 +314,15 @@ class TaskTest extends GraphQLTestCase
     protected function tearDown(): void
     {
         // $this->user->invitations()->forceDelete();
+        $userTaskId = UserTask::select('id')
+            ->orderByDESC('id')
+            ->limit(1)
+            ->get();
+        UserTask::destroy($userTaskId);
+
+        $this->user->forceDelete();
+        $this->task->forceDelete();
+        $this->userProfile->forceDelete();
         parent::tearDown();
     }
 }
