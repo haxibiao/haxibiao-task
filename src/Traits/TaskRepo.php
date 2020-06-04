@@ -2,7 +2,6 @@
 
 namespace haxibiao\task\Traits;
 
-use App\Exceptions\GQLException;
 use App\Exceptions\UserException;
 use App\Gold;
 use App\User;
@@ -128,22 +127,6 @@ trait TaskRepo
             }
         }
         return $assignment->status;
-    }
-
-    public static function highPraise(User $user, Task $task, string $content): bool
-    {
-        $assignment = $task->getAssignment($user->id);
-
-        if ($assignment->status >= Assignment::TASK_REACH) {
-            throw new GQLException('好评任务已经做过了哦~');
-        }
-
-        $assignment->status = Assignment::TASK_REVIEW;
-        $assignment->save();
-
-        //无需审核，1分钟后任务自动完成
-        dispatch(new DelayRewaredTask($assignment->id))->delay(now()->addMinute(1));
-        return 1;
     }
 
     public static function toastDiffTime($completed_at, $minutes)
@@ -277,34 +260,49 @@ trait TaskRepo
         return 1;
     }
 
-    public static function replyTask(User $user, $task_id, $content)
+    /**
+     * 应用商店好评是工厂APP里假做审核的版本
+     */
+    public static function highPraise(User $user, Task $task, string $content): bool
     {
-        $task = $user->tasks()->find($task_id);
-        //非自定义任务,不需要提交任务回复（应用商店好评需要）
-        if (empty($task) || !$task->isCustomTask()) {
-            if (is_prod_env()) {
-                throw new UserException('提交失败,请刷新后再试');
-            }
+        $assignment = $task->getAssignment($user->id);
+
+        if ($assignment->status >= Assignment::TASK_REACH) {
+            throw new UserException('好评任务已经做过了哦~');
         }
 
+        $assignment->status = Assignment::TASK_REVIEW;
+        $assignment->save();
+
+        //无需审核，1分钟后任务自动完成
+        dispatch(new DelayRewaredTask($assignment->id))->delay(now()->addMinute(1));
+        return 1;
+    }
+
+    /**
+     * 答复任务，答赚里保存应用好评回复信息和截图地址到 content 这个json里
+     */
+    public static function replyTask(User $user, $task_id, $content)
+    {
         $content = json_encode($content, JSON_UNESCAPED_UNICODE);
         if (!is_json($content)) {
             throw new UserException('提交有误,请稍后再试');
         }
 
-        $userTask = $task->pivot;
-        //防止重复提交,重复奖励
-        if ($userTask->status == Assignment::TASK_REVIEW) {
-            // throw new UserException('提交失败,请勿重复提交！');
-            return 1;
+        if ($assignment = $user->getAssignment($task_id)) {
+            //防止重复提交,重复奖励
+            if ($assignment->status == Assignment::TASK_REVIEW) {
+                // throw new UserException('提交失败,请勿重复提交！');
+                return 1;
+            }
+
+            $assignment->content = $content;
+            $assignment->status  = Assignment::TASK_REVIEW;
+            $assignment->save();
+
+            //30秒后自动更改状态发放奖励
+            dispatch(new DelayRewaredTask($assignment->id))->delay(now()->addSecond(30))->onQueue('reward');
         }
-
-        $userTask->content = $content;
-        $userTask->status  = Assignment::TASK_REVIEW;
-        $userTask->save();
-
-        //30秒后自动更改状态发放奖励
-        dispatch(new DelayRewaredTask($userTask->id))->delay(now()->addSecond(30))->onQueue('reward');
 
         return 1;
     }

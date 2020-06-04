@@ -2,7 +2,7 @@
 
 namespace haxibiao\task\Traits;
 
-use App\Exceptions\GQLException;
+use App\Exceptions\UserException;
 use Carbon\Carbon;
 use GraphQL\Type\Definition\ResolveInfo;
 use haxibiao\task\Assignment;
@@ -90,7 +90,7 @@ trait TaskResolvers
         $user      = getUser();
         $sleepTask = Task::where('resolve->task_en', 'Sleep')->first();
 
-        throw_if(is_null($sleepTask), GQLException::class, '睡觉任务不存在!');
+        throw_if(is_null($sleepTask), UserException::class, '睡觉任务不存在!');
 
         $task       = $sleepTask;
         $assignment = Assignment::firstOrCreate([
@@ -142,8 +142,8 @@ trait TaskResolvers
         $task       = Task::where('name', 'DrinkWaterAll')->first();
         $assignment = $task->getAssignment($userId);
 
-        throw_if($assignment->status == Assignment::TASK_DONE, GQLException::class, '奖励已经领取');
-        throw_if($assignment->status != Assignment::TASK_REACH, GQLException::class, '任务还未完成');
+        throw_if($assignment->status == Assignment::TASK_DONE, UserException::class, '奖励已经领取');
+        throw_if($assignment->status != Assignment::TASK_REACH, UserException::class, '任务还未完成');
 
         $assignment->status = Assignment::TASK_DONE;
         $assignment->save();
@@ -208,12 +208,12 @@ trait TaskResolvers
         $resolve = $assignment->resolve;
 
         $subTaskHasDone = $resolve && in_array($position, $resolve);
-        throw_if($subTaskHasDone, GQLException::class, '已经完成了');
+        throw_if($subTaskHasDone, UserException::class, '已经完成了');
 
         // 校验第$position杯水是否已经开始
         $hour           = Carbon::now()->hour;
         $taskIsNotStart = ($position + 8 > $hour);
-        throw_if($taskIsNotStart, GQLException::class, '还未开始');
+        throw_if($taskIsNotStart, UserException::class, '还未开始');
 
         if (is_null($resolve)) {
             $resolve = [$position];
@@ -231,19 +231,11 @@ trait TaskResolvers
     public static function resolveHighPariseReply($root, array $args, $context, $info)
     {
         $user = checkUser();
-
         $task = Task::find($args['id']);
-        throw_if(is_null($task), GQLException::class, '任务不存在哦~,请稍后再试');
-        throw_if(empty(trim($args['content'])), GQLException::class, '账号不能为空哦~');
+        throw_if(is_null($task), UserException::class, '任务不存在哦~,请稍后再试');
+        throw_if(empty(trim($args['content'])), UserException::class, '账号不能为空哦~');
 
         return Task::highPraise($user, $task, $args['content']);
-    }
-
-    //观看新手教程或采集视频教程任务状态变更
-    public static function newUserReword($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
-    {
-        //TODO: 新人教程任务，抖音采集学习任务
-        return 1;
     }
 
     //答复任务
@@ -251,9 +243,16 @@ trait TaskResolvers
     {
         $user    = getUser();
         $task_id = $args['id'];
-        $content = Arr::get($args, 'content', null);
+        $content = $args['content'] ?? '';
 
         return Task::replyTask($user, $task_id, $content);
+    }
+
+    //观看新手教程或采集视频教程任务状态变更
+    public static function newUserReword($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
+    {
+        //TODO: 新人教程任务，抖音采集学习任务
+        return 1;
     }
 
     //完成任务

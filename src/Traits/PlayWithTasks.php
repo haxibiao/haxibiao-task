@@ -20,6 +20,11 @@ trait PlayWithTasks
         return $this->hasMany(Assignment::class);
     }
 
+    public function getAssignment($task_id)
+    {
+        return $this->assignments()->where('task_id', $task_id)->first();
+    }
+
     //新手任务
     public function getNewUserTasks()
     {

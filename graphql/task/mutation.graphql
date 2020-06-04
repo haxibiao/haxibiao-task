@@ -23,9 +23,10 @@ extend type Mutation {
   """
   receiveTask(id: ID!): Task @field(resolver: "App\\Task@resolveReceive")
   """
-  答复任务
+  答复任务(content JSON 可选)
   """
-  replyTask(id: Int!): Int @field(resolver: "App\\Task@resolveReply")
+  replyTask(id: Int!, content: String): Int
+    @field(resolver: "App\\Task@resolveReply")
 
   """
   完成任务

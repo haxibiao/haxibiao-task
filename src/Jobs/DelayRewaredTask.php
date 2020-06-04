@@ -20,9 +20,9 @@ class DelayRewaredTask implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($userTaskId)
+    public function __construct($assignment_id)
     {
-        $this->assignment = Assignment::find($userTaskId);
+        $this->assignment = Assignment::find($assignment_id);
     }
 
     /**
