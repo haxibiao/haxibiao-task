@@ -3,21 +3,21 @@ namespace haxibiao\task\Console;
 
 use Illuminate\Console\Command;
 
-class TaskPublish extends Command
+class PublishCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'task:publish {--force : Overwrite any existing files}';
+    protected $signature = 'task:publish {--force : 强制覆盖}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = '发布 resources';
+    protected $description = '发布 haxibiao-task';
 
     /**
      * Execute the console command.
@@ -30,12 +30,12 @@ class TaskPublish extends Command
         // vendor:publish --tag=task-config --force=true
         $this->call('vendor:publish', [
             '--tag'   => 'task-config',
-            '--force' => false,
+            '--force' => $this->option('force'),
         ]);
 
         $this->call('vendor:publish', [
             '--tag'   => 'task-db',
-            '--force' => true,
+            '--force' => $this->option('force'),
         ]);
 
         $this->call('vendor:publish', [

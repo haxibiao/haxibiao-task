@@ -14,8 +14,8 @@ class TaskServiceProvider extends ServiceProvider
     public function register()
     {
         $this->commands([
-            Console\TaskInstall::class,
-            Console\TaskPublish::class,
+            Console\InstallCommand::class,
+            Console\PublishCommand::class,
         ]);
 
     }

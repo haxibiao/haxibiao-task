@@ -5,7 +5,7 @@ namespace haxibiao\task\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
-class TaskInstall extends Command
+class InstallCommand extends Command
 {
 
     /**
@@ -20,7 +20,7 @@ class TaskInstall extends Command
      *
      * @var string
      */
-    protected $description = '任务模块的安装脚本 db,views ...';
+    protected $description = '安装 haxibiao-task';
 
     /**
      * Create a new command instance.
