@@ -43,7 +43,7 @@ type Task {
   progress_details: String
 
   """
-  指派的状态(1:已指派，2:已完成，3:已奖励)
+  指派的状态(0:未开始，1:已指派/进行中/审核中，2:已达成，3:已奖励)
   """
   assignment_status: Int @rename(attribute: "task_status")
   """
