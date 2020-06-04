@@ -4,6 +4,7 @@ namespace haxibiao\task\Traits;
 
 use App\Exceptions\GQLException;
 use App\Exceptions\UserException;
+use App\Gold;
 use App\User;
 use Carbon\Carbon;
 use haxibiao\task\Assignment;
@@ -317,5 +318,39 @@ trait TaskRepo
         dispatch(new DelayRewaredTask($userTask->id))->delay(now()->addSecond(30))->onQueue('reward');
 
         return 1;
+    }
+
+    public static function receiveTask($task_id)
+    {
+        $task = Task::where('id', $task_id)
+            ->first();
+        $user       = getUser();
+        $assignment = Assignment::firstOrNew([
+            'task_id' => $task->id,
+            'user_id' => $user->id,
+        ]);
+        if (!$assignment->id) {
+            $assignment->save();
+            // Action::createAction('tasks', $task->id, $user->id);
+        }
+        return $task;
+    }
+
+    public static function rewardTask($task_id)
+    {
+        $user       = getUser();
+        $task       = Task::findOrFail($task_id);
+        $assignment = Assignment::firstOrNew([
+            'user_id' => $user->id,
+            'task_id' => $task->id,
+        ]);
+        if ($assignment->status == Assignment::TASK_REACH) {
+            $assignment->status = Assignment::TASK_DONE;
+            $assignment->save();
+            $gold   = $task->reward['gold'];
+            $remark = sprintf('%s奖励', $task->name);
+            Gold::makeIncome($user, $gold, $remark); //发放金币奖励
+        }
+        return $task;
     }
 }

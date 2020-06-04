@@ -1,6 +1,6 @@
 # 睡觉打卡奖励接口
-mutation sleepRewardMutation($id: Int!) {
-  SleepReward(task_id: $id) {
+mutation sleepRewardMutation {
+  SleepReward {
     id
     content
     task {

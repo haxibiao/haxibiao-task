@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\GraphQL;
 
 // use App\Invitation;
 use App\User;
@@ -40,6 +40,7 @@ class TaskTest extends GraphQLTestCase
 
     /**
      * 领取任务
+     * @group task
      */
     public function testReceiveTaskMutation()
     {
@@ -50,13 +51,14 @@ class TaskTest extends GraphQLTestCase
             'Accept'        => 'application/json',
         ];
         $variables = [
-            'task_id' => '1',
+            'id' => '1',
         ];
-        $this->startGraphQL($query, $variables, $headers);
+        $this->runGQL($query, $variables, $headers);
     }
 
     /**
      * 获取任务奖励
+     * @group task
      */
     public function testRewardTaskMutation()
     {
@@ -68,14 +70,15 @@ class TaskTest extends GraphQLTestCase
         ];
 
         $variables = [
-            'task_id' => '1',
+            'id' => '1',
 
         ];
-        $this->startGraphQL($query, $variables, $headers);
+        $this->runGQL($query, $variables, $headers);
     }
 
     /**
      * 提交应用商店好评任务
+     * @group task
      */
     public function testHighPraiseTaskMutation()
     {
@@ -92,16 +95,17 @@ class TaskTest extends GraphQLTestCase
 
         //提交好评
         $variables = [
-            'task_id' => $task->id,
+            'id'      => $task->id,
             'content' => '应用商店好评',
         ];
 
         //测试提交是否出错
-        $this->startGraphQL($query, $variables, $headers);
+        $this->runGQL($query, $variables, $headers);
     }
 
     /**
      * 直播观看任务领取奖励
+     * @group task
      */
     public function testLiveAudienceTaskMutation()
     {
@@ -120,7 +124,7 @@ class TaskTest extends GraphQLTestCase
         $this->updateTaskStatus($task->id, 1);
 
         //指派中状态的任务，领取奖励.. 应该返回异常
-        $this->startGraphQL($query, $variables, $headers);
+        $this->runGQL($query, $variables, $headers);
 
         //assert json has error
         //assert text has "任务未完成..."
@@ -132,6 +136,7 @@ class TaskTest extends GraphQLTestCase
 
     /**
      * 任务列表查询
+     * @group task
      */
     public function testTasksQuery()
     {
@@ -146,13 +151,13 @@ class TaskTest extends GraphQLTestCase
         $variables = [
             'type' => 'NEW_USER_TASK',
         ];
-        $this->startGraphQL($query, $variables, $headers);
+        $this->runGQL($query, $variables, $headers);
 
         //每日任务
         $variables = [
             'type' => 'DAILY_TASK',
         ];
-        $response = $this->startGraphQL($query, $variables, $headers);
+        $response = $this->runGQL($query, $variables, $headers);
         //校验存在已指派的看视频赚钱
         $response->assertJsonFragment(['name' => "看视频赚钱"]);
 
@@ -164,7 +169,7 @@ class TaskTest extends GraphQLTestCase
         $variables = [
             'type' => 'CUSTOM_TASK',
         ];
-        $response = $this->startGraphQL($query, $variables, $headers);
+        $response = $this->runGQL($query, $variables, $headers);
         //校验存在已指派的邀请任务
         $response->assertJsonFragment(['name' => "邀请任务"]);
 
@@ -172,7 +177,7 @@ class TaskTest extends GraphQLTestCase
         $variables = [
             'type' => 'All',
         ];
-        $response = $this->startGraphQL($query, $variables, $headers);
+        $response = $this->runGQL($query, $variables, $headers);
         //检查除了返回新人任务
         //还有邀请（CUSTOM_TASK）
         //$response->assertJsonFragment(['type' => Task::CUSTOM_TASK]); //TODO:目前没有CUSTOM任务 会报错.
@@ -180,7 +185,10 @@ class TaskTest extends GraphQLTestCase
         $response->assertJsonFragment(['type' => Task::DAILY_TASK]);
     }
 
-    //更新任务状态
+    /**
+     * 更新任务状态
+     * @group task
+     */
     public function updateTaskStatus($task_id, $status)
     {
         $userAssignment = Assignment::where('user_id', $this->user->id)->where('task_id', $task_id)->first();

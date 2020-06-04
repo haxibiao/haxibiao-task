@@ -85,7 +85,7 @@ type RewardInfo {
   ticket: Int
 }
 
-extend type Query @middleware(checks: ["auth:api"]) {
+extend type Query {
   """
   喝水打卡任务列表
   """

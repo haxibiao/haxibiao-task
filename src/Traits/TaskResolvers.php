@@ -2,9 +2,7 @@
 
 namespace haxibiao\task\Traits;
 
-use App\Action;
 use App\Exceptions\GQLException;
-use App\Gold;
 use Carbon\Carbon;
 use GraphQL\Type\Definition\ResolveInfo;
 use haxibiao\task\Assignment;
@@ -41,7 +39,7 @@ trait TaskResolvers
         $assignments = $user->assignments()->with('task')->with('user')
             ->whereIn('task_id', $task_ids)->get();
 
-        if ($type == self::DAILY_TASK) {
+        if ($type == Task::DAILY_TASK) {
             //初始化每日任务状态
             Assignment::initDailyTask($assignments);
         }
@@ -133,18 +131,8 @@ trait TaskResolvers
 
     public static function resolveReceive($root, array $args, $context = null, $info = null)
     {
-        $task = Task::where('id', $args['task_id'])
-            ->first();
-        $user       = getUser();
-        $assignment = Assignment::firstOrNew([
-            'task_id' => $task->id,
-            'user_id' => $user->id,
-        ]);
-        if (!$assignment->id) {
-            $assignment->save();
-            Action::createAction('tasks', $task->id, $user->id);
-        }
-        return 1;
+        $task_id = $args['id'];
+        return Task::receiveTask($task_id);
     }
 
     // 所有喝水完成后的奖励
@@ -167,7 +155,7 @@ trait TaskResolvers
     public static function resolveSleepReward($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $user       = getUser();
-        $task       = Task::find($args['task_id']);
+        $task       = Task::find($args['id']);
         $assignment = $task->getAssignment($user->id);
         $isWakeCard = Arr::get($task->resolve, 'task_en') == "Wake";
 
@@ -201,20 +189,8 @@ trait TaskResolvers
     // 任务中心领取奖励接口
     public static function resolveReward($root, array $args, $context = null, $info = null)
     {
-        $user       = getUser();
-        $task       = Task::findOrFail($args['task_id']);
-        $assignment = Assignment::firstOrNew([
-            'user_id' => $user->id,
-            'task_id' => $task->id,
-        ]);
-        if ($assignment->status == Assignment::TASK_REACH) {
-            $assignment->status = Assignment::TASK_DONE;
-            $assignment->save();
-            $gold   = $task->reward['gold'];
-            $remark = sprintf('%s奖励', $task->name);
-            Gold::makeIncome($user, $gold, $remark); //发放金币奖励
-        }
-        return 1;
+        $task_id = $args['id'];
+        return Task::rewardTask($task_id);
     }
 
     // 喝水任务上报打卡接口 drinkWater,单次喝水成功后调用...
@@ -223,7 +199,7 @@ trait TaskResolvers
         $userId = getUserId();
 
         // 此处的task_id代表喝的是第几杯水,兼容以前的设计
-        $position = $args['task_id'];
+        $position = $args['id'];
 
         $task       = Task::where('name', 'DrinkWaterAll')->first();
         $assignment = $task->getAssignment($userId);
@@ -256,7 +232,7 @@ trait TaskResolvers
     {
         $user = checkUser();
 
-        $task = Task::find($args['task_id']);
+        $task = Task::find($args['id']);
         throw_if(is_null($task), GQLException::class, '任务不存在哦~,请稍后再试');
         throw_if(empty(trim($args['content'])), GQLException::class, '账号不能为空哦~');
 
@@ -274,7 +250,7 @@ trait TaskResolvers
     public static function resolveReply($root, array $args, $context = null, $info = null)
     {
         $user    = getUser();
-        $task_id = Arr::get($args, 'task_id', null);
+        $task_id = $args['id'];
         $content = Arr::get($args, 'content', null);
 
         return Task::replyTask($user, $task_id, $content);
@@ -284,7 +260,7 @@ trait TaskResolvers
     public static function resolveComplete($root, array $args, $context = null, $info = null)
     {
         $user    = getUser();
-        $task_id = Arr::get($args, 'task_id', null);
+        $task_id = $args['id'];
 
         return Task::completeTask($user, $task_id);
     }
