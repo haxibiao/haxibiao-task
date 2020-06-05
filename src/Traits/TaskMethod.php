@@ -4,7 +4,6 @@ namespace haxibiao\task\Traits;
 
 use App\Category;
 use App\CategoryUser;
-use App\Dimension;
 use App\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -235,16 +234,11 @@ trait TaskMethod
     // 检查今日看激励视频次数
     public function checkTodayWatchRewardVideoCount($user, $task, $assignment)
     {
-        // 默认是答赚里面点击激励视频和观看激励视频的名称
-        $videoName = data_get($task->resolve, 'video_name', ['WATCH_REWARD_VIDEO', 'CLICK_REWARD_VIDEO']);
-        $record    = Dimension::whereDate('created_at', today())
-            ->where('user_id', $user->id)
-            ->whereIn('name', $videoName)
-            ->first();
-        $done = $record->count >= $task->max_count;
+        $today_count = $user->profile->today_reward_video_count;
+        $done        = $today_count >= $task->max_count;
         return [
             'status'        => $done,
-            'current_count' => $record->count,
+            'current_count' => $today_count,
             'is_over'       => $done, //决定是否不奖励，直接结束
         ];
     }
