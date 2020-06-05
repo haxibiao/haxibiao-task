@@ -116,7 +116,7 @@ trait TaskAttrs
     /* --------------------------------------------------------------------- */
 
     /**
-     * 指派的进度说明
+     * 指派的进度说明 (3/20) 这样
      * @return string|null
      */
     public function getProgressDetailsAttribute()

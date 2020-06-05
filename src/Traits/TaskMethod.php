@@ -242,9 +242,11 @@ trait TaskMethod
             ->where('user_id', $user->id)
             ->whereIn('name', $videoName)
             ->first();
+        $done = $record->count >= $task->max_count;
         return [
-            'status'        => $record->count >= $task->max_count,
+            'status'        => $done,
             'current_count' => $record->count,
+            'is_over'       => $done, //决定是否不奖励，直接结束
         ];
     }
 

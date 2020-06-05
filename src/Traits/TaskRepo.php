@@ -106,21 +106,26 @@ trait TaskRepo
                             break;
                         }
                         //执行检查
+
+                        //1 $result['status']: false, true
                         $result = $this->$method($user, $task, $assignment);
                         if ($result['status']) {
                             //检查结果2：任务状态,已指派的更新为已完成
                             if ($assignment->status == Assignment::TASK_REVIEW) {
                                 $assignment->status = Assignment::TASK_REACH;
                             }
-
                             $assignment->completed_at = now();
                         }
 
+                        // 2. $result['current_count']: 当前进度
                         //检查结果1：任务进度
                         $assignment->current_count = Arr::get($result, 'current_count', 0);
                         if ($task->max_count > 0) {
                             $assignment->progress = $assignment->current_count / $task->max_count;
                         }
+
+                        // 3. $result['is_over']: 是否直接结束任务
+                        //TODO: $result 支持决定是进入(已达成)未领取 还是 直接 进入已完成（可关闭）..
 
                         $assignment->save();
                     }
