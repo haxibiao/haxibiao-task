@@ -230,6 +230,21 @@ trait TaskMethod
         ];
     }
 
+    // 检查今日看激励视频次数
+    public function checkTodayWatchRewardVideoCount($user, $task, $assignment)
+    {
+        // 默认是答赚里面点击激励视频和观看激励视频的名称
+        $videoName = data_get($task->resolve, 'video_name', ['WATCH_REWARD_VIDEO', 'CLICK_REWARD_VIDEO']);
+        $record    = \App\Dimension::whereDate('created_at', today())
+            ->where('user_id', $user->id)
+            ->whereIn('name', $videoName)
+            ->first();
+        return [
+            'status'        => $record->count >= $task->max_count,
+            'current_count' => $record->count,
+        ];
+    }
+
     //今日比赛获胜次数
     public function checkTodayGameWinnersCount($user, $task, $assignment)
     {
@@ -259,9 +274,9 @@ trait TaskMethod
         $status = $user->withdraws()->whereStatus(Withdraw::SUCCESS_WITHDRAW)->exists();
         return
             [
-                'status'        => $status,
-                'current_count' => 0,
-            ];
+            'status'        => $status,
+            'current_count' => 0,
+        ];
     }
 
     //检查用户答题数
@@ -271,9 +286,9 @@ trait TaskMethod
         $status        = $current_count >= $task->max_count;
         return
             [
-                'status'        => $status,
-                'current_count' => $current_count,
-            ];
+            'status'        => $status,
+            'current_count' => $current_count,
+        ];
     }
 
     //检查用户是否更换过性别
@@ -300,7 +315,6 @@ trait TaskMethod
         ];
     }
 
-
     //答赚 - 是否修改头像
     public function checkUserIsUpdateAvatar($user, $task, $assignment)
     {
@@ -308,8 +322,8 @@ trait TaskMethod
         $user = getUser();
         return
             [
-                'status' => !empty($user->avatar),
-                'current_count' => 0
-            ];
+            'status'        => !empty($user->avatar),
+            'current_count' => 0,
+        ];
     }
 }
