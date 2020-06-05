@@ -106,7 +106,7 @@ trait TaskRepo
                             break;
                         }
                         //执行检查
-
+                        //TODO: $result 支持决定是进入(已达成)未领取 还是 直接 进入已完成（可关闭）..
                         //1 $result['status']: false, true
                         $result = $this->$method($user, $task, $assignment);
                         if ($result['status']) {
@@ -125,7 +125,9 @@ trait TaskRepo
                         }
 
                         // 3. $result['is_over']: 是否直接结束任务
-                        //TODO: $result 支持决定是进入(已达成)未领取 还是 直接 进入已完成（可关闭）..
+                        if (data_get($result, 'is_over') === true) {
+                            $assignment->status = Assignment::TASK_DONE;
+                        }
 
                         $assignment->save();
                     }
