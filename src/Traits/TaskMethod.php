@@ -6,7 +6,6 @@ use App\Category;
 use App\CategoryUser;
 use App\Dimension;
 use App\User;
-use App\Withdraw;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
@@ -276,7 +275,7 @@ trait TaskMethod
     //检查是否第一次提现
     public function checkFirstWithdraw($user, $task, $assignment)
     {
-        $status = $user->withdraws()->whereStatus(Withdraw::SUCCESS_WITHDRAW)->exists();
+        $status = $user->wallet->total_withdraw_amount > 0;
         return
             [
             'status'        => $status,
@@ -287,7 +286,7 @@ trait TaskMethod
     //检查用户答题数
     public function checkAnswerQuestionCount($user, $task, $assignment)
     {
-        $current_count = $user->answers()->where('created_at', '>', today())->count();
+        $current_count = $user->profile->answers_count;
         $status        = $current_count >= $task->max_count;
         return
             [
