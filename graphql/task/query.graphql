@@ -13,9 +13,10 @@ type Task {
   review_flow_id: Int
 
   """
-  任务的说明
+  任务的说明文本(nova)
   """
   details: String
+
   """
   任务的分组Int
   """
@@ -72,17 +73,29 @@ type Task {
 
 type RewardInfo {
   """
-  奖励金币
+  普通金币奖励
   """
   gold: Int
   """
-  奖励贡献
+  高额金币奖励
+  """
+  gold_high: Int
+  """
+  普通贡献奖励
   """
   contribute: Int
   """
-  奖励精力
+  高额贡献奖励
+  """
+  contribute_high: Int
+  """
+  普通精力奖励
   """
   ticket: Int
+  """
+  高额精力奖励
+  """
+  ticket_high: Int
 }
 
 extend type Query {

@@ -4,7 +4,7 @@ namespace haxibiao\task\Traits;
 
 use App\Category;
 use App\CategoryUser;
-use App\Contribute;
+use App\Dimension;
 use App\User;
 use App\Withdraw;
 use Illuminate\Support\Arr;
@@ -161,8 +161,11 @@ trait TaskMethod
      */
     public function checkRewardVideo($user, $task, $assignment)
     {
-        //FIXME: getTodayCountByType表示获取今日激励视频奖励次数... 答题APP内部能用这个...
-        $count = Contribute::getTodayCountByType(Contribute::REWARD_VIDEO_CONTRIBUTED_TYPE, $user);
+        //FIXME: 这个工厂里任务是看10次才奖励？？
+
+        //TODO: 需要重构下面的属性来支撑
+        // $count = $user->profile->today_reward_video_count;
+        $count = 0;
         return [
             'status'        => $count >= $task->max_count,
             'current_count' => $count,
@@ -235,7 +238,7 @@ trait TaskMethod
     {
         // 默认是答赚里面点击激励视频和观看激励视频的名称
         $videoName = data_get($task->resolve, 'video_name', ['WATCH_REWARD_VIDEO', 'CLICK_REWARD_VIDEO']);
-        $record    = \App\Dimension::whereDate('created_at', today())
+        $record    = Dimension::whereDate('created_at', today())
             ->where('user_id', $user->id)
             ->whereIn('name', $videoName)
             ->first();

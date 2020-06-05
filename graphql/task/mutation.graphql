@@ -34,9 +34,10 @@ extend type Mutation {
   completeTask(id: Int!): Int @field(resolver: "App\\Task@resolveComplete")
 
   """
-  领取奖励(ID!兼容工厂APP)
+  领取奖励(ID!兼容工厂APP, 兼容高额奖励的情况)
   """
-  rewardTask(id: ID!): Task @field(resolver: "App\\Task@resolveReward")
+  rewardTask(id: ID!, high: Boolean = false): Task
+    @field(resolver: "App\\Task@resolveReward")
 
   """
   应用商店好评任务回复

@@ -2,7 +2,6 @@
 
 namespace haxibiao\task\Traits;
 
-use App\Exceptions\GQLException;
 use App\Exceptions\UserException;
 use Carbon\Carbon;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -191,7 +190,8 @@ trait TaskResolvers
     public static function resolveReward($root, array $args, $context = null, $info = null)
     {
         $task_id = $args['id'];
-        return Task::rewardTask($task_id);
+        $high    = $args['high'];
+        return Task::rewardTask($task_id, $high);
     }
 
     // 喝水任务上报打卡接口 drinkWater,单次喝水成功后调用...
@@ -204,7 +204,7 @@ trait TaskResolvers
 
         $task = Task::where('name', 'DrinkWaterAll')->first();
 
-        if (is_null($task)){
+        if (is_null($task)) {
             return new UserException('喝水任务好像不见咯，请刷新后重试');
         }
 

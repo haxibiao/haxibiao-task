@@ -46,12 +46,8 @@ trait TaskAttrs
      */
     public function getRewardInfoAttribute()
     {
-        $json = $this->reward;
-        return [
-            'gold'       => array_get($json, "gold"),
-            'contribute' => array_get($json, "contribute"),
-            'ticket'     => array_get($json, "ticket"),
-        ];
+        //这里可以控制奖励信息的特殊显示，比如激励视频的...
+        return $this->reward;
     }
 
     /**

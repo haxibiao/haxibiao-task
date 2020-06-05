@@ -2,6 +2,7 @@
 
 namespace haxibiao\task\Traits;
 
+use App\Contribute;
 use App\Exceptions\UserException;
 use App\Gold;
 use App\User;
@@ -247,7 +248,7 @@ trait TaskRepo
         throw_if(is_null($task) || !$task->isCustomTask(), UserException::class, '任务完成失败!');
         throw_if(!Str::contains($task->name, '试玩'), UserException::class, '该任务不是有效的试玩任务!');
 
-        $pivot = \App\Assignment::where([
+        $pivot = Assignment::where([
             'user_id' => $user->id,
             'task_id' => $task->id,
         ])->first();
@@ -324,7 +325,7 @@ trait TaskRepo
         return $task;
     }
 
-    public static function rewardTask($task_id)
+    public static function rewardTask($task_id, $high = false)
     {
         $user       = getUser();
         $task       = Task::findOrFail($task_id);
@@ -332,12 +333,25 @@ trait TaskRepo
             'user_id' => $user->id,
             'task_id' => $task->id,
         ]);
+
         if ($assignment->status == Assignment::TASK_REACH) {
             $assignment->status = Assignment::TASK_DONE;
             $assignment->save();
-            $gold   = $task->reward['gold'];
+
+            //金币奖励
+            $gold   = $high ? $task->reward['gold_high'] : $task->reward['gold'];
             $remark = sprintf('%s奖励', $task->name);
-            Gold::makeIncome($user, $gold, $remark); //发放金币奖励
+            Gold::makeIncome($user, $gold, $remark);
+
+            //精力奖励
+            $ticket       = $high ? $task->reward['ticket_high'] : $task->reward['ticket'];
+            $user->ticket = $user->ticket + $ticket;
+            $user->save();
+
+            //贡献奖励
+            $contribute = $high ? $task->reward['contribute_high'] : $task->reward['contribute'];
+            Contribute::rewardAssignmentContribute($user, $assignment, $contribute);
+
         }
         return $task;
     }
