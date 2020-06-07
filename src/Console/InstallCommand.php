@@ -40,20 +40,19 @@ class InstallCommand extends Command
     public function handle()
     {
 
-        $this->comment('发布 Service Provider...');
+        $this->info('发布 Service Provider...');
         $this->callSilent('vendor:publish', ['--tag' => 'task-provider']);
 
-        $this->comment('发布 资源文件 ...');
+        $this->info('发布 资源文件 ...');
         $this->callSilent('task:publish', ['--force' => true]);
 
-        $this->comment("注册 TaskServiceProvider ...");
+        $this->info("注册 TaskServiceProvider ...");
         $this->registerServiceProvider();
 
+        $this->info("复制 stubs ...");
         copy($this->resolveStubPath('/stubs/Task.stub'), app_path('Task.php'));
         copy($this->resolveStubPath('/stubs/Assignment.stub'), app_path('Assignment.php'));
-
         copy($this->resolveStubPath('/stubs/Nova/Task.stub'), app_path('Nova/Task.php'));
-
         copy($this->resolveStubPath('/stubs/Nova/Filters/Task/TaskType.stub'), app_path('Nova/Filters/Task/TaskType.php'));
         copy($this->resolveStubPath('/stubs/Nova/Filters/Task/TaskStatus.stub'), app_path('Nova/Filters/Task/TaskStatus.php'));
 
