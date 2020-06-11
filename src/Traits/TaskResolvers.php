@@ -39,10 +39,10 @@ trait TaskResolvers
         $assignments = $user->assignments()->with('task')->with('user')
             ->whereIn('task_id', $task_ids)->get();
 
-        if ($type == Task::DAILY_TASK) {
-            //初始化每日任务状态
-            Assignment::initDailyTask($assignments);
-        }
+
+        //初始化每日任务状态
+        Assignment::initDailyTask($assignments);
+
 
         $tasks = [];
         foreach ($assignments as $assignment) {
@@ -269,5 +269,4 @@ trait TaskResolvers
 
         return Task::completeTask($user, $task_id);
     }
-
 }
