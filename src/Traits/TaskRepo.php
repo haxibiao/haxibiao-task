@@ -111,7 +111,8 @@ trait TaskRepo
                         $result = $this->$method($user, $task, $assignment);
                         if ($result['status']) {
                             //检查结果2：任务状态,已指派的更新为已完成
-                            if ($assignment->status == Assignment::TASK_REVIEW) {
+                            // 因为 有0 和 1 的状态 所以加一个 or
+                            if ($assignment->status == Assignment::TASK_REVIEW || $assignment->status == Assignment::TASK_UNDONE) {
                                 $assignment->status = Assignment::TASK_REACH;
                             }
                             $assignment->completed_at = now();
