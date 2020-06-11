@@ -272,21 +272,21 @@ trait TaskMethod
         $status = $user->wallet->total_withdraw_amount > 0;
         return
             [
-            'status'        => $status,
-            'current_count' => 0,
-        ];
+                'status'        => $status,
+                'current_count' => 0,
+            ];
     }
 
-    //检查用户答题数
+    //检查用户每日答题数
     public function checkAnswerQuestionCount($user, $task, $assignment)
     {
-        $current_count = $user->profile->answers_count;
+        $current_count = $user->answers()->whereDate('created_at', today())->count();
         $status        = $current_count >= $task->max_count;
         return
             [
-            'status'        => $status,
-            'current_count' => $current_count,
-        ];
+                'status'        => $status,
+                'current_count' => $current_count,
+            ];
     }
 
     //检查用户是否更换过性别
@@ -320,8 +320,8 @@ trait TaskMethod
         $user = getUser();
         return
             [
-            'status'        => !empty($user->avatar),
-            'current_count' => 0,
-        ];
+                'status'        => !empty($user->avatar),
+                'current_count' => 0,
+            ];
     }
 }
