@@ -317,7 +317,6 @@ trait TaskMethod
     public function checkUserIsUpdateAvatar($user, $task, $assignment)
     {
 
-        $user = getUser();
         return
             [
                 'status'        => !empty($user->avatar),
