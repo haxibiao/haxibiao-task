@@ -4,6 +4,7 @@ namespace haxibiao\task\Traits;
 
 use App\Exceptions\UserException;
 use Carbon\Carbon;
+use DateTime;
 use GraphQL\Type\Definition\ResolveInfo;
 use haxibiao\task\Assignment;
 use haxibiao\task\Task;
@@ -50,6 +51,11 @@ trait TaskResolvers
             $task = $assignment->task;
             //过滤掉下架的任务不显示
             if ($task->status == Task::DISABLE) {
+                continue;
+            }
+
+            //兼容老接口 所以转成Carbon
+            if (Carbon::parse($user->created_at)->diffInDays(today()) > 7 && $task->type == Task::NEW_USER_TASK) {
                 continue;
             }
 
