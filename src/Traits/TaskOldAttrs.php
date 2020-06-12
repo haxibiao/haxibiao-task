@@ -1,4 +1,5 @@
 <?php
+
 namespace haxibiao\task\Traits;
 
 use Illuminate\Support\Arr;
@@ -12,7 +13,6 @@ trait TaskOldAttrs
     public function getGoldAttribute()
     {
         return Arr::get($this->reward, 'gold', 0);
-
     }
 
     public function getTicketAttribute()
@@ -44,5 +44,10 @@ trait TaskOldAttrs
     public function getPostIdAttribute()
     {
         return Arr::get($this->resolve, 'post_id');
+    }
+
+    public function getUserTaskStatusAttrs()
+    {
+        return $this->assignment->status;
     }
 }
