@@ -17,7 +17,7 @@ trait PlayWithTasks
 
     public function assignments()
     {
-        return $this->hasMany(Assignment::class);
+        return $this->hasMany(Assignment::class)->latest('id');
     }
 
     public function getAssignment($task_id)
