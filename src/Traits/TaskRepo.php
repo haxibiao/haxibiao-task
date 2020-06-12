@@ -342,7 +342,8 @@ trait TaskRepo
             'task_id' => $task->id,
         ]);
 
-        if ($assignment->status == Assignment::TASK_REACH) {
+        // 为了兼容前端 贡献任务 加一个条件
+        if ($assignment->status == Assignment::TASK_REACH || $task->type = Task::CONTRIBUTE_TASK) {
             $assignment->status = Assignment::TASK_DONE;
             $assignment->save();
 
