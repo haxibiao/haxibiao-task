@@ -46,7 +46,7 @@ trait TaskOldAttrs
         return Arr::get($this->resolve, 'post_id');
     }
 
-    public function getUserTaskStatusAttrs()
+    public function getUserTaskStatusAttribute()
     {
         return $this->assignment->status;
     }
