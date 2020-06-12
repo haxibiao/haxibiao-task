@@ -350,13 +350,13 @@ trait TaskRepo
             // 判断奖励是否存在只需要判断 普通额度的奖励即可, 低额不一定有高额,但高额一定会有低额
 
             // 金币奖励
-            $gold   = $high ? $task->reward['gold_high'] : $task->reward['gold'];
+            $gold   = $high ? $task->reward['gold_high'] : $task->reward['gold'] ?? 0;
 
             //精力奖励
-            $ticket       = $high ? $task->reward['ticket_high'] : $task->reward['ticket'];
+            $ticket       = $high ? $task->reward['ticket_high'] : $task->reward['ticket'] ?? 0;
 
             //贡献奖励
-            $contribute = $high ? $task->reward['contribute_high'] : $task->reward['contribute'];
+            $contribute = $high ? $task->reward['contribute_high'] : $task->reward['contribute'] ?? 0;
 
             if (isset($task->reward['gold']) && $gold > 0) {
 
