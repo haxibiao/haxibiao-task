@@ -342,41 +342,57 @@ trait TaskRepo
             'task_id' => $task->id,
         ]);
 
-        // 为了兼容前端 贡献任务 加一个条件
-        if ($assignment->status == Assignment::TASK_REACH || $task->type = Task::CONTRIBUTE_TASK) {
+        // 为了兼容前端 贡献任务 加一个条件 else //贡献任务可以多次领奖,所以不能直接更改状态为 Done
+        if ($assignment->status == Assignment::TASK_REACH || $task->type != Task::CONTRIBUTE_TASK) {
             $assignment->status = Assignment::TASK_DONE;
             $assignment->save();
+            //领取奖励
+            Task::reward($user, $task, $assignment, $high);
+        } else if ($task->type = Task::CONTRIBUTE_TASK) {
 
-            // 判断奖励是否存在只需要判断 普通额度的奖励即可, 低额不一定有高额,但高额一定会有低额
-
-            // 金币奖励
-            $gold   = $high ? $task->reward['gold_high'] : $task->reward['gold'] ?? 0;
-
-            //精力奖励
-            $ticket       = $high ? $task->reward['ticket_high'] : $task->reward['ticket'] ?? 0;
-
-            //贡献奖励
-            $contribute = $high ? $task->reward['contribute_high'] : $task->reward['contribute'] ?? 0;
-
-            if (isset($task->reward['gold']) && $gold > 0) {
-
-                $remark = sprintf('%s奖励', $task->name);
-                Gold::makeIncome($user, $gold, $remark);
+            //如果贡献任务有完成次数
+            if ($task->max_count > 0) {
+                $is_done = $assignment->current_count >= $task->max_count;
+                if ($is_done) {
+                    $assignment->status = Assignment::TASK_DONE;
+                    $assignment->save();
+                }
             }
-
-            //精力奖励
-            if (isset($task->reward['ticket']) && $ticket > 0) {
-
-                $user->ticket = $user->ticket + $ticket;
-                $user->save();
-            }
-
-            //贡献奖励
-            if (isset($task->reward['contribute']) && $contribute > 0) {
-
-                Contribute::rewardAssignmentContribute($user, $assignment, $contribute);
-            }
+            Task::reward($user, $task, $assignment, $high);
         }
         return $task;
+    }
+
+    public static function reward($user, $task, $assignment, $high)
+    {
+        // 判断奖励是否存在只需要判断 普通额度的奖励即可, 低额不一定有高额,但高额一定会有低额
+
+        // 金币奖励
+        $gold   = $high ? $task->reward['gold_high'] : $task->reward['gold'] ?? 0;
+
+        //精力奖励
+        $ticket       = $high ? $task->reward['ticket_high'] : $task->reward['ticket'] ?? 0;
+
+        //贡献奖励
+        $contribute = $high ? $task->reward['contribute_high'] : $task->reward['contribute'] ?? 0;
+
+        if (isset($task->reward['gold']) && $gold > 0) {
+
+            $remark = sprintf('%s奖励', $task->name);
+            Gold::makeIncome($user, $gold, $remark);
+        }
+
+        //精力奖励
+        if (isset($task->reward['ticket']) && $ticket > 0) {
+
+            $user->ticket = $user->ticket + $ticket;
+            $user->save();
+        }
+
+        //贡献奖励
+        if (isset($task->reward['contribute']) && $contribute > 0) {
+
+            Contribute::rewardAssignmentContribute($user, $assignment, $contribute);
+        }
     }
 }
