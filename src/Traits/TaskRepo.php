@@ -347,23 +347,32 @@ trait TaskRepo
             $assignment->save();
 
             // 判断奖励是否存在只需要判断 普通额度的奖励即可, 低额不一定有高额,但高额一定会有低额
+
             // 金币奖励
-            if (isset($task->reward['gold']) && $task->reward['gold'] > 0) {
-                $gold   = $high ? $task->reward['gold_high'] : $task->reward['gold'];
+            $gold   = $high ? $task->reward['gold_high'] : $task->reward['gold'];
+
+            //精力奖励
+            $ticket       = $high ? $task->reward['ticket_high'] : $task->reward['ticket'];
+
+            //贡献奖励
+            $contribute = $high ? $task->reward['contribute_high'] : $task->reward['contribute'];
+
+            if (isset($task->reward['gold']) && $gold > 0) {
+
                 $remark = sprintf('%s奖励', $task->name);
                 Gold::makeIncome($user, $gold, $remark);
             }
 
             //精力奖励
-            if (isset($task->reward['ticket']) && $task->reward['ticket'] > 0) {
-                $ticket       = $high ? $task->reward['ticket_high'] : $task->reward['ticket'];
+            if (isset($task->reward['ticket']) && $ticket > 0) {
+
                 $user->ticket = $user->ticket + $ticket;
                 $user->save();
             }
 
             //贡献奖励
-            if (isset($task->reward['contribute']) && $task->reward['contribute'] > 0) {
-                $contribute = $high ? $task->reward['contribute_high'] : $task->reward['contribute'];
+            if (isset($task->reward['contribute']) && $contribute > 0) {
+
                 Contribute::rewardAssignmentContribute($user, $assignment, $contribute);
             }
         }
