@@ -4,7 +4,6 @@ namespace haxibiao\task\Traits;
 
 use App\Exceptions\UserException;
 use Carbon\Carbon;
-use DateTime;
 use GraphQL\Type\Definition\ResolveInfo;
 use haxibiao\task\Assignment;
 use haxibiao\task\Task;
@@ -13,14 +12,11 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 trait TaskResolvers
 {
-    /* --------------------------------------------------------------------- */
-    /* ------------------------------- Query ----------------------------- */
-    /* --------------------------------------------------------------------- */
     // 获取任务列表
     public static function resolveTasks($root, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo = null)
     {
+        app_track_event('任务', '获取任务列表');
         $user = getUser();
-
         //单次查询一个分类的
         $type = $args['type'] ?? 'All';
 
@@ -40,10 +36,8 @@ trait TaskResolvers
         $assignments = $user->assignments()->with('task')->with('user')
             ->whereIn('task_id', $task_ids)->get();
 
-
         //初始化每日任务状态
         Assignment::initDailyTask($assignments);
-
 
         $tasks = [];
         foreach ($assignments as $assignment) {
@@ -131,12 +125,9 @@ trait TaskResolvers
         return $task;
     }
 
-    /* --------------------------------------------------------------------- */
-    /* ------------------------------- Mutation ----------------------------- */
-    /* --------------------------------------------------------------------- */
-
     public static function resolveReceive($root, array $args, $context = null, $info = null)
     {
+        app_track_event('任务', '领取任务');
         $task_id = $args['id'];
         return Task::receiveTask($task_id);
     }
@@ -195,6 +186,8 @@ trait TaskResolvers
     // 任务中心领取奖励接口
     public static function resolveReward($root, array $args, $context = null, $info = null)
     {
+        app_track_event('任务', '领取任务奖励');
+
         $task_id = $args['id'];
         $high    = $args['high'];
         return Task::rewardTask($task_id, $high);
@@ -242,6 +235,8 @@ trait TaskResolvers
     // 应用商店好评任务接口
     public static function resolveHighPariseReply($root, array $args, $context, $info)
     {
+        app_track_event('任务', '回复好评任务');
+
         $user = checkUser();
         $task = Task::find($args['id']);
         throw_if(is_null($task), UserException::class, '任务不存在哦~,请稍后再试');
@@ -253,6 +248,8 @@ trait TaskResolvers
     //答复任务
     public static function resolveReply($root, array $args, $context = null, $info = null)
     {
+        app_track_event('任务', '答复任务');
+
         $user    = getUser();
         $task_id = $args['id'];
         $content = $args['content'] ?? '';
@@ -263,6 +260,8 @@ trait TaskResolvers
     //观看新手教程或采集视频教程任务状态变更
     public static function newUserReword($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
+        app_track_event('任务', '新手教程');
+
         //TODO: 新人教程任务，抖音采集学习任务
         return 1;
     }
@@ -270,6 +269,8 @@ trait TaskResolvers
     //完成任务
     public static function resolveComplete($root, array $args, $context = null, $info = null)
     {
+        app_track_event('任务', '完成任务');
+
         $user    = getUser();
         $task_id = $args['id'];
 
