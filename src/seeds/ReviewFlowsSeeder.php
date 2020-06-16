@@ -14,86 +14,112 @@ class ReviewFlowsSeeder extends Seeder
      */
     public function run()
     {
-
         DB::table('review_flows')->truncate();
-
         $reviewFlows = [
             [
-                'name'                => '喝水赚钱',
-                'check_functions'     => ['checkDrinkWater'],
-                'need_owner_review'   => false,
-                'need_offical_review' => false,
-                'type'                => 1, //1代表只能后台用户选用
+                'name'            => '试玩答妹',
+                'check_functions' => null,
             ],
             [
-                'name'                => '睡觉赚钱',
-                'check_functions'     => ['checkSleep'],
-                'need_owner_review'   => false,
-                'need_offical_review' => false,
-                'type'                => 1, //1代表只能后台用户选用
+                'name'            => '应用好评',
+                'check_functions' => null,
             ],
             [
-                'name'                => '视频发布',
-                'check_functions'     => ['checkPublishVideo'],
-                'need_owner_review'   => false,
-                'need_offical_review' => false,
-                'type'                => 1, //1代表只能后台用户选用
+                'name'            => '在线出题',
+                'check_functions' => null,
             ],
             [
-                'name'                => '看视频赚钱',
-                'check_functions'     => ['checkRewardVideo'],
-                'need_owner_review'   => false,
-                'need_offical_review' => false,
-                'type'                => 1, //1代表只能后台用户选用
+                'name'            => '抖音采集',
+                'check_functions' => null,
             ],
             [
-                'name'                => '完善头像',
-                'check_functions'     => ['checkUserHasAvatar'],
-                'need_owner_review'   => false,
-                'need_offical_review' => false,
-                'type'                => 1, //1代表只能后台用户选用
+                'name'            => '更换头像',
+                'check_functions' => ['checkUserIsUpdateAvatar'],
             ],
             [
-                'name'                => '绑定手机号',
-                'check_functions'     => ['checkUserHasPhone'],
-                'need_owner_review'   => false,
-                'need_offical_review' => false,
-                'type'                => 1, //1代表只能后台用户选用
+                'name'            => '答题总数',
+                'check_functions' => ['checkAnswerQuestionCount'],
             ],
             [
-                'name'                => '修改性别和生日',
-                'check_functions'     => ['checkUserGenderAndBirthday'],
-                'need_owner_review'   => false,
-                'need_offical_review' => false,
-                'type'                => 1, //1代表只能后台用户选用
+                'name'            => '更换昵称',
+                'check_functions' => ['checkUserIsUpdateName'],
             ],
             [
-                'name'                => '应用商店好评',
-                'check_functions'     => ['checkAppStoreComment'],
-                'need_owner_review'   => false,
-                'need_offical_review' => false,
-                'type'                => 1, //1代表只能后台用户选用
+                'name'            => '设置性别',
+                'check_functions' => ['checkUserIsUpdateGender'],
             ],
             [
-                'name'                => '最大观众数量',
-                'check_functions'     => ['checkAudienceCount'],
-                'need_owner_review'   => false,
-                'need_offical_review' => false,
-                'type'                => 1, //1代表只能后台用户选用
+                'name'            => '设置年龄',
+                'check_functions' => ['checkAgeIsUpdate'],
             ],
             [
-                'name'                => '点赞数量统计',
-                'check_functions'     => ['checkLikesCount'],
-                'need_owner_review'   => false,
-                'need_offical_review' => false,
-                'type'                => 1, //1代表只能后台用户选用
+                'name'            => '新冠答题数',
+                'check_functions' => ['checkCategoryAnswerQuestion'],
             ],
             [
-                'name'                => '邀请用户统计',
-                'check_functions'     => ['checkInviteUser'],
-                'need_owner_review'   => false,
-                'need_offical_review' => false,
-                'type'                => 1, //1代表只能后台用户选用
+                'name'            => '答题PK',
+                'check_functions' => ['checkTodayGameWinnersCount'],
+            ],
+            [
+                'name'            => '刷视频',
+                'check_functions' => ['checkTodayVisitsCount'],
+            ],
+            [
+                'name'            => '新手答题',
+                'check_functions' => ['checkAnswerQuestionCount'],
+            ],
+            [
+                'name'            => '首次提现奖励',
+                'check_functions' => ['checkFirstWithdraw'],
+            ],
+            [
+                'name'            => '看激励视频',
+                'check_functions' => ['checkTodayWatchRewardVideoCount'],
+            ],
+
+            [
+                'name'            => '喝水赚钱',
+                'check_functions' => ['checkDrinkWater'],
+            ],
+            [
+                'name'            => '睡觉赚钱',
+                'check_functions' => ['checkSleep'],
+            ],
+            [
+                'name'            => '视频发布',
+                'check_functions' => ['checkPublishVideo'],
+            ],
+            [
+                'name'            => '看视频赚钱',
+                'check_functions' => ['checkRewardVideo'],
+            ],
+            [
+                'name'            => '完善头像',
+                'check_functions' => ['checkUserHasAvatar'],
+            ],
+            [
+                'name'            => '绑定手机号',
+                'check_functions' => ['checkUserHasPhone'],
+            ],
+            [
+                'name'            => '修改性别和生日',
+                'check_functions' => ['checkUserGenderAndBirthday'],
+            ],
+            [
+                'name'            => '应用商店好评',
+                'check_functions' => ['checkAppStoreComment'],
+            ],
+            [
+                'name'            => '最大观众数量',
+                'check_functions' => ['checkAudienceCount'],
+            ],
+            [
+                'name'            => '点赞数量统计',
+                'check_functions' => ['checkLikesCount'],
+            ],
+            [
+                'name'            => '邀请用户统计',
+                'check_functions' => ['checkInviteUser'],
             ],
         ];
         foreach ($reviewFlows as $reviewFlow) {

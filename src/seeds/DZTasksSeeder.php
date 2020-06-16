@@ -46,7 +46,7 @@ class DZTasksSeeder extends Seeder
                 'contribute_high' => 6,
             ],
             'max_count'      => 20,
-            'review_flow_id' => ReviewFlow::whereName('检查今日用户观看激励视频次数')->first()->id, //这些都是前端直接做，前端知道结果，不需要后端审查
+            'review_flow_id' => ReviewFlow::whereName('看激励视频')->first()->id,
             'status'         => true,
         ]);
         $task->group = "贡献任务";
@@ -60,7 +60,7 @@ class DZTasksSeeder extends Seeder
                 'ticket'     => -1,
                 'contribute' => 10,
             ],
-            'review_flow_id' => null, //这些都是前端直接做，前端知道结果，不需要后端审查
+            'review_flow_id' => ReviewFlow::whereName('在线出题')->first()->id,
             'status'         => true,
         ]);
         $task->group = "贡献任务";
@@ -74,7 +74,7 @@ class DZTasksSeeder extends Seeder
                 'ticket'     => 0,
                 'contribute' => 0,
             ],
-            'review_flow_id' => null, //这些都是前端直接做，前端知道结果，不需要后端审查
+            'review_flow_id' => ReviewFlow::whereName('抖音采集')->first()->id,
             'status'         => true,
         ]);
         $task->group = "贡献任务";
@@ -92,7 +92,7 @@ class DZTasksSeeder extends Seeder
                 'gold'   => 5,
                 'ticket' => 0,
             ],
-            'review_flow_id' => ReviewFlow::whereName('检测用户是否更换过昵称')->first()->id,
+            'review_flow_id' => ReviewFlow::whereName('更换昵称')->first()->id,
             'status'         => true,
         ]);
         $task->group = "新人任务";
@@ -105,7 +105,7 @@ class DZTasksSeeder extends Seeder
                 'gold'   => 10,
                 'ticket' => 0,
             ],
-            'review_flow_id' => ReviewFlow::whereName('检测用户是否更换过头像')->first()->id,
+            'review_flow_id' => ReviewFlow::whereName('更换头像')->first()->id,
             'status'         => true,
         ]);
         $task->group = "新人任务";
@@ -118,7 +118,7 @@ class DZTasksSeeder extends Seeder
                 'gold'   => 10,
                 'ticket' => 0,
             ],
-            'review_flow_id' => ReviewFlow::whereName('检查用户是否更换过性别')->first()->id,
+            'review_flow_id' => ReviewFlow::whereName('设置性别')->first()->id,
             'status'         => true,
         ]);
         $task->group = "新人任务";
@@ -131,7 +131,7 @@ class DZTasksSeeder extends Seeder
                 'gold'   => 5,
                 'ticket' => 0,
             ],
-            'review_flow_id' => ReviewFlow::whereName('检查用户是否填写过年龄')->first()->id,
+            'review_flow_id' => ReviewFlow::whereName('设置年龄')->first()->id,
             'status'         => true,
         ]);
         $task->group = "新人任务";
@@ -179,7 +179,7 @@ class DZTasksSeeder extends Seeder
                 'ticket' => 40,
             ],
             'max_count'      => 200,
-            'review_flow_id' => ReviewFlow::whereName('检测用户答题数')->first()->id,
+            'review_flow_id' => ReviewFlow::whereName('答题总数')->first()->id,
             'status'         => true,
         ]);
         $task->group = "每日任务";
@@ -193,7 +193,7 @@ class DZTasksSeeder extends Seeder
                 'ticket' => 20,
             ],
             'max_count'      => 100,
-            'review_flow_id' => ReviewFlow::whereName('检测用户答题数')->first()->id,
+            'review_flow_id' => ReviewFlow::whereName('答题总数')->first()->id,
             'status'         => true,
         ]);
         $task->group = "每日任务";
@@ -207,7 +207,7 @@ class DZTasksSeeder extends Seeder
                 'ticket' => 10,
             ],
             'max_count'      => 50,
-            'review_flow_id' => ReviewFlow::whereName('检测用户答题数')->first()->id,
+            'review_flow_id' => ReviewFlow::whereName('答题总数')->first()->id,
             'status'         => true,
         ]);
         $task->group = "每日任务";
@@ -221,7 +221,7 @@ class DZTasksSeeder extends Seeder
                 'ticket' => 1,
             ],
             'max_count'      => 1,
-            'review_flow_id' => ReviewFlow::whereName('检测用户答题数')->first()->id,
+            'review_flow_id' => ReviewFlow::whereName('答题总数')->first()->id,
             'status'         => true,
         ]);
         $task->group = "每日任务";
@@ -235,7 +235,7 @@ class DZTasksSeeder extends Seeder
                 'ticket' => 5,
             ],
             'max_count'      => 10,
-            'review_flow_id' => ReviewFlow::whereName('检查用户分类答题数')->first()->id,
+            'review_flow_id' => ReviewFlow::whereName('新冠答题数')->first()->id,
             'status'         => true,
             'resolve'        => ["category_id" => 140, "submit_name" => "去答题"],
         ]);
@@ -250,7 +250,7 @@ class DZTasksSeeder extends Seeder
                 'ticket' => 0,
             ],
             'max_count'      => 50,
-            'review_flow_id' => ReviewFlow::whereName('今日浏览次数')->first()->id,
+            'review_flow_id' => ReviewFlow::whereName('刷视频')->first()->id,
             'status'         => true,
             'resolve'        => ["visits_type" => "posts", "route" => "学习"],
         ]);
@@ -265,7 +265,7 @@ class DZTasksSeeder extends Seeder
                 'ticket' => 0,
             ],
             'max_count'      => 50,
-            'review_flow_id' => ReviewFlow::whereName('检查今日比赛获胜次数')->first()->id,
+            'review_flow_id' => ReviewFlow::whereName('答题PK')->first()->id,
             'status'         => true,
         ]);
         $task->group = "每日任务";
@@ -284,7 +284,7 @@ class DZTasksSeeder extends Seeder
                 'gold'   => 600,
                 'ticket' => 0,
             ],
-            'review_flow_id' => null,
+            'review_flow_id' => ReviewFlow::whereName('应用好评')->first()->id,
             'status'         => true,
             'resolve'        => ["router" => "SubmitTask", "submit_name" => "去评价"],
         ]);
@@ -299,7 +299,7 @@ class DZTasksSeeder extends Seeder
                 'gold'   => 50,
                 'ticket' => 0,
             ],
-            'review_flow_id' => null,
+            'review_flow_id' => ReviewFlow::whereName('试玩答妹')->first()->id,
             'status'         => true,
             'resolve'        => ["package" => "com.damei", "post_id" => 15053],
         ]);

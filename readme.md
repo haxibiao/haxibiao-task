@@ -18,8 +18,8 @@
 2. 执行`php artisan task:install && composer dump`
 3. 给app/User.php 添加 use PlayWithTasks
 4. 执行`php artisan migrate`
-5. 执行`php artisan db:seed --class=ReviewFlowsSeeder` 先执行 (答赚的请用自己项目的Dati开头的Seeders)
-6. 执行`php artisan db:seed --class=TaskSeeder`
+5. 执行`php artisan db:seed --class=ReviewFlowsSeeder` 先执行 
+6. 执行`php artisan db:seed --class=TaskSeeder` (答赚的DZTasksSeeders)
 7. 完成
 
 ### 如何完成更新？
