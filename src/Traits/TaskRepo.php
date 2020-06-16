@@ -445,20 +445,22 @@ trait TaskRepo
      */
     public static function recordRewardVideo($user, $rewardTaskID, $high)
     {
-        // $task = Task::where('name', '有趣小视频')->first();
-        // // 领奖任务与激励视频任务相同
-        // if ($rewardTaskID == $task->id) {
-        //     if ($high == true) {
-        //         $action     = 'CLICK_REWARD_VIDEO';
-        //         $contribute = $task->reward['contribute_high'];
-        //     } else {
-        //         $action     = 'WATCH_REWARD_VIDEO';
-        //         $contribute = $task->reward['contribute'];
-        //     }
+        $task = Task::where('name', '有趣小视频')->first();
+        // 领奖任务与激励视频任务相同
+        if ($rewardTaskID == $task->id) {
+            if ($high == true) {
+                $action     = 'CLICK_REWARD_VIDEO';
+                $contribute = $task->reward['contribute_high'];
+            } else {
+                $action     = 'WATCH_REWARD_VIDEO';
+                $contribute = $task->reward['contribute'];
+            }
 
-        //     // Dimension::setDimension($user, $action, $contribute);
-        //     $rerawrdVideoTask = \App\Task::where('name', '有趣小视频')->first();
-        //     $rerawrdVideoTask->checkTaskStatus($user);
-        // }
+            if (class_exists('App\\Dimension')) {
+                \App\Dimension::setDimension($user, $action, $contribute);
+            }
+            $rerawrdVideoTask = \App\Task::where('name', '有趣小视频')->first();
+            $rerawrdVideoTask->checkTaskStatus($user);
+        }
     }
 }
