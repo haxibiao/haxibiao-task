@@ -3,6 +3,10 @@ query tasks($type: TaskType!) {
   tasks(type: $type) {
     id
     name
+    review_flow {
+      id
+      name
+    }
     assignment_status
     assignment_progress
     progress_details
@@ -13,6 +17,5 @@ query tasks($type: TaskType!) {
       ticket
       contribute
     }
-    review_flow_id
   }
 }

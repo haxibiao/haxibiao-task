@@ -35,48 +35,58 @@ class ReviewFlowsSeeder extends Seeder
             [
                 'name'            => '更换头像',
                 'check_functions' => ['checkUserIsUpdateAvatar'],
+                'review_class'    => 'User',
             ],
             [
                 'name'            => '答题总数',
                 'check_functions' => ['checkAnswerQuestionCount'],
+                'review_class'    => 'Answer',
             ],
             [
                 'name'            => '更换昵称',
                 'check_functions' => ['checkUserIsUpdateName'],
+                'review_class'    => 'User',
             ],
             [
                 'name'            => '设置性别',
                 'check_functions' => ['checkUserIsUpdateGender'],
+                'review_class'    => 'User',
             ],
             [
                 'name'            => '设置年龄',
                 'check_functions' => ['checkAgeIsUpdate'],
+                'review_class'    => 'Profile',
             ],
             [
                 'name'            => '新冠答题数',
                 'check_functions' => ['checkCategoryAnswerQuestion'],
+                'review_class'    => 'Answer',
             ],
             [
                 'name'            => '答题PK',
                 'check_functions' => ['checkTodayGameWinnersCount'],
+                'review_class'    => 'Game',
             ],
             [
                 'name'            => '刷视频',
                 'check_functions' => ['checkTodayVisitsCount'],
+                'review_class'    => 'Visit',
             ],
             [
                 'name'            => '新手答题',
                 'check_functions' => ['checkAnswerQuestionCount'],
+                'review_class'    => 'Answer',
             ],
             [
                 'name'            => '首次提现奖励',
                 'check_functions' => ['checkFirstWithdraw'],
+                'review_class'    => 'Withdraw',
             ],
             [
                 'name'            => '看激励视频',
                 'check_functions' => ['checkTodayWatchRewardVideoCount'],
+                'review_class'    => 'Gold',
             ],
-
             [
                 'name'            => '喝水赚钱',
                 'check_functions' => ['checkDrinkWater'],
@@ -88,22 +98,27 @@ class ReviewFlowsSeeder extends Seeder
             [
                 'name'            => '视频发布',
                 'check_functions' => ['checkPublishVideo'],
+                'review_class'    => 'Post',
             ],
             [
                 'name'            => '看视频赚钱',
                 'check_functions' => ['checkRewardVideo'],
+                'review_class'    => 'Gold',
             ],
             [
                 'name'            => '完善头像',
                 'check_functions' => ['checkUserHasAvatar'],
+                'review_class'    => 'Profile',
             ],
             [
                 'name'            => '绑定手机号',
                 'check_functions' => ['checkUserHasPhone'],
+                'review_class'    => 'User',
             ],
             [
                 'name'            => '修改性别和生日',
                 'check_functions' => ['checkUserGenderAndBirthday'],
+                'review_class'    => 'Profile',
             ],
             [
                 'name'            => '应用商店好评',
@@ -112,14 +127,17 @@ class ReviewFlowsSeeder extends Seeder
             [
                 'name'            => '最大观众数量',
                 'check_functions' => ['checkAudienceCount'],
+                'review_class'    => 'UserLive',
             ],
             [
                 'name'            => '点赞数量统计',
                 'check_functions' => ['checkLikesCount'],
+                'review_class'    => 'Like',
             ],
             [
                 'name'            => '邀请用户统计',
                 'check_functions' => ['checkInviteUser'],
+                'review_class'    => 'Invite',
             ],
         ];
         foreach ($reviewFlows as $reviewFlow) {
