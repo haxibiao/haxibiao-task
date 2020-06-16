@@ -37,9 +37,9 @@ class TaskServiceProvider extends ServiceProvider
                 __DIR__ . '/../config/task.php' => config_path('task.php'),
             ], 'task-config');
 
-            // $this->publishes([
-            //     __DIR__ . '/../database' => database_path('./'),
-            // ], 'task-db');
+            $this->publishes([
+                __DIR__ . '/../database/factories' => database_path('./factories'),
+            ], 'task-db');
 
             $this->publishes([
                 __DIR__ . '/../graphql' => base_path('graphql'),
