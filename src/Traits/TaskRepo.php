@@ -139,12 +139,14 @@ trait TaskRepo
         $task       = $this;
         $assignment = $task->getAssignment($user->id);
 
+
         if ($assignment->status < Assignment::TASK_REACH) {
-            if ($flow = $task->reviewFlow) {
+            if ($flow = $task->review_flow) {
                 // 执行模版任务定义的检查方法s
                 $checkoutFunctions = $flow->check_functions;
                 if (is_array($checkoutFunctions)) {
                     foreach ($checkoutFunctions as $method) {
+
                         if (!method_exists($this, $method)) {
                             break;
                         }
