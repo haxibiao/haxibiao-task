@@ -1,8 +1,8 @@
 <?php
+namespace haxibiao\task;
 
 use haxibiao\task\Task;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class TaskSeeder extends Seeder
 {
@@ -13,8 +13,8 @@ class TaskSeeder extends Seeder
      */
     public function run()
     {
-        //正式上线后，不要再清空，要保留运营更新的 图文...
-        DB::table('tasks')->truncate();
+        //需要的旧系统手动truncate
+        // DB::table('tasks')->truncate();
 
         //新人任务
         Task::firstOrCreate([

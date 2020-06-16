@@ -16,6 +16,49 @@ use Illuminate\Support\Str;
 
 trait TaskRepo
 {
+    public static function getAssignments($user, $type)
+    {
+        //类型
+        if ($type == 'All') {
+            if (getAppVersion() < "3.0") {
+                $qb = Task::where('type', '<>', Task::CONTRIBUTE_TASK); //贡献任务以前没进入后端任务列表
+                //3.0之前的任务不显示新手答题和首次提现任务
+                $qb->where('name', '<>', '新手答题')->where('name', '<>', '首次提现奖励');
+            } else {
+                $qb = Task::all();
+            }
+        } else {
+            $qb = Task::whereType($type);
+        }
+        $task_ids = $qb->pluck('id');
+
+        //确保指派数据正常
+        Assignment::initAssignments($user);
+        $assignments = $user->assignments()->with('task.review_flow')->with('user')
+            ->whereIn('task_id', $task_ids)->get();
+
+        //初始化每日任务状态
+        Assignment::initDailyTask($assignments);
+
+        //过滤
+        $assignments = $assignments->filter(function ($assignment, $key) {
+            $take = true;
+            $task = $assignment->task;
+            //已领取的,新人和自定义任务不再返回前端显示
+            if (in_array($task->type, [Task::NEW_USER_TASK, Task::CUSTOM_TASK])) {
+                $take = $assignment->status != Assignment::TASK_DONE;
+            }
+
+            //已下架的,过滤掉不显示
+            if ($task->status == Task::DISABLE) {
+                $take = false;
+            }
+            return $take;
+        });
+
+        return $assignments;
+    }
+
     public function isDailyTask()
     {
         return $this->type == Task::DAILY_TASK;
@@ -368,10 +411,10 @@ trait TaskRepo
         // 判断奖励是否存在只需要判断 普通额度的奖励即可, 低额不一定有高额,但高额一定会有低额
 
         // 金币奖励
-        $gold   = $high ? $task->reward['gold_high'] : $task->reward['gold'] ?? 0;
+        $gold = $high ? $task->reward['gold_high'] : $task->reward['gold'] ?? 0;
 
         //精力奖励
-        $ticket       = $high ? $task->reward['ticket_high'] : $task->reward['ticket'] ?? 0;
+        $ticket = $high ? $task->reward['ticket_high'] : $task->reward['ticket'] ?? 0;
 
         //贡献奖励
         $contribute = $high ? $task->reward['contribute_high'] : $task->reward['contribute'] ?? 0;
@@ -394,5 +437,27 @@ trait TaskRepo
 
             Contribute::rewardAssignmentContribute($user, $assignment, $contribute);
         }
+    }
+
+    /**
+     * 记录激励视频任务 //FIXME: 这里可以先不记录，等重构haxibiao-dimension一起...
+     */
+    public static function recordRewardVideo($user, $rewardTaskID, $high)
+    {
+        // $task = Task::where('name', '有趣小视频')->first();
+        // // 领奖任务与激励视频任务相同
+        // if ($rewardTaskID == $task->id) {
+        //     if ($high == true) {
+        //         $action     = 'CLICK_REWARD_VIDEO';
+        //         $contribute = $task->reward['contribute_high'];
+        //     } else {
+        //         $action     = 'WATCH_REWARD_VIDEO';
+        //         $contribute = $task->reward['contribute'];
+        //     }
+
+        //     // Dimension::setDimension($user, $action, $contribute);
+        //     $rerawrdVideoTask = \App\Task::where('name', '有趣小视频')->first();
+        //     $rerawrdVideoTask->checkTaskStatus($user);
+        // }
     }
 }

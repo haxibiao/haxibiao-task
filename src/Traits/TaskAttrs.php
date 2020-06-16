@@ -9,27 +9,43 @@ use Illuminate\Support\Facades\Storage;
 
 trait TaskAttrs
 {
-
-    public function getGroupAttribute()
+    public function getNextRewardVideoTimeAttribute()
     {
-        switch ($this->type) {
-            case 0:
-                return "新人任务";
-                break;
-            case 1:
-                return "每日任务";
-                break;
-            case 3:
-                return "实时任务";
-                break;
-            case 4:
-                return "贡献任务";
-                break;
-            default:
-                return "自定义任务";
-                break;
+        if ($this->name == '有趣小视频') {
+            if ($user = checkUser()) {
+                $created_at = $user->getLatestWatchRewardVideoTime();
+                if (empty($created_at)) {
+                    return 0;
+                }
+                $leftTime = now()->diffInSeconds($created_at);
+
+                return $leftTime >= 30 ? 0 : 30 - $leftTime;
+            }
+            return 0;
         }
+
     }
+
+    // public function getGroupAttribute()
+    // {
+    //     switch ($this->type) {
+    //         case 0:
+    //             return "新人任务";
+    //             break;
+    //         case 1:
+    //             return "每日任务";
+    //             break;
+    //         case 3:
+    //             return "实时任务"; //工厂的喝水睡觉
+    //             break;
+    //         case 4:
+    //             return "贡献任务";
+    //             break;
+    //         default:
+    //             return "自定义任务"; //type=2
+    //             break;
+    //     }
+    // }
 
     /**
      * 获取任务配置信息

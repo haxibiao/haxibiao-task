@@ -24,7 +24,8 @@ class CreateTasksTable extends Migration
             $table->string('icon')->nullable()->comment("任务图标");
             $table->string('background_img')->nullable()->comment('任务背景图');
 
-            $table->integer('type')->nullable()->comment('任务分组：0:新人任务 1:每日任务 2:自定义任务 3:实时任务（答题没用）');
+            $table->string('group', 20)->nullable()->comment('任务分组：新人任务|每日任务|自定义任务|实时任务|贡献任务...');
+            $table->integer('type')->nullable()->comment('任务类型：0:新人任务 1:每日任务 2:自定义任务 3:实时任务 - 逻辑用途');
             $table->boolean('status')->default(0)->comment('状态: 0:删除 1:展示');
 
             $table->json('resolve')->nullable()->comment('解析json，留给前端开发来发挥的json信息');

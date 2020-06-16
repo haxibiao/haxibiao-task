@@ -17,7 +17,7 @@ class TaskServiceProvider extends ServiceProvider
             Console\InstallCommand::class,
             Console\PublishCommand::class,
         ]);
-
+        $this->bindPathsInContainer();
     }
 
     /**
@@ -37,9 +37,9 @@ class TaskServiceProvider extends ServiceProvider
                 __DIR__ . '/../config/task.php' => config_path('task.php'),
             ], 'task-config');
 
-            $this->publishes([
-                __DIR__ . '/../database' => database_path('./'),
-            ], 'task-db');
+            // $this->publishes([
+            //     __DIR__ . '/../database' => database_path('./'),
+            // ], 'task-db');
 
             $this->publishes([
                 __DIR__ . '/../graphql' => base_path('graphql'),
@@ -49,6 +49,37 @@ class TaskServiceProvider extends ServiceProvider
                 __DIR__ . '/../tests/Feature/GraphQL' => base_path('tests/Feature/GraphQL'),
             ], 'task-tests');
 
+            //注册 migrations paths
+            $this->loadMigrationsFrom($this->app->make('path.haxibiao-task.migrations'));
         }
+    }
+
+    /**
+     * Bind paths in container.
+     *
+     * @return void
+     */
+    protected function bindPathsInContainer()
+    {
+        foreach ([
+            'path.haxibiao-task'            => $root = dirname(__DIR__),
+            'path.haxibiao-task.config'     => $root . '/config',
+            'path.haxibiao-task.graphql'    => $root . '/graphql',
+            'path.haxibiao-task.database'   => $database = $root . '/database',
+            'path.haxibiao-task.migrations' => $database . '/migrations',
+            'path.haxibiao-task.seeds'      => $database . '/seeds',
+        ] as $abstract => $instance) {
+            $this->app->instance($abstract, $instance);
+        }
+    }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return [DZTasksSeeder::class];
     }
 }

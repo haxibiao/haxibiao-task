@@ -61,6 +61,11 @@ class Assignment extends Model
         return $this->belongsTo(\App\Task::class);
     }
 
+    public function review_flow()
+    {
+        return $this->belongsTo(\App\ReviewFlow::class);
+    }
+
     public function getStatus()
     {
         $status     = $this->status;

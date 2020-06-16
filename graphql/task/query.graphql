@@ -7,10 +7,12 @@ type Task {
   """
   name: String
 
-  """
-  任务的模板(定义任务做什么事情，到什么程度)
-  """
   review_flow_id: Int
+
+  """
+  任务定义(做什么事情，到什么程度)
+  """
+  review_flow: ReviewFlow
 
   """
   任务的说明文本(nova)
@@ -69,6 +71,11 @@ type Task {
 
   created_at: DateTime
   updated_at: DateTime
+
+  """
+  从当前计算与下次激励视频的间隔时间
+  """
+  next_reward_video_time: Int
 }
 
 type RewardInfo {

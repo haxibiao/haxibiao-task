@@ -58,9 +58,9 @@ class Task extends Model
         return $query->whereStatus(self::ENABLE);
     }
 
-    public function reviewFlow()
+    public function review_flow()
     {
-        return $this->belongsTo(ReviewFlow::class);
+        return $this->belongsTo(ReviewFlow::class, 'review_flow_id');
     }
 
     public function assignments()

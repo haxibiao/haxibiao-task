@@ -12,55 +12,17 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 trait TaskResolvers
 {
-    // 获取任务列表
+    // 获取任务(指派)列表
     public static function resolveTasks($root, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo = null)
     {
         app_track_event('任务', '获取任务列表');
         $user = getUser();
         //单次查询一个分类的
-        $type = $args['type'] ?? 'All';
-
-        if ($type == 'All') {
-            if (getAppVersion() < "3.0") {
-                $qb = Task::where('type', '<>', Task::CONTRIBUTE_TASK); //贡献任务以前没进入后端任务列表
-                //3.0之前的任务不显示新手答题和首次提现任务
-                $qb->where('name', '<>', '新手答题')->where('name', '<>', '首次提现奖励');
-            } else {
-                $qb = Task::all();
-            }
-        } else {
-            $qb = Task::whereType($type);
-        }
-        $task_ids = $qb->pluck('id');
-        //确保指派数据正常
-        Assignment::initAssignments($user);
-
-        $assignments = $user->assignments()->with('task')->with('user')
-            ->whereIn('task_id', $task_ids)->get();
-
-        //初始化每日任务状态
-        Assignment::initDailyTask($assignments);
-
-        $tasks = [];
+        $type        = $args['type'] ?? 'All';
+        $assignments = Task::getAssignments($user, $type);
+        $tasks       = [];
         foreach ($assignments as $assignment) {
-
             $task = $assignment->task;
-            //过滤掉下架的任务不显示
-            if ($task->status == Task::DISABLE) {
-                continue;
-            }
-
-            //兼容老接口 所以转成Carbon
-            if (Carbon::parse($user->created_at)->diffInDays(today()) > 7 && $task->type == Task::NEW_USER_TASK) {
-                continue;
-            }
-
-            //过滤完成后需要不显示的任务 ↓ $record 保存的是 tasks 表主键
-            $notShowCompletedIds = Task::whereType(Task::NEW_USER_TASK)->pluck('id')->toArray();
-            if ($assignment->status == 3 && in_array($assignment->task_id, $notShowCompletedIds)) {
-                continue;
-            }
-
             //指派的 属性alias 过去给gql用
             $task->assignment = $assignment;
             $task->user       = $assignment->user;
@@ -192,6 +154,10 @@ trait TaskResolvers
 
         $task_id = $args['id'];
         $high    = $args['high'];
+
+        //记录激励视频dimensions
+        Task::recordRewardVideo(getUser(), $task_id, $high);
+
         return Task::rewardTask($task_id, $high);
     }
 

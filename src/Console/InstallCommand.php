@@ -40,14 +40,14 @@ class InstallCommand extends Command
     public function handle()
     {
 
-        $this->info('发布 Service Provider...');
-        $this->callSilent('vendor:publish', ['--tag' => 'task-provider']);
+        // $this->info('发布...');
+        // $this->callSilent('vendor:publish', ['--tag' => 'task-provider']);
 
         $this->info('发布 资源文件 ...');
         $this->callSilent('task:publish', ['--force' => true]);
 
-        $this->info("注册 TaskServiceProvider ...");
-        $this->registerServiceProvider();
+        // $this->info("注册 TaskServiceProvider ...");
+        // $this->registerServiceProvider();
 
         $this->info("复制 stubs ...");
         copy($this->resolveStubPath('/stubs/Task.stub'), app_path('Task.php'));

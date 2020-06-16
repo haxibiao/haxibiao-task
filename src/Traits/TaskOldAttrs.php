@@ -48,6 +48,6 @@ trait TaskOldAttrs
 
     public function getUserTaskStatusAttribute()
     {
-        return $this->assignment->status;
+        return $this->assignment ? $this->assignment->status : 0;
     }
 }
