@@ -246,7 +246,7 @@ trait TaskMethod
     //今日比赛获胜次数
     public function checkTodayGameWinnersCount($user, $task, $assignment)
     {
-        $current_count = $user->gameWinners()->today()->count();
+        $current_count = $user->gameWinners()->whereDate('created_at', today())->count();
         $status        = $current_count >= $task->max_count;
         return [
             'status'        => $status,
@@ -258,7 +258,7 @@ trait TaskMethod
     public function checkTodayVisitsCount($user, $task, $assignment)
     {
         $visits_type   = Arr::get($task->resolve, 'visits_type', 'videos');
-        $current_count = $user->visits()->ofType($visits_type)->today()->count();
+        $current_count = $user->visits()->ofType($visits_type)->whereDate('created_at', today())->count();
         $status        = $current_count >= $task->max_count;
         return [
             'status'        => $status,
@@ -272,9 +272,9 @@ trait TaskMethod
         $status = $user->wallet->total_withdraw_amount > 0;
         return
             [
-                'status'        => $status,
-                'current_count' => 0,
-            ];
+            'status'        => $status,
+            'current_count' => 0,
+        ];
     }
 
     //检查用户每日答题数
@@ -284,9 +284,9 @@ trait TaskMethod
         $status        = $current_count >= $task->max_count;
         return
             [
-                'status'        => $status,
-                'current_count' => $current_count,
-            ];
+            'status'        => $status,
+            'current_count' => $current_count,
+        ];
     }
 
     //检查用户是否更换过性别
@@ -319,8 +319,8 @@ trait TaskMethod
 
         return
             [
-                'status'        => !empty($user->avatar),
-                'current_count' => 0,
-            ];
+            'status'        => !empty($user->avatar),
+            'current_count' => 0,
+        ];
     }
 }
