@@ -23,7 +23,6 @@ trait TaskAttrs
             }
             return 0;
         }
-
     }
 
     // public function getGroupAttribute()
@@ -140,6 +139,8 @@ trait TaskAttrs
         //resolvers里会关联这个属性回来
         if ($this->max_count != 0 && isset($this->assignment)) {
             $count = $this->assignment->current_count;
+            //如果当前完成进度等于最大完成次数 不超过计数  保证不出现 5/1 这种出现
+            $count ==  $this->max_count ? $this->max_count : $count;
             return $count . " / " . $this->max_count;
         }
 
@@ -165,5 +166,4 @@ trait TaskAttrs
         }
         return 0;
     }
-
 }
