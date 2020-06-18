@@ -318,7 +318,6 @@ class DZTasksSeeder extends Seeder
             'gold'   => 600,
             'ticket' => 0,
         ];
-        $task->max_count      = 5;
         $task->review_flow_id = ReviewFlow::whereName('应用好评')->first()->id;
         $task->status         = true;
         $task->resolve        = ["router" => "SubmitTask", "submit_name" => "去评价"];
@@ -335,7 +334,6 @@ class DZTasksSeeder extends Seeder
             'gold'   => 50,
             'ticket' => 0,
         ];
-        $task->max_count      = 5;
         $task->review_flow_id = ReviewFlow::whereName('试玩答妹')->first()->id;
         $task->status         = true;
         $task->icon = "task/task15_1592446299.png";
