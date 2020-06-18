@@ -62,9 +62,9 @@ trait TaskRepo
                 $take = $user->answers()->count() < 10;
             }
 
-            if ($task->name == "首次提现奖励") {
-                $take = $user->wallet->total_withdraw_amount == 0;
-            }
+            // if ($task->name == "首次提现奖励") {
+            //     $take = $user->wallet->total_withdraw_amount == 0;
+            // }
             return $take;
         });
 
