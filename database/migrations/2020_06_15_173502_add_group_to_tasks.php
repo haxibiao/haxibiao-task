@@ -14,7 +14,9 @@ class AddGroupToTasks extends Migration
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->string('group', 20)->nullable()->comment('任务分组：新人任务|每日任务|自定义任务|实时任务|贡献任务...');
+            if (!Schema::hasColumn('tasks', 'group')) {
+                $table->string('group', 20)->nullable()->comment('任务分组：新人任务|每日任务|自定义任务|实时任务|贡献任务...');
+            }
         });
     }
 

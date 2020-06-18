@@ -14,7 +14,9 @@ class AddReviewClassToReviewFlows extends Migration
     public function up()
     {
         Schema::table('review_flows', function (Blueprint $table) {
-            $table->string('review_class')->nullable()->comment('任务关联的模型的class,去掉App\ haxibiao\content等namespace');
+            if (!Schema::hasColumn('review_flows', 'review_class')) {
+                $table->string('review_class')->nullable()->comment('任务关联的模型的class,去掉App\ haxibiao\content等namespace');
+            }
         });
     }
 
