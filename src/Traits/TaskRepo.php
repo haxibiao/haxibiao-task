@@ -58,9 +58,9 @@ trait TaskRepo
             }
 
             //过滤两个新人任务 老用户不让完成
-            if ($task->name == "新手答题") {
-                $take = $user->answers()->count() < 10;
-            }
+            // if ($task->name == "新手答题") {
+            //     $take = $user->answers()->count() < 10;
+            // }
 
             // if ($task->name == "首次提现奖励") {
             //     $take = $user->wallet->total_withdraw_amount == 0;
