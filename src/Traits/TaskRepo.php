@@ -42,6 +42,9 @@ trait TaskRepo
         //初始化每日任务状态
         Assignment::initDailyTask($assignments);
 
+        //初始化有趣小视频任务状态(每日刷新)以后也是贡献任务
+        Assignment::initContributeTask($assignments);
+
         //过滤
         $assignments = $assignments->filter(function ($assignment, $key) {
             $take = true;
@@ -91,6 +94,11 @@ trait TaskRepo
     public function isCustomTask()
     {
         return $this->type == Task::CUSTOM_TASK;
+    }
+
+    public function isContributeTask()
+    {
+        return $this->type == Task::CONTRIBUTE_TASK;
     }
 
     public function getDailyStartTime()

@@ -6,6 +6,26 @@ use App\Task;
 
 trait AssignmentRepo
 {
+
+    public static function initContributeTask($assignments)
+    {
+        foreach ($assignments as $assignment) {
+
+            $task = $assignment->task;
+            //每日任务: 重置刷新状态和进度
+            if ($task->isContributeTask()) {
+                //新的一天开始
+                if ($assignment->updated_at < today()) {
+                    $assignment->progress      = 0;
+                    $assignment->completed_at  = null;
+                    $assignment->resolve       = null;
+                    $assignment->current_count = 0;
+                    $assignment->status        = 0;
+                    $assignment->save();
+                }
+            }
+        }
+    }
     //初始化用户的任务指派
     public static function initAssignments($user)
     {
@@ -14,7 +34,7 @@ trait AssignmentRepo
 
         //$assigned_task_ids = array_unique($assigned_task_ids);
         $needSyncTasks = count(array_diff($task_ids, $assigned_task_ids)) ||
-        count(array_diff($assigned_task_ids, $task_ids));
+            count(array_diff($assigned_task_ids, $task_ids));
 
         if ($needSyncTasks) {
             //指派所有可指派的任务,更新任务列表，符合当前任务系统版本要求
