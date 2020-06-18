@@ -46,7 +46,8 @@ trait TaskRepo
         $assignments = $assignments->filter(function ($assignment, $key) {
             $take = true;
             $task = $assignment->task;
-            $user = $task->user;
+
+            $user = $assignment->user;
             //已领取的,新人和自定义任务不再返回前端显示
             if (in_array($task->type, [Task::NEW_USER_TASK, Task::CUSTOM_TASK])) {
                 $take = $assignment->status != Assignment::TASK_DONE;
@@ -57,14 +58,15 @@ trait TaskRepo
                 $take = false;
             }
 
-            //过滤两个新人任务 老用户不让完成
-            // if ($task->name == "新手答题") {
-            //     $take = $user->answers()->count() < 10;
-            // }
 
-            // if ($task->name == "首次提现奖励") {
-            //     $take = $user->wallet->total_withdraw_amount == 0;
-            // }
+            //过滤两个新人任务 老用户不让完成
+            if ($task->name == "新手答题") {
+                $take = $user->answers()->count() < 10;
+            }
+
+            if ($task->name == "首次提现奖励") {
+                $take = $user->wallet->total_withdraw_amount == 0;
+            }
             return $take;
         });
 
