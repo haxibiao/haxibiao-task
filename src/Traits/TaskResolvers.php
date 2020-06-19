@@ -153,7 +153,7 @@ trait TaskResolvers
         app_track_event('任务', '领取任务奖励');
 
         $task_id = $args['id'];
-        $high    = $args['high'];
+        $high    = $args['high'] ?? false;
 
         //记录激励视频dimensions
         Task::recordRewardVideo(getUser(), $task_id, $high);
