@@ -15,7 +15,11 @@ trait TaskResolvers
     // 获取任务(指派)列表
     public static function resolveTasks($root, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo = null)
     {
-        app_track_event('任务', '获取任务列表');
+        //避开任务列表refetch重复matomo事件
+        if (!isset($args['refetch'])) {
+            app_track_event('任务', '获取任务列表');
+        }
+
         $user = getUser();
         //单次查询一个分类的
         $type        = $args['type'] ?? 'All';
