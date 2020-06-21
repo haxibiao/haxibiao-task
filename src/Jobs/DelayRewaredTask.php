@@ -12,7 +12,7 @@ class DelayRewaredTask implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable;
 
-    protected $assignment;
+    protected $assignment_id;
 
     /**
      * Create a new job instance.
@@ -21,7 +21,7 @@ class DelayRewaredTask implements ShouldQueue
      */
     public function __construct($assignment_id)
     {
-        $this->assignment = Assignment::find($assignment_id);
+        $this->assignment_id = $assignment_id;
         $this->onQueue('reward');
         $this->delay(30); //延迟自动审核
     }
@@ -33,7 +33,7 @@ class DelayRewaredTask implements ShouldQueue
      */
     public function handle()
     {
-        $assignment = $this->assignment;
+        $assignment = Assignment::find($this->assignment_id);
         if ($assignment) {
             $assignment->status = Assignment::TASK_REACH; //自动达标，需要用户自动领取奖励，
             $assignment->save();
