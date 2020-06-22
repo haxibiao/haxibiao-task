@@ -1,4 +1,5 @@
 <?php
+
 namespace haxibiao\task;
 
 use App\ReviewFlow;
@@ -24,7 +25,6 @@ class DMTasksSeeder extends Seeder
         $this->initDailyTasks();
         $this->initCustomTasks();
         $this->initContributeTasks();
-
     }
 
     //这些以前是前端代码+rest API的，可以直接用新的数据库结构seed
@@ -79,7 +79,6 @@ class DMTasksSeeder extends Seeder
 
         $task->group = "贡献任务";
         $task->save();
-
     }
 
     //新人任务
@@ -141,7 +140,6 @@ class DMTasksSeeder extends Seeder
 
         $task->group = "新人任务";
         $task->save();
-
     }
 
     //每日任务
@@ -207,7 +205,6 @@ class DMTasksSeeder extends Seeder
 
         $task->group = "每日任务";
         $task->save();
-
     }
 
     public function initCustomTasks()
@@ -223,7 +220,6 @@ class DMTasksSeeder extends Seeder
             'gold'   => 600,
             'ticket' => 0,
         ];
-        $task->max_count      = 5;
         $task->review_flow_id = ReviewFlow::whereName('应用好评')->first()->id;
         $task->status         = true;
         $task->resolve        = ["router" => "SubmitTask", "submit_name" => "去评价"];
