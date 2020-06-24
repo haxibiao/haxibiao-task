@@ -17,7 +17,6 @@ use Illuminate\Support\Str;
 trait TaskRepo
 {
 
-
     public static function getAssignments($user, $type)
     {
         //类型
@@ -60,7 +59,6 @@ trait TaskRepo
             if ($task->status == Task::DISABLE) {
                 $take = false;
             }
-
 
             //过滤两个新人任务 老用户不让完成
             if ($task->name == "新手答题") {
@@ -160,7 +158,6 @@ trait TaskRepo
     {
         $task       = $this;
         $assignment = $task->getAssignment($user->id);
-
 
         if ($assignment->status < Assignment::TASK_REACH) {
             if ($flow = $task->review_flow) {
@@ -461,32 +458,6 @@ trait TaskRepo
         if (isset($task->reward['contribute']) && $contribute > 0) {
 
             Contribute::rewardAssignmentContribute($user, $assignment, $contribute);
-        }
-    }
-
-    /**
-     * 记录激励视频任务 //FIXME: 这里可以先不记录，等重构haxibiao-dimension一起...
-     */
-    public static function recordRewardVideo($user, $rewardTaskID, $high)
-    {
-        $task = Task::where('name', '有趣小视频')->first();
-        if ($task) {
-            // 领奖任务与激励视频任务相同
-            if ($rewardTaskID == $task->id) {
-                if ($high == true) {
-                    $action     = 'CLICK_REWARD_VIDEO';
-                    $contribute = $task->reward['contribute_high'];
-                } else {
-                    $action     = 'WATCH_REWARD_VIDEO';
-                    $contribute = $task->reward['contribute'];
-                }
-
-                if (class_exists('App\\Dimension')) {
-                    \App\Dimension::setDimension($user, $action, $contribute);
-                }
-                $rerawrdVideoTask = \App\Task::where('name', '有趣小视频')->first();
-                $rerawrdVideoTask->checkTaskStatus($user);
-            }
         }
     }
 }

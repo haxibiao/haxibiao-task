@@ -159,9 +159,6 @@ trait TaskResolvers
         $task_id = $args['id'];
         $high    = $args['high'] ?? false;
 
-        //记录激励视频dimensions
-        Task::recordRewardVideo(getUser(), $task_id, $high);
-
         return Task::rewardTask($task_id, $high);
     }
 
