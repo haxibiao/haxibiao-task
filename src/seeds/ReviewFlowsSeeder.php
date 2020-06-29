@@ -1,4 +1,5 @@
 <?php
+
 namespace haxibiao\task;
 
 use haxibiao\task\ReviewFlow;
@@ -103,7 +104,7 @@ class ReviewFlowsSeeder extends Seeder
             [
                 'name'            => '看视频赚钱',
                 'check_functions' => ['checkRewardVideo'],
-                'review_class'    => 'Gold',
+                'review_class'    => 'Contribute',
             ],
             [
                 'name'            => '完善头像',
