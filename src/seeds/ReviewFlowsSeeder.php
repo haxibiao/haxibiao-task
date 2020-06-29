@@ -86,7 +86,7 @@ class ReviewFlowsSeeder extends Seeder
             [
                 'name'            => '看激励视频',
                 'check_functions' => ['checkTodayWatchRewardVideoCount'],
-                'review_class'    => 'Gold',
+                'review_class'    => 'Contribute',
             ],
             [
                 'name'            => '喝水赚钱',
