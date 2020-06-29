@@ -13,7 +13,7 @@ trait TaskAttrs
     {
         if ($this->name == '有趣小视频') {
             if ($user = checkUser()) {
-                $created_at = $user->getLatestWatchRewardVideoTime();
+                $created_at = $user->profile->last_reward_video_time ?? now();
                 if (empty($created_at)) {
                     return 0;
                 }

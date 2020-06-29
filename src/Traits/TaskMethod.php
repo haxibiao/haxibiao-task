@@ -234,7 +234,7 @@ trait TaskMethod
     // 检查今日看激励视频次数
     public function checkTodayWatchRewardVideoCount($user, $task, $assignment)
     {
-        $today_count = $user->contributes()->where('created_at', today())->where('contributed_type', 'assignments')->count();
+        $today_count = $user->profile->today_reward_video_count ?? 0;
         $done        = $today_count >= $task->max_count;
         return [
             'status'        => $done,
@@ -272,9 +272,9 @@ trait TaskMethod
         $status = $user->wallet->total_withdraw_amount > 0;
         return
             [
-                'status'        => $status,
-                'current_count' => 0,
-            ];
+            'status'        => $status,
+            'current_count' => 0,
+        ];
     }
 
     //检查用户每日答题数
@@ -284,9 +284,9 @@ trait TaskMethod
         $status        = $current_count >= $task->max_count;
         return
             [
-                'status'        => $status,
-                'current_count' => $current_count,
-            ];
+            'status'        => $status,
+            'current_count' => $current_count,
+        ];
     }
 
     //检查用户是否更换过性别
@@ -319,8 +319,8 @@ trait TaskMethod
 
         return
             [
-                'status'        => !empty($user->avatar),
-                'current_count' => 0,
-            ];
+            'status'        => !empty($user->avatar),
+            'current_count' => 0,
+        ];
     }
 }
