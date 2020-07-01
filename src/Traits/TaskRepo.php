@@ -406,15 +406,14 @@ trait TaskRepo
             'user_id' => $user->id,
             'task_id' => $task->id,
         ]);
-
         // 为了兼容前端 贡献任务 加一个条件 else //贡献任务可以多次领奖,所以不能直接更改状态为 Done
         if ($assignment->status == Assignment::TASK_REACH && $task->type != Task::CONTRIBUTE_TASK) {
             $assignment->status = Assignment::TASK_DONE;
             $assignment->save();
             //领取奖励
-            Task::reward($user, $task, $assignment, $high);
-        } else if ($task->type = Task::CONTRIBUTE_TASK) {
 
+            Task::reward($user, $task, $assignment, $high);
+        } else if ($task->type == Task::CONTRIBUTE_TASK) {
             //如果贡献任务有完成次数
             if ($task->max_count > 0) {
                 $is_done = $assignment->current_count >= $task->max_count;
