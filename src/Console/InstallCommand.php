@@ -55,7 +55,6 @@ class InstallCommand extends Command
         copy($this->resolveStubPath('/stubs/Nova/Task.stub'), app_path('Nova/Task.php'));
         copy($this->resolveStubPath('/stubs/Nova/Filters/Task/TaskType.stub'), app_path('Nova/Filters/Task/TaskType.php'));
         copy($this->resolveStubPath('/stubs/Nova/Filters/Task/TaskStatus.stub'), app_path('Nova/Filters/Task/TaskStatus.php'));
-
     }
 
     protected function resolveStubPath($stub)
@@ -75,7 +74,7 @@ class InstallCommand extends Command
 
         file_put_contents(config_path('app.php'), str_replace(
             "{$namespace}\\Providers\EventServiceProvider::class," . PHP_EOL,
-            "{$namespace}\\Providers\EventServiceProvider::class," . PHP_EOL . "        haxibiao\\task\\TaskServiceProvider::class," . PHP_EOL,
+            "{$namespace}\\Providers\EventServiceProvider::class," . PHP_EOL . "        Haxibiao\\task\\TaskServiceProvider::class," . PHP_EOL,
             file_get_contents(config_path('app.php'))
         ));
     }
