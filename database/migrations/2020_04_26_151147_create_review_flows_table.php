@@ -20,7 +20,7 @@ class CreateReviewFlowsTable extends Migration
         Schema::create('review_flows', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->comment('模版名');
-            $table->string('review_class')->nullable()->comment('任务关联的模型的class,去掉App\ haxibiao\content等namespace');
+            $table->string('review_class')->nullable()->comment('任务关联的模型的class 最后的Name');
             $table->json('check_functions')->nullable()->comment('任务检查流程函数名');
             $table->boolean('need_owner_review')->default(false)->comment('是否需要任务建立者Review');
             $table->boolean('need_offical_review')->default(false)->comment('是否需要官方人员Review');
