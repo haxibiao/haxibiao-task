@@ -5,9 +5,9 @@
  * @Version
  */
 
-namespace haxibiao\task\Traits;
+namespace Haxibiao\Task\Traits;
 
-use haxibiao\task\Assignment;
+use Haxibiao\Task\Assignment;
 
 trait AssignmentAttrs
 {

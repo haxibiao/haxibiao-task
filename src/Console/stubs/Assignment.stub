@@ -2,7 +2,7 @@
 
 namespace App;
 
-use haxibiao\task\Assignment as HXBAssignment;
+use Haxibiao\Task\Assignment as HXBAssignment;
 
 class Assignment extends HXBAssignment
 {

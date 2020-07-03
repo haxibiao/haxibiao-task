@@ -1,10 +1,10 @@
 <?php
 
-namespace haxibiao\task\Traits;
+namespace Haxibiao\Task\Traits;
 
 use App\Assignment;
 use App\Task;
-use haxibiao\task\ReviewFlow;
+use Haxibiao\Task\ReviewFlow;
 
 trait PlayWithTasks
 {

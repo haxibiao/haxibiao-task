@@ -13,7 +13,7 @@
   "minimum-stability": "dev",
   "autoload": {
     "psr-0": {
-      "haxibiao\\task\\": "src/"
+      "Haxibiao\\Task\\": "src/"
     }
   },
   "autoload-dev": {
@@ -24,10 +24,10 @@
   "extra": {
     "laravel": {
       "providers": [
-        "haxibiao\\task\\TaskServiceProvider"
+        "Haxibiao\\Task\\TaskServiceProvider"
       ],
       "aliases": {
-        "Task": "haxibiao\\task\\Task"
+        "Task": "Haxibiao\\Task\\Task"
       }
     }
   }

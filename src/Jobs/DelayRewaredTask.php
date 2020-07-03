@@ -1,8 +1,8 @@
 <?php
 
-namespace haxibiao\task\Jobs;
+namespace Haxibiao\Task\Jobs;
 
-use haxibiao\task\Assignment;
+use Haxibiao\Task\Assignment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

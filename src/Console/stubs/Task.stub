@@ -2,7 +2,7 @@
 
 namespace App;
 
-use haxibiao\task\Task as HXBTask;
+use Haxibiao\Task\Task as HXBTask;
 
 class Task extends HXBTask
 {

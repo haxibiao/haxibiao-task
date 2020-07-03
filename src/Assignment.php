@@ -1,12 +1,12 @@
 <?php
 
-namespace haxibiao\task;
+namespace Haxibiao\Task;
 
 //FIXME: 依赖贡献系统
 use App\Contribute;
 use Carbon\Carbon;
-use haxibiao\task\Traits\AssignmentAttrs;
-use haxibiao\task\Traits\AssignmentRepo;
+use Haxibiao\Task\Traits\AssignmentAttrs;
+use Haxibiao\Task\Traits\AssignmentRepo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 

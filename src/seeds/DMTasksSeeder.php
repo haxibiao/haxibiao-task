@@ -1,10 +1,10 @@
 <?php
 
-namespace haxibiao\task;
+namespace Haxibiao\Task;
 
 use App\ReviewFlow;
 use App\Task;
-use haxibiao\task\Assignment;
+use Haxibiao\Task\Assignment;
 use Illuminate\Database\Seeder;
 
 class DMTasksSeeder extends Seeder

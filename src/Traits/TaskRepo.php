@@ -1,15 +1,15 @@
 <?php
 
-namespace haxibiao\task\Traits;
+namespace Haxibiao\Task\Traits;
 
 use App\Contribute;
 use App\Exceptions\UserException;
 use App\Gold;
 use App\User;
 use Carbon\Carbon;
-use haxibiao\task\Assignment;
-use haxibiao\task\Jobs\DelayRewaredTask;
-use haxibiao\task\Task;
+use Haxibiao\Task\Assignment;
+use Haxibiao\Task\Jobs\DelayRewaredTask;
+use Haxibiao\Task\Task;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;

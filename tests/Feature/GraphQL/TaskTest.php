@@ -3,8 +3,8 @@
 namespace Tests\Feature\GraphQL;
 
 use App\User;
-use haxibiao\task\Assignment;
-use haxibiao\task\Task;
+use Haxibiao\Task\Assignment;
+use Haxibiao\Task\Task;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\Feature\GraphQL\GraphQLTestCase;
 

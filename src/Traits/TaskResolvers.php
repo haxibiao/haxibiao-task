@@ -1,12 +1,12 @@
 <?php
 
-namespace haxibiao\task\Traits;
+namespace Haxibiao\Task\Traits;
 
 use App\Exceptions\UserException;
 use Carbon\Carbon;
 use GraphQL\Type\Definition\ResolveInfo;
-use haxibiao\task\Assignment;
-use haxibiao\task\Task;
+use Haxibiao\Task\Assignment;
+use Haxibiao\Task\Task;
 use Illuminate\Support\Arr;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace haxibiao\task;
+namespace Haxibiao\Task;
 
 use App\ReviewFlow;
 use App\Task;
@@ -51,7 +51,7 @@ class DZTasksSeeder extends Seeder
         $task->max_count      = 20;
         $task->review_flow_id = ReviewFlow::whereName('看激励视频')->first()->id;
         $task->status         = true;
-        $task->icon = "task/task16_1592445997.png";
+        $task->icon           = "task/task16_1592445997.png";
         $task->group          = "贡献任务";
         $task->save();
 
@@ -67,7 +67,7 @@ class DZTasksSeeder extends Seeder
         ];
         $task->review_flow_id = ReviewFlow::whereName('在线出题')->first()->id;
         $task->status         = true;
-        $task->icon = "task/task17_1592445960.png";
+        $task->icon           = "task/task17_1592445960.png";
 
         $task->group = "贡献任务";
         $task->save();
@@ -83,7 +83,7 @@ class DZTasksSeeder extends Seeder
         ];
         $task->review_flow_id = ReviewFlow::whereName('抖音采集')->first()->id;
         $task->status         = true;
-        $task->icon = "task/task18_1592445846.png";
+        $task->icon           = "task/task18_1592445846.png";
 
         $task->group = "贡献任务";
         $task->save();
@@ -102,7 +102,7 @@ class DZTasksSeeder extends Seeder
         ];
         $task->review_flow_id = ReviewFlow::whereName('更换昵称')->first()->id;
         $task->status         = true;
-        $task->icon = "task/task1_1592443870.png";
+        $task->icon           = "task/task1_1592443870.png";
 
         $task->group = "新人任务";
         $task->save();
@@ -118,7 +118,7 @@ class DZTasksSeeder extends Seeder
         ];
         $task->review_flow_id = ReviewFlow::whereName('更换头像')->first()->id;
         $task->status         = true;
-        $task->icon = "task/task2_1592444819.png";
+        $task->icon           = "task/task2_1592444819.png";
 
         $task->group = "新人任务";
         $task->save();
@@ -133,7 +133,7 @@ class DZTasksSeeder extends Seeder
         ];
         $task->review_flow_id = ReviewFlow::whereName('设置性别')->first()->id;
         $task->status         = true;
-        $task->icon = "task/task3_1592444878.png";
+        $task->icon           = "task/task3_1592444878.png";
 
         $task->group = "新人任务";
         $task->save();
@@ -148,7 +148,7 @@ class DZTasksSeeder extends Seeder
         ];
         $task->review_flow_id = ReviewFlow::whereName('设置年龄')->first()->id;
         $task->status         = true;
-        $task->icon = "task/task4_1592444929.png";
+        $task->icon           = "task/task4_1592444929.png";
 
         $task->group = "新人任务";
         $task->save();
@@ -166,7 +166,7 @@ class DZTasksSeeder extends Seeder
         $task->max_count      = 10;
         $task->review_flow_id = ReviewFlow::whereName('新手答题')->first()->id;
         $task->status         = true;
-        $task->icon = "task/task5_1592444990.png";
+        $task->icon           = "task/task5_1592444990.png";
 
         $task->group = "新人任务";
         $task->save();
@@ -182,7 +182,7 @@ class DZTasksSeeder extends Seeder
         ];
         $task->review_flow_id = ReviewFlow::whereName('首次提现奖励')->first()->id;
         $task->status         = true;
-        $task->icon = "task/task6_1592446511.png";
+        $task->icon           = "task/task6_1592446511.png";
 
         $task->group = "新人任务";
         $task->save();
@@ -202,8 +202,7 @@ class DZTasksSeeder extends Seeder
         $task->max_count      = 200;
         $task->review_flow_id = ReviewFlow::whereName('答题总数')->first()->id;
         $task->status         = true;
-        $task->icon = "task/task5_1592444990.png";
-
+        $task->icon           = "task/task5_1592444990.png";
 
         $task->group = "每日任务";
         $task->save();
@@ -219,7 +218,7 @@ class DZTasksSeeder extends Seeder
         $task->max_count      = 100;
         $task->review_flow_id = ReviewFlow::whereName('答题总数')->first()->id;
         $task->status         = true;
-        $task->icon = "task/task5_1592444990.png";
+        $task->icon           = "task/task5_1592444990.png";
 
         $task->group = "每日任务";
         $task->save();
@@ -235,7 +234,7 @@ class DZTasksSeeder extends Seeder
         $task->max_count      = 50;
         $task->review_flow_id = ReviewFlow::whereName('答题总数')->first()->id;
         $task->status         = true;
-        $task->icon = "task/task5_1592444990.png";
+        $task->icon           = "task/task5_1592444990.png";
 
         $task->group = "每日任务";
         $task->save();
@@ -251,7 +250,7 @@ class DZTasksSeeder extends Seeder
         $task->max_count      = 1;
         $task->review_flow_id = ReviewFlow::whereName('答题总数')->first()->id;
         $task->status         = true;
-        $task->icon = "task/task5_1592444990.png";
+        $task->icon           = "task/task5_1592444990.png";
 
         $task->group = "每日任务";
         $task->save();
@@ -268,8 +267,8 @@ class DZTasksSeeder extends Seeder
         $task->review_flow_id = ReviewFlow::whereName('新冠答题数')->first()->id;
         $task->status         = true;
         $task->resolve        = ["category_id" => 140, "submit_name" => "去答题"];
-        $task->icon = "task/task5_1592444990.png";
-        $task->group = "每日任务";
+        $task->icon           = "task/task5_1592444990.png";
+        $task->group          = "每日任务";
         $task->save();
 
         $task = $this->saveTask([
@@ -298,7 +297,7 @@ class DZTasksSeeder extends Seeder
         ];
         $task->max_count      = 5;
         $task->review_flow_id = ReviewFlow::whereName('答题PK')->first()->id;
-        $task->icon = "task/task13_1592446392.png";
+        $task->icon           = "task/task13_1592446392.png";
         $task->status         = true;
 
         $task->group = "每日任务";
@@ -321,8 +320,8 @@ class DZTasksSeeder extends Seeder
         $task->review_flow_id = ReviewFlow::whereName('应用好评')->first()->id;
         $task->status         = true;
         $task->resolve        = ["router" => "SubmitTask", "submit_name" => "去评价"];
-        $task->icon = "task/task15_1592446299.png";
-        $task->group = "自定义任务";
+        $task->icon           = "task/task15_1592446299.png";
+        $task->group          = "自定义任务";
         $task->save();
 
         $task = $this->saveTask([
@@ -336,7 +335,7 @@ class DZTasksSeeder extends Seeder
         ];
         $task->review_flow_id = ReviewFlow::whereName('试玩答妹')->first()->id;
         $task->status         = true;
-        $task->icon = "task/task15_1592446299.png";
+        $task->icon           = "task/task15_1592446299.png";
         $task->resolve        = ["package" => "com.damei", "post_id" => 15053];
 
         $task->group = "自定义任务";

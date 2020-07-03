@@ -1,6 +1,6 @@
 <?php
 
-namespace haxibiao\task\Traits;
+namespace Haxibiao\Task\Traits;
 
 use App\Category;
 use App\CategoryUser;

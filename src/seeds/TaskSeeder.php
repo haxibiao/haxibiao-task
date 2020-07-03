@@ -1,7 +1,7 @@
 <?php
-namespace haxibiao\task;
+namespace Haxibiao\Task;
 
-use haxibiao\task\Task;
+use Haxibiao\Task\Task;
 use Illuminate\Database\Seeder;
 
 class TaskSeeder extends Seeder

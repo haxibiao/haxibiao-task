@@ -1,6 +1,6 @@
 <?php
 
-namespace haxibiao\task;
+namespace Haxibiao\Task;
 
 use Illuminate\Database\Eloquent\Model;
 

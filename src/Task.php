@@ -1,15 +1,15 @@
 <?php
 
-namespace haxibiao\task;
+namespace Haxibiao\Task;
 
 use App\User;
-use haxibiao\task\Assignment;
-use haxibiao\task\ReviewFlow;
-use haxibiao\task\Traits\TaskAttrs;
-use haxibiao\task\Traits\TaskMethod;
-use haxibiao\task\Traits\TaskOldAttrs;
-use haxibiao\task\Traits\TaskRepo;
-use haxibiao\task\Traits\TaskResolvers;
+use Haxibiao\Task\Assignment;
+use Haxibiao\Task\ReviewFlow;
+use Haxibiao\Task\Traits\TaskAttrs;
+use Haxibiao\Task\Traits\TaskMethod;
+use Haxibiao\Task\Traits\TaskOldAttrs;
+use Haxibiao\Task\Traits\TaskRepo;
+use Haxibiao\Task\Traits\TaskResolvers;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model

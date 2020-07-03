@@ -1,9 +1,9 @@
 <?php
 
-namespace haxibiao\task\Traits;
+namespace Haxibiao\Task\Traits;
 
 use App\Assignment;
-use haxibiao\task\Task;
+use Haxibiao\Task\Task;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 

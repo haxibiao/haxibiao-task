@@ -2,7 +2,7 @@
 
 namespace App;
 
-use haxibiao\task\ReviewFlow as HXBReviewFlow;
+use Haxibiao\Task\ReviewFlow as HXBReviewFlow;
 
 class ReviewFlow extends HXBReviewFlow
 {

@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use haxibiao\task\TaskServiceProvider as BaseTaskServiceProvider;
+use Haxibiao\Task\TaskServiceProvider as BaseTaskServiceProvider;
 
 class TaskServiceProvider extends BaseTaskServiceProvider
 {

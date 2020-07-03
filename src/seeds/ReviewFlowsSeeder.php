@@ -1,8 +1,8 @@
 <?php
 
-namespace haxibiao\task;
+namespace Haxibiao\Task;
 
-use haxibiao\task\ReviewFlow;
+use Haxibiao\Task\ReviewFlow;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
