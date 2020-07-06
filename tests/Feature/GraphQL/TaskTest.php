@@ -32,7 +32,6 @@ class TaskTest extends GraphQLTestCase
         $this->task = factory(Task::class)->create([
             'type' => 2,
         ]);
-
     }
 
     /* --------------------------------------------------------------------- */
@@ -196,7 +195,7 @@ class TaskTest extends GraphQLTestCase
      * @deprecated 根据DatiTaskSeed可以看出暂时没有喝水任务
      * @group task
      */
-//    public function testDrinkWaterMutation()
+    //    public function testDrinkWaterMutation()
     //    {
     //        $token   = $this->user->api_token;
     //        $query   = file_get_contents(__DIR__ . '/task/Mutation/drinkWaterMutation.graphql');

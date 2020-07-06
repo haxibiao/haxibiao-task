@@ -61,6 +61,7 @@ class Task extends Resource
             ID::make()->sortable(),
             Text::make('任务名称', 'name'),
             Text::make('任务描述', 'details'),
+            Text::make('任务模板id', 'review_flow_id'),
             Select::make('类型', 'type')->options(\App\Task::getTypes())->displayUsingLabels(),
             Select::make('状态', 'status')->options(\App\Task::getStatuses())->displayUsingLabels(),
             Code::make('奖励', 'reward')->json(JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE),

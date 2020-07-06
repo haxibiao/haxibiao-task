@@ -79,6 +79,12 @@ trait PlayWithTasks
         return Task::whereName('直播任务')->get();
     }
 
+    //评论任务
+    public function getCommentTasks()
+    {
+        return Task::whereName('评论高手')->get();
+    }
+
     public function getLikeTasksAttribute()
     {
         //邀请类的任务

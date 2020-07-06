@@ -10,6 +10,22 @@ use Illuminate\Support\Str;
 
 trait TaskMethod
 {
+
+    /**
+     * 检查评论次数任务
+     *
+     * @return bool
+     */
+    public function checkComment($user, $task, $assignment)
+    {
+        info($assignment->current_count);
+        $count = $assignment->current_count;
+        return [
+            'status'        => $count >= $task->max_count,
+            'current_count' => $count,
+        ];
+    }
+
     /**
      * 检查直播观看人数任务
      *
@@ -272,9 +288,9 @@ trait TaskMethod
         $status = $user->wallet->total_withdraw_amount > 0;
         return
             [
-            'status'        => $status,
-            'current_count' => 0,
-        ];
+                'status'        => $status,
+                'current_count' => 0,
+            ];
     }
 
     //检查用户每日答题数
@@ -284,9 +300,9 @@ trait TaskMethod
         $status        = $current_count >= $task->max_count;
         return
             [
-            'status'        => $status,
-            'current_count' => $current_count,
-        ];
+                'status'        => $status,
+                'current_count' => $current_count,
+            ];
     }
 
     //检查用户是否更换过性别
@@ -319,8 +335,8 @@ trait TaskMethod
 
         return
             [
-            'status'        => !empty($user->avatar),
-            'current_count' => 0,
-        ];
+                'status'        => !empty($user->avatar),
+                'current_count' => 0,
+            ];
     }
 }
