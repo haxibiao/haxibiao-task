@@ -85,6 +85,12 @@ trait PlayWithTasks
         return Task::whereName('评论高手')->get();
     }
 
+    //点赞他人任务
+    public function getLikeActionTasks()
+    {
+        return Task::whereName('点赞超人')->get();
+    }
+
     public function getLikeTasksAttribute()
     {
         //邀请类的任务

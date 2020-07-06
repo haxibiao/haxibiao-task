@@ -12,13 +12,12 @@ trait TaskMethod
 {
 
     /**
-     * 检查评论次数任务
+     * 通用检查任务方法
      *
      * @return bool
      */
-    public function checkComment($user, $task, $assignment)
+    public function checkCommom($user, $task, $assignment)
     {
-        info($assignment->current_count);
         $count = $assignment->current_count;
         return [
             'status'        => $count >= $task->max_count,
