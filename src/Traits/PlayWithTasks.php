@@ -85,6 +85,12 @@ trait PlayWithTasks
         return Task::whereName('评论高手')->get();
     }
 
+    //租号任务
+    public function getOrderTasks()
+    {
+        return Task::whereName('我要租号')->get();
+    }
+
     //点赞他人任务
     public function getLikeActionTasks()
     {
