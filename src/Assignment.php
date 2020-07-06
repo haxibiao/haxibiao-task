@@ -132,14 +132,15 @@ class Assignment extends Model
         ]);
     }
 
-    public static function getTypes()
+    public static function getStatuses()
     {
         return [
-            self::TASK_FAILED => '失败',
+            self::TASK_FAILED => '任务失败',
             self::TASK_UNDONE => '未完成',
-            self::TASK_REVIEW => '进行中',
-            self::TASK_REACH  => '领奖',
-            self::TASK_DONE   => '完成',
+            self::TASK_REVIEW => '待审核',
+            self::TASK_REACH  => '待奖励',
+            self::TASK_DONE   => '已完成',
         ];
     }
+
 }

@@ -27,6 +27,6 @@ trait AssignmentAttrs
      */
     public function getSubmitNameAttribute()
     {
-        return Assignment::getTypes()[$this->status];
+        return Assignment::getStatuses()[$this->status];
     }
 }
