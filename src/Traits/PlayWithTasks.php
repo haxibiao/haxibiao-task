@@ -73,29 +73,21 @@ trait PlayWithTasks
         return Task::whereType(0)->get();
     }
 
+
+    /**
+     * 获取指定任务 通用方法（每日任务）
+     **/
+    public function getCommonTasks(String $name)
+    {
+        return Task::whereName($name)->get();
+    }
+
     //直播任务
     public function getUserLiveTasks()
     {
         return Task::whereName('直播任务')->get();
     }
 
-    //评论任务
-    public function getCommentTasks()
-    {
-        return Task::whereName('评论高手')->get();
-    }
-
-    //租号任务
-    public function getOrderTasks()
-    {
-        return Task::whereName('我要租号')->get();
-    }
-
-    //点赞他人任务
-    public function getLikeActionTasks()
-    {
-        return Task::whereName('点赞超人')->get();
-    }
 
     public function getLikeTasksAttribute()
     {

@@ -13,6 +13,7 @@ trait TaskMethod
 
     /**
      * 通用检查任务方法
+     * 如果只是一般检查任务进度，推荐使用（每日任务）
      *
      * @return bool
      */
