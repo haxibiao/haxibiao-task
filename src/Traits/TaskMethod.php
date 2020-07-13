@@ -224,6 +224,18 @@ trait TaskMethod
         ];
     }
 
+    //每日邀请任务
+    public function checkInviteUserToday($user, $task, $assignment)
+    {
+        $count = $user->today_invited_users_count;
+        return [
+            'status' => $count > 0,
+            'current_count' => $count
+        ];
+    }
+
+
+
     //检查新型肺炎防治答10题
     public function checkCategoryAnswerQuestion($user, $task, $assignment)
     {

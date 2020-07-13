@@ -205,6 +205,22 @@ class DMTasksSeeder extends Seeder
 
         $task->group = "每日任务";
         $task->save();
+
+
+        $task = $this->saveTask([
+            'name' => '每日邀请用户',
+            'type' => Task::DAILY_TASK,
+        ]);
+        $task->reward = [
+            'gold'   => 20,
+            'ticket' => 0,
+        ];
+        $task->max_count      = 1;
+        $task->review_flow_id = ReviewFlow::whereName('每日邀请用户统计')->first()->id;
+        $task->status         = true;
+
+        $task->group = "每日任务";
+        $task->save();
     }
 
     public function initCustomTasks()
