@@ -128,7 +128,7 @@ class ReviewFlowsSeeder extends Seeder
             [
                 'name'            => '最大观众数量',
                 'check_functions' => ['checkAudienceCount'],
-                'review_class'    => 'UserLive',
+                'review_class'    => 'Live',
             ],
             [
                 'name'            => '点赞数量统计',

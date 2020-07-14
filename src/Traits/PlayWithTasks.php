@@ -73,7 +73,6 @@ trait PlayWithTasks
         return Task::whereType(0)->get();
     }
 
-
     /**
      * 获取指定任务 通用方法（每日任务）
      **/
@@ -83,11 +82,10 @@ trait PlayWithTasks
     }
 
     //直播任务
-    public function getUserLiveTasks()
+    public function getLiveTasks()
     {
         return Task::whereName('直播任务')->get();
     }
-
 
     public function getLikeTasksAttribute()
     {
