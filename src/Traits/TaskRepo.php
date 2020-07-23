@@ -2,18 +2,18 @@
 
 namespace Haxibiao\Task\Traits;
 
+use App\Contribute;
+use App\Exceptions\UserException;
 use App\Gold;
 use App\User;
 use Carbon\Carbon;
-use App\Contribute;
+use Haxibiao\Task\Assignment;
+use Haxibiao\Task\Jobs\DelayRewaredTask;
 use Haxibiao\Task\Task;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Haxibiao\Task\Assignment;
-use App\Exceptions\UserException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Haxibiao\Task\Jobs\DelayRewaredTask;
+use Illuminate\Support\Str;
 
 trait TaskRepo
 {
@@ -470,7 +470,7 @@ trait TaskRepo
         $tasks = $user->getCommonTasks($taskName);
         foreach ($tasks as $task) {
             $task->checkTaskStatus($user);
-            $assignment               = $user->tasks()->where('task_id', $task->id)->first()->pivot;
+            $assignment = $user->tasks()->where('task_id', $task->id)->first()->pivot;
             $assignment->update(["current_count" => DB::raw("current_count+1")]); //次数加1
         }
     }

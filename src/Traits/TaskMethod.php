@@ -300,9 +300,9 @@ trait TaskMethod
         $status = $user->wallet->total_withdraw_amount > 0;
         return
             [
-                'status'        => $status,
-                'current_count' => 0,
-            ];
+            'status'        => $status,
+            'current_count' => 0,
+        ];
     }
 
     //检查用户每日答题数
@@ -312,9 +312,9 @@ trait TaskMethod
         $status        = $current_count >= $task->max_count;
         return
             [
-                'status'        => $status,
-                'current_count' => $current_count,
-            ];
+            'status'        => $status,
+            'current_count' => $current_count,
+        ];
     }
 
     //检查用户是否更换过性别
@@ -347,8 +347,20 @@ trait TaskMethod
 
         return
             [
-                'status'        => !empty($user->avatar),
-                'current_count' => 0,
-            ];
+            'status'        => !empty($user->avatar),
+            'current_count' => 0,
+        ];
     }
+
+    // 检查今日提现金额是否达标
+    public function checkTodayWithdrawAmount($user, $task, $assignment)
+    {
+        $resolve = $task->resolve;
+        $amount  = Arr::get($resolve, 'amount');
+        return [
+            'status'        => is_numeric($amount) && 3 >= $amount,
+            'current_count' => 0,
+        ];
+    }
+
 }

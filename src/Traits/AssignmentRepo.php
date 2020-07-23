@@ -26,6 +26,7 @@ trait AssignmentRepo
             }
         }
     }
+
     //初始化用户的任务指派
     public static function initAssignments($user)
     {
