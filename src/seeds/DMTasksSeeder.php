@@ -18,11 +18,12 @@ class DMTasksSeeder extends Seeder
     public function run()
     {
         //需要清理
-        Assignment::truncate();
+        // Assignment::truncate();
         Task::truncate();
 
         $this->initNewUserTasks();
         $this->initDailyTasks();
+
         $this->initCustomTasks();
         $this->initContributeTasks();
     }
@@ -78,6 +79,21 @@ class DMTasksSeeder extends Seeder
         $task->status         = true;
 
         $task->group = "贡献任务";
+        $task->save();
+
+        $task = $this->saveTask([
+            'name' => '每日邀请用户',
+            'type' => Task::DAILY_TASK,
+        ]);
+        $task->reward = [
+            'gold'   => 20,
+            'ticket' => 0,
+        ];
+        $task->max_count      = 1;
+        $task->review_flow_id = ReviewFlow::whereName('每日邀请用户统计')->first()->id;
+        $task->status         = true;
+
+        $task->group = "每日任务";
         $task->save();
     }
 
@@ -202,22 +218,6 @@ class DMTasksSeeder extends Seeder
         $task->review_flow_id = ReviewFlow::whereName('刷视频')->first()->id;
         $task->status         = true;
         $task->resolve        = ["visits_type" => "posts", "route" => "学习"];
-
-        $task->group = "每日任务";
-        $task->save();
-
-
-        $task = $this->saveTask([
-            'name' => '每日邀请用户',
-            'type' => Task::DAILY_TASK,
-        ]);
-        $task->reward = [
-            'gold'   => 20,
-            'ticket' => 0,
-        ];
-        $task->max_count      = 1;
-        $task->review_flow_id = ReviewFlow::whereName('每日邀请用户统计')->first()->id;
-        $task->status         = true;
 
         $task->group = "每日任务";
         $task->save();
