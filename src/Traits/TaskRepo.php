@@ -160,7 +160,8 @@ trait TaskRepo
         $task       = $this;
         $assignment = $task->getAssignment($user->id);
 
-        if ($assignment->status < Assignment::TASK_REACH) {
+        $reviewFlowName = data_get($task->review_flow, 'name');
+        if ($assignment->status < Assignment::TASK_REACH || $reviewFlowName == '每日答题任务(聚合)') {
             if ($flow = $task->review_flow) {
                 // 执行模版任务定义的检查方法s
                 $checkoutFunctions = $flow->check_functions;
@@ -180,6 +181,7 @@ trait TaskRepo
                             if ($assignment->status == Assignment::TASK_REVIEW || $assignment->status == Assignment::TASK_UNDONE) {
                                 $assignment->status = Assignment::TASK_REACH;
                             }
+
                             $assignment->completed_at = now();
                         }
 
@@ -409,7 +411,20 @@ trait TaskRepo
         ]);
         // 为了兼容前端 贡献任务 加一个条件 else //贡献任务可以多次领奖,所以不能直接更改状态为 Done
         if ($assignment->status == Assignment::TASK_REACH && $task->type != Task::CONTRIBUTE_TASK) {
-            $assignment->status = Assignment::TASK_DONE;
+
+            //聚合任务可以多次领取奖励
+            $reviewFlow = $task->review_flow;
+            if (!is_null($reviewFlow) && $reviewFlow->name == '每日答题任务(聚合)') {
+                $is_done = $assignment->current_count >= $task->max_count;
+                if ($is_done) {
+                    $assignment->status = Assignment::TASK_DONE;
+                } else {
+                    $assignment->status = Assignment::TASK_REVIEW;
+                }
+            } else {
+                $assignment->status = Assignment::TASK_DONE;
+            }
+
             $assignment->save();
             //领取奖励
 
@@ -429,7 +444,7 @@ trait TaskRepo
         return $task;
     }
 
-    public static function reward($user, $task, $assignment, $high)
+    public static function reward($user, &$task, $assignment, $high)
     {
         // 判断奖励是否存在只需要判断 普通额度的奖励即可, 低额不一定有高额,但高额一定会有低额
 
@@ -443,7 +458,6 @@ trait TaskRepo
         $contribute = $high ? $task->reward['contribute_high'] : $task->reward['contribute'] ?? 0;
 
         if (isset($task->reward['gold']) && $gold > 0) {
-
             $remark = sprintf('%s奖励', $task->name);
             Gold::makeIncome($user, $gold, $remark);
         }
@@ -459,6 +473,33 @@ trait TaskRepo
         if (isset($task->reward['contribute']) && $contribute > 0) {
 
             Contribute::rewardAssignmentContribute($user, $assignment, $contribute);
+        }
+
+        //聚合任务奖励
+        $reviewFlow = $task->review_flow;
+        if (!is_null($reviewFlow) && $reviewFlow->name == '每日答题任务(聚合)') {
+            $resolve = $assignment->resolve;
+            //目标奖励金额
+            $rewardTicket = Arr::get($resolve, 'reward_ticket', 0);
+            //已领取奖励
+            $receiveTicket = Arr::get($resolve, 'receive_ticket', 0);
+            $surplusTicket = $rewardTicket - $receiveTicket;
+            if ($surplusTicket > 0) {
+                //更新领取精力点数量
+                $resolve['receive_ticket'] = $receiveTicket + $surplusTicket;
+                $assignment->resolve       = $resolve;
+                $assignment->save();
+
+                //更新精力点
+                $user->ticket += $surplusTicket;
+                $user->save();
+
+                //临时改变一下task 返回的精力点数据 给前端展示
+                $reward_info           = $task->reward_info;
+                $reward_info['ticket'] = $surplusTicket;
+                $task->reward          = $reward_info;
+            }
+
         }
     }
 

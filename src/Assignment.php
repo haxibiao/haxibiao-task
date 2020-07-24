@@ -30,6 +30,7 @@ class Assignment extends Model
         'created_at',
         'updated_at',
         'completed_at',
+        'resolve',
     ];
 
     protected $casts = [

@@ -229,12 +229,10 @@ trait TaskMethod
     {
         $count = $user->today_invited_users_count;
         return [
-            'status' => $count > 0,
-            'current_count' => $count
+            'status'        => $count > 0,
+            'current_count' => $count,
         ];
     }
-
-
 
     //检查新型肺炎防治答10题
     public function checkCategoryAnswerQuestion($user, $task, $assignment)
@@ -358,8 +356,39 @@ trait TaskMethod
         $resolve = $task->resolve;
         $amount  = Arr::get($resolve, 'amount');
         return [
-            'status'        => is_numeric($amount) && 3 >= $amount,
+            'status'        => is_numeric($amount) && $user->today_withdraw_amount >= $amount,
             'current_count' => 0,
+        ];
+    }
+
+    // 检测天天答题任务
+    public function checkDaliyAnswer($user, $task, &$assignment)
+    {
+        // 无通用化需求 硬编码写死
+        $todayAnswerCount = $user->answers()->whereDate('created_at', today())->count();
+        $answerReawrd     = [
+            ['answers_count' => 1, 'ticket' => 1],
+            ['answers_count' => 50, 'ticket' => 10],
+            ['answers_count' => 100, 'ticket' => 20],
+            ['answers_count' => 300, 'ticket' => 40],
+        ];
+
+        $currentCount = 0;
+        $rewardTicket = 0;
+        foreach ($answerReawrd as $item) {
+            if ($todayAnswerCount >= $item['answers_count']) {
+                $rewardTicket += $item['ticket'];
+                $currentCount++;
+            }
+        }
+
+        $resolve                  = $assignment->resove;
+        $receiveTikect            = Arr::get($resolve, 'receive_ticket', 0);
+        $resolve['reward_ticket'] = $rewardTicket;
+        $assignment->resolve      = $resolve;
+        return [
+            'status'        => $currentCount > 0 && $rewardTicket > $receiveTikect,
+            'current_count' => $currentCount,
         ];
     }
 
