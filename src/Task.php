@@ -33,6 +33,7 @@ class Task extends Model
         'review_flow_id',
         'max_count',
         'group',
+        'desciption',
     ];
 
     protected $casts = [

@@ -37,6 +37,7 @@ class CreateTasksTable extends Migration
             //FIXME: 这两个时间只有喝水睡觉的 assignment 上有用
             // $table->timestamp('start_at')->nullable()->comment('开始时间');
             $table->timestamp('end_at')->nullable()->comment('截止时间');
+            $table->string('description')->default('');
 
             $table->timestamps();
 
