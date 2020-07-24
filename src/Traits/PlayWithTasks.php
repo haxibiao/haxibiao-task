@@ -62,7 +62,7 @@ trait PlayWithTasks
 
     public function getTasksByReviewClass($class)
     {
-        $tasks = Task::with('parent')->whereIn('review_flow_id', function ($query) use ($class) {
+        $tasks = Task::whereIn('review_flow_id', function ($query) use ($class) {
             $query->select('id')
                 ->from((new ReviewFlow)->getTable())
                 ->where('review_class', $class);
