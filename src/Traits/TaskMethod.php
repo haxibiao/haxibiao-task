@@ -392,4 +392,18 @@ trait TaskMethod
         ];
     }
 
+    public function checkUserProfile($user, $task, $assignment)
+    {
+        $isUpdatedAge    = Arr::get($this->checkAgeIsUpdate($user, $task, $assignment), 'status', false);
+        $isUpdatedAvatar = Arr::get($this->checkUserIsUpdateAvatar($user, $task, $assignment), 'status', false);
+        $isUpdatedName   = Arr::get($this->checkUserIsUpdateName($user, $task, $assignment), 'status', false);
+        $isUpdatedGender = Arr::get($this->checkUserIsUpdateGender($user, $task, $assignment), 'status', false);
+        $isComplete      = $isUpdatedAge && $isUpdatedAvatar && $isUpdatedName && $isUpdatedGender;
+
+        return [
+            'status'        => $isComplete,
+            'current_count' => (int) $isComplete,
+        ];
+    }
+
 }

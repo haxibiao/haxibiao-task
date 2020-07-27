@@ -245,4 +245,16 @@ trait TaskResolvers
 
         return Task::completeTask($user, $task_id);
     }
+
+    public static function resolveTaskDesc($root, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo = null)
+    {
+        $task        = $root;
+        $description = $task->description;
+        // 前端无需截取
+        // if (empty($description)) {
+        //     $description = Str::limit($task->details, 60);
+        // }
+
+        return $description;
+    }
 }

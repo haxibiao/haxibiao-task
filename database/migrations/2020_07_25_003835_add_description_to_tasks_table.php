@@ -14,7 +14,7 @@ class AddDescriptionToTasksTable extends Migration
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            if (Schema::hasColumn('tasks', 'description')) {
+            if (!Schema::hasColumn('tasks', 'description')) {
                 $table->string('description')->default('');
             }
         });
