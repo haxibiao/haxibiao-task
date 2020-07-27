@@ -145,6 +145,11 @@ class ReviewFlowsSeeder extends Seeder
                 'check_functions' => ['checkInviteUserToday'],
                 'review_class'    => 'Invite',
             ],
+            [
+                'name'            => '粘贴热门标签视频',
+                'check_functions' => ['checkTikTokPaste'],
+                'review_class'    => 'Spider',
+            ],
         ];
         foreach ($reviewFlows as $reviewFlow) {
             ReviewFlow::firstOrCreate($reviewFlow);

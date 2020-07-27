@@ -81,6 +81,11 @@ class DMTasksSeeder extends Seeder
         $task->group = "贡献任务";
         $task->save();
 
+
+
+
+
+
         $task = $this->saveTask([
             'name' => '每日邀请用户',
             'type' => Task::DAILY_TASK,
@@ -91,6 +96,23 @@ class DMTasksSeeder extends Seeder
         ];
         $task->max_count      = 1;
         $task->review_flow_id = ReviewFlow::whereName('每日邀请用户统计')->first()->id;
+        $task->status         = true;
+
+        $task->group = "每日任务";
+        $task->save();
+
+
+
+        $task = $this->saveTask([
+            'name' => '热门标签视频',
+            'type' => Task::DAILY_TASK,
+        ]);
+        $task->reward = [
+            'gold'   => 20,
+            'contribute' => 1,
+        ];
+        $task->max_count      = 2;
+        $task->review_flow_id = ReviewFlow::whereName('粘贴热门标签视频')->first()->id;
         $task->status         = true;
 
         $task->group = "每日任务";
