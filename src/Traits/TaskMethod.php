@@ -2,11 +2,15 @@
 
 namespace Haxibiao\Task\Traits;
 
-use App\Category;
-use App\CategoryUser;
+use App\Gold;
 use App\User;
+use App\Spider;
+use App\Category;
+use App\Assignment;
+use App\CategoryUser;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 trait TaskMethod
 {
@@ -298,9 +302,9 @@ trait TaskMethod
         $status = $user->wallet->total_withdraw_amount > 0;
         return
             [
-                'status'        => $status,
-                'current_count' => 0,
-            ];
+            'status'        => $status,
+            'current_count' => 0,
+        ];
     }
 
     //检查用户每日答题数
@@ -310,9 +314,9 @@ trait TaskMethod
         $status        = $current_count >= $task->max_count;
         return
             [
-                'status'        => $status,
-                'current_count' => $current_count,
-            ];
+            'status'        => $status,
+            'current_count' => $current_count,
+        ];
     }
 
     //检查用户是否更换过性别
@@ -345,9 +349,9 @@ trait TaskMethod
 
         return
             [
-                'status'        => !empty($user->avatar),
-                'current_count' => 0,
-            ];
+            'status'        => !empty($user->avatar),
+            'current_count' => 0,
+        ];
     }
 
     // 检查今日提现金额是否达标
@@ -409,7 +413,7 @@ trait TaskMethod
     public function checkTikTokPaste($user, $task, $assignment)
     {
         //获得当前热门标签
-        $hot = $task->resolve['hot'] ?? null;
+        $hot   = $task->resolve['hot'] ?? null;
         $count = 0;
         //当前用户粘贴的视频列表
         $spiders = \App\Spider::query()
@@ -423,16 +427,16 @@ trait TaskMethod
         //匹配是否是热标签
         foreach ($spiders as $spider) {
 
-            $title =  $spider->data['title'] ?? null;
+            $title = $spider->data['title'] ?? null;
             if (!empty($title)) {
-                $flag =  strpos($title, $hot);
+                $flag = strpos($title, $hot);
                 if ($flag !== false) {
                     $count++;
                 }
             }
         }
         return [
-            'status'        => $count  >=  $task->max_count,
+            'status'        => $count >= $task->max_count,
             'current_count' => $count,
         ];
     }
