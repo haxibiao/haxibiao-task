@@ -2,15 +2,12 @@
 
 namespace Haxibiao\Task\Traits;
 
-use App\Gold;
-use App\User;
-use App\Spider;
 use App\Category;
-use App\Assignment;
 use App\CategoryUser;
+use App\Spider;
+use App\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
 
 trait TaskMethod
 {
@@ -398,11 +395,11 @@ trait TaskMethod
 
     public function checkUserProfile($user, $task, $assignment)
     {
-        $isUpdatedAge    = Arr::get($this->checkAgeIsUpdate($user, $task, $assignment), 'status', false);
-        $isUpdatedAvatar = Arr::get($this->checkUserIsUpdateAvatar($user, $task, $assignment), 'status', false);
-        $isUpdatedName   = Arr::get($this->checkUserIsUpdateName($user, $task, $assignment), 'status', false);
+        $isUpdatedAge = Arr::get($this->checkAgeIsUpdate($user, $task, $assignment), 'status', false);
+        // $isUpdatedAvatar = Arr::get($this->checkUserIsUpdateAvatar($user, $task, $assignment), 'status', false);
+        // $isUpdatedName   = Arr::get($this->checkUserIsUpdateName($user, $task, $assignment), 'status', false);
         $isUpdatedGender = Arr::get($this->checkUserIsUpdateGender($user, $task, $assignment), 'status', false);
-        $isComplete      = $isUpdatedAge && $isUpdatedAvatar && $isUpdatedName && $isUpdatedGender;
+        $isComplete      = $isUpdatedAge && $isUpdatedGender;
 
         return [
             'status'        => $isComplete,
