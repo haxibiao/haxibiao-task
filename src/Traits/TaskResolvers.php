@@ -32,7 +32,8 @@ trait TaskResolvers
             $task->user       = $assignment->user;
             $tasks[]          = $task;
         }
-        return $tasks;
+
+        return array_reverse($tasks);
     }
 
     // 喝水打卡任务列表
