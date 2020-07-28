@@ -386,7 +386,7 @@ trait TaskMethod
             }
         }
 
-        $resolve                  = $assignment->resove;
+        $resolve                  = $assignment->resolve;
         $receiveTikect            = Arr::get($resolve, 'receive_ticket', 0);
         $resolve['reward_ticket'] = $rewardTicket;
         $assignment->resolve      = $resolve;
