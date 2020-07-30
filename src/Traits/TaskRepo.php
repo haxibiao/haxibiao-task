@@ -42,6 +42,9 @@ trait TaskRepo
         //初始化每日任务状态
         Assignment::initDailyTask($assignments);
 
+        //初始化每周任务状态
+        Assignment::initWeekTask($assignments);
+
         //初始化有趣小视频任务状态(每日刷新)以后也是贡献任务
         Assignment::initContributeTask($assignments);
 
@@ -78,6 +81,11 @@ trait TaskRepo
     public function isDailyTask()
     {
         return $this->type == Task::DAILY_TASK;
+    }
+
+    public function isWeekTask()
+    {
+        return $this->type == Task::WEEK_TASK;
     }
 
     public function isTimeTask()
