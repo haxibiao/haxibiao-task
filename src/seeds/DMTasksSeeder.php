@@ -26,6 +26,7 @@ class DMTasksSeeder extends Seeder
 
         $this->initCustomTasks();
         $this->initContributeTasks();
+        $this->initGroupTasks();
     }
 
     //这些以前是前端代码+rest API的，可以直接用新的数据库结构seed
@@ -263,6 +264,45 @@ class DMTasksSeeder extends Seeder
         $task->resolve        = ["router" => "SubmitTask", "submit_name" => "去评价"];
 
         $task->group = "自定义任务";
+        $task->save();
+    }
+
+    public function initGroupTasks()
+    {
+        $task = $this->saveTask(
+            [
+                'name' => '每天答题越多,奖励越多!',
+                'details' => '每天答题越多,奖励越多!',
+                'type' => TASK::GROUP_TASK,
+            ]
+        );
+        $task->reward = [
+            [
+                'answers_count' => 1,
+                'ticket'        => 1,
+            ],
+            [
+                'answers_count' => 50,
+                'ticket'        => 10,
+            ],
+            [
+                'answers_count' => 100,
+                'ticket'        => 20,
+            ],
+            [
+                'answers_count' => 300,
+                'ticket'        => 40,
+            ],
+
+        ];
+        $task->review_flow_id = ReviewFlow::whereName('每日答题任务(聚合)')->first()->id;
+        $task->status         = true;
+        $task->max_count = 4;
+        $task->resolve        = [
+            'answers_count' => [1, 50, 100, 300],
+        ];
+
+        $task->group = "每日任务";
         $task->save();
     }
 
