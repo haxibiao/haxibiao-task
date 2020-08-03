@@ -155,6 +155,11 @@ class ReviewFlowsSeeder extends Seeder
                 'check_functions' => ['checkDaliyAnswer'],
                 'review_class' => 'Answer',
             ],
+            [
+                'name'         => '完善个人资料',
+                'check_functions' => ['checkUserProfile'],
+                'review_class' => 'User',
+            ],
 
         ];
         foreach ($reviewFlows as $reviewFlow) {

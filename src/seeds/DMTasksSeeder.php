@@ -304,6 +304,24 @@ class DMTasksSeeder extends Seeder
 
         $task->group = "每日任务";
         $task->save();
+
+
+        $task = $this->saveTask(
+            [
+                'name' => '完善个人资料',
+                'details'        => '只有当您上传头像、完善昵称、填写年龄、填写性别资料后才可以领取任务奖励哦。',
+                'type'           => Task::NEW_USER_TASK
+            ]
+        );
+
+        $task->review_flow_id = ReviewFlow::whereName('完善个人资料')->first()->id;
+        $task->status         = true;
+        $task->max_count = 1;
+        $task->reward = [
+            'gold' => 20
+        ];
+        $task->group = "新人任务";
+        $task->save();
     }
 
     public function saveTask(array $data)
