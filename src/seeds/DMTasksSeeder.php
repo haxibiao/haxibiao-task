@@ -296,7 +296,7 @@ class DMTasksSeeder extends Seeder
 
         ];
         $task->review_flow_id = ReviewFlow::whereName('每日答题任务(聚合)')->first()->id;
-        $task->status         = true;
+        $task->status         = 0;
         $task->max_count = 4;
         $task->resolve        = [
             'answers_count' => [1, 50, 100, 300],
