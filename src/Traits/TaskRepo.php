@@ -519,7 +519,9 @@ trait TaskRepo
         foreach ($tasks as $task) {
             $task->checkTaskStatus($user);
             $assignment = $user->tasks()->where('task_id', $task->id)->first()->pivot;
-            $assignment->update(["current_count" => DB::raw("current_count+1"), "progress" => DB::raw("current_count/" . $task->max_count)]); //次数加1
+            if ($assignment->current_count < $task->max_count) {
+                $assignment->update(["current_count" => DB::raw("current_count+1"), "progress" => DB::raw("current_count/" . $task->max_count)]); //次数加1
+            }
         }
     }
 }
