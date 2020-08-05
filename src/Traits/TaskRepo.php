@@ -507,7 +507,6 @@ trait TaskRepo
                 $reward_info['ticket'] = $surplusTicket;
                 $task->reward          = $reward_info;
             }
-
         }
     }
 
@@ -520,7 +519,7 @@ trait TaskRepo
         foreach ($tasks as $task) {
             $task->checkTaskStatus($user);
             $assignment = $user->tasks()->where('task_id', $task->id)->first()->pivot;
-            $assignment->update(["current_count" => DB::raw("current_count+1")]); //次数加1
+            $assignment->update(["current_count" => DB::raw("current_count+1"), "progress" => DB::raw("current_count/" . $task->max_count)]); //次数加1
         }
     }
 }
