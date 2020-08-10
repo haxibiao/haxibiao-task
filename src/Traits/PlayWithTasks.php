@@ -35,9 +35,17 @@ trait PlayWithTasks
         $user  = $this;
         //判断新手任务是否完成 //FIXME: 注意性能问题，注意单词mutation触发过多sql 查询和update
         $tasks = $user->getTasksByReviewClass($class);
+        //在这里就批量插入完成,会降低脏读几率,导致插入unique报错
+        $insertData = [];
         foreach ($tasks as $task) {
+            $insertData[] = ['task_id' => $task->id, 'user_id' => $user->id];
+        }
+        Assignment::insertOrIgnore($insertData);
+        $assignments = $user->assignments()->whereIn('task_id', $tasks->pluck('id'))->get();
+        foreach ($tasks as $task) {
+            $assignment = $assignments->firstWhere('task_id', $task->id);
             //检查更新任务指派状态
-            $task->checkTaskStatus($user);
+            $task->checkTaskStatus($user, $assignment);
         }
 
         // //提现任务
@@ -62,7 +70,7 @@ trait PlayWithTasks
 
     public function getTasksByReviewClass($class)
     {
-        $tasks = Task::whereIn('review_flow_id', function ($query) use ($class) {
+        $tasks = Task::with(['review_flow'])->whereIn('review_flow_id', function ($query) use ($class) {
             $query->select('id')
                 ->from((new ReviewFlow)->getTable())
                 ->where('review_class', $class);

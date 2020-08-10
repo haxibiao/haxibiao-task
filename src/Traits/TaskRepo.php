@@ -155,10 +155,10 @@ trait TaskRepo
     }
 
     //检查并更新assignment的进度（current_count）和状态（status）
-    public function checkTaskStatus($user)
+    public function checkTaskStatus($user, $assignment = null)
     {
         $task       = $this;
-        $assignment = $task->getAssignment($user->id);
+        $assignment = $assignment ?: $task->getAssignment($user->id);
 
         $reviewFlowName = data_get($task->review_flow, 'name');
         if ($assignment->status < Assignment::TASK_REACH || $reviewFlowName == '每日答题任务(聚合)') {
