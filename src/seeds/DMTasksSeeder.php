@@ -49,6 +49,7 @@ class DMTasksSeeder extends Seeder
         $task->review_flow_id = ReviewFlow::whereName('看激励视频')->first()->id;
         $task->status         = true;
         $task->group          = "贡献任务";
+        $task->details = '看完视频即可获取奖励，点击下载广告或查看详情才能获取更多贡献点奖励哦~';
         $task->save();
 
         $task = $this->saveTask([
@@ -65,6 +66,7 @@ class DMTasksSeeder extends Seeder
         $task->status         = true;
 
         $task->group = "贡献任务";
+        $task->details = '每出1题消耗1精力点，只有成功通过审核的题目才能获得出题奖励。出图文视频题或添加详细的解析内容可以获得更多的奖励哦~';
         $task->save();
 
         $task = $this->saveTask([
@@ -80,6 +82,7 @@ class DMTasksSeeder extends Seeder
         $task->status         = true;
 
         $task->group = "贡献任务";
+        $task->details = '打开抖音视频-点击分享按钮-选择复制链接，返回答妹即可触发视频采集，采集成功将获得智慧点奖励，如果采集了热门标签视频，可以获得额外贡献点奖励哦~';
         $task->save();
 
 
@@ -96,6 +99,7 @@ class DMTasksSeeder extends Seeder
         $task->status         = true;
 
         $task->group = "贡献任务";
+        $task->details = '1. 首次免费参与，其他情况下完成所有福利任务后，可以参与报名；2. 奖金一共分为4档【1.1，2，4，8】；3. 中奖后，需要在结果公布当日申请提现，否则名额作废；4. 系统通知会通知中奖用户具体的中奖信息，另外官方公告中会有当日所有中奖用户的名单。';
         $task->save();
     }
 
@@ -253,7 +257,6 @@ class DMTasksSeeder extends Seeder
         $task->max_count      = 2;
         $task->review_flow_id = ReviewFlow::whereName('粘贴热门标签视频')->first()->id;
         $task->status         = true;
-
         $task->group = "每日任务";
         $task->save();
     }
