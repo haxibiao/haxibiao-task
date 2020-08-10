@@ -36,11 +36,21 @@ trait PlayWithTasks
         //判断新手任务是否完成 //FIXME: 注意性能问题，注意单词mutation触发过多sql 查询和update
         $tasks = $user->getTasksByReviewClass($class);
         //在这里就批量插入完成,会降低脏读几率,导致插入unique报错
-        $insertData = [];
-        foreach ($tasks as $task) {
-            $insertData[] = ['task_id' => $task->id, 'user_id' => $user->id];
+
+        $assignments   = $user->assignments()->whereIn('task_id', $tasks->pluck('id'))->get();
+        $insertTaskIds = array_diff($tasks->pluck('id')->toArray(), $assignments->pluck('task_id')->toArray());
+        $insertData    = [];
+        foreach ($insertTaskIds as $taskId) {
+            $insertData[] = ['task_id' => $taskId, 'user_id' => $user->id];
+
         }
-        Assignment::insertOrIgnore($insertData);
+        //这这里采用ignore 并发情况下会造成大量死锁,改成insert
+        try {
+            Assignment::insert($insertData);
+        } catch (\Exception $ex) {
+            //添加重试机制
+        }
+
         $assignments = $user->assignments()->whereIn('task_id', $tasks->pluck('id'))->get();
         foreach ($tasks as $task) {
             $assignment = $assignments->firstWhere('task_id', $task->id);
