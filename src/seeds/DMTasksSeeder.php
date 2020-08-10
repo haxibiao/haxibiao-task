@@ -19,7 +19,7 @@ class DMTasksSeeder extends Seeder
     {
         //需要清理
         // Assignment::truncate();
-        Task::truncate();
+        //Task::truncate();
 
         $this->initNewUserTasks();
         $this->initDailyTasks();
