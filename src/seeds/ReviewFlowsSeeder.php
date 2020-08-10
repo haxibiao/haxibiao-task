@@ -34,6 +34,10 @@ class ReviewFlowsSeeder extends Seeder
                 'check_functions' => null,
             ],
             [
+                'name'            => '高额抽奖',
+                'check_functions' => null,
+            ],
+            [
                 'name'            => '更换头像',
                 'check_functions' => ['checkUserIsUpdateAvatar'],
                 'review_class'    => 'User',
@@ -150,6 +154,17 @@ class ReviewFlowsSeeder extends Seeder
                 'check_functions' => ['checkTikTokPaste'],
                 'review_class'    => 'Spider',
             ],
+            [
+                'name'         => '每日答题任务(聚合)',
+                'check_functions' => ['checkDaliyAnswer'],
+                'review_class' => 'Answer',
+            ],
+            [
+                'name'         => '完善个人资料',
+                'check_functions' => ['checkUserProfile'],
+                'review_class' => 'User',
+            ],
+
         ];
         foreach ($reviewFlows as $reviewFlow) {
             ReviewFlow::firstOrCreate($reviewFlow);

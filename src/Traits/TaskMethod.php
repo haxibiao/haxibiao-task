@@ -299,9 +299,9 @@ trait TaskMethod
         $status = $user->wallet->total_withdraw_amount > 0;
         return
             [
-            'status'        => $status,
-            'current_count' => 0,
-        ];
+                'status'        => $status,
+                'current_count' => 0,
+            ];
     }
 
     //检查用户每日答题数
@@ -311,9 +311,9 @@ trait TaskMethod
         $status        = $current_count >= $task->max_count;
         return
             [
-            'status'        => $status,
-            'current_count' => $current_count,
-        ];
+                'status'        => $status,
+                'current_count' => $current_count,
+            ];
     }
 
     //检查用户是否更换过性别
@@ -346,9 +346,9 @@ trait TaskMethod
 
         return
             [
-            'status'        => !empty($user->avatar),
-            'current_count' => 0,
-        ];
+                'status'        => !empty($user->avatar),
+                'current_count' => 0,
+            ];
     }
 
     // 检查今日提现金额是否达标
@@ -365,9 +365,9 @@ trait TaskMethod
     // 检测天天答题任务
     public function checkDaliyAnswer($user, $task, &$assignment)
     {
-        // 无通用化需求 硬编码写死
-        $todayAnswerCount = $user->answers()->whereDate('created_at', today())->count();
-        $answerReawrd     = [
+
+        $todayAnswerCount = $user->profile->answers_count_today;
+        $answerReward     = [
             ['answers_count' => 1, 'ticket' => 1],
             ['answers_count' => 50, 'ticket' => 10],
             ['answers_count' => 100, 'ticket' => 20],
@@ -376,7 +376,7 @@ trait TaskMethod
 
         $currentCount = 0;
         $rewardTicket = 0;
-        foreach ($answerReawrd as $item) {
+        foreach ($answerReward as $item) {
             if ($todayAnswerCount >= $item['answers_count']) {
                 $rewardTicket += $item['ticket'];
                 $currentCount++;

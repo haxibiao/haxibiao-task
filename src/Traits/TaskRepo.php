@@ -42,6 +42,9 @@ trait TaskRepo
         //初始化每日任务状态
         Assignment::initDailyTask($assignments);
 
+        //初始化每周任务状态
+        Assignment::initWeekTask($assignments);
+
         //初始化有趣小视频任务状态(每日刷新)以后也是贡献任务
         Assignment::initContributeTask($assignments);
 
@@ -78,6 +81,11 @@ trait TaskRepo
     public function isDailyTask()
     {
         return $this->type == Task::DAILY_TASK;
+    }
+
+    public function isWeekTask()
+    {
+        return $this->type == Task::WEEK_TASK;
     }
 
     public function isTimeTask()
@@ -499,7 +507,6 @@ trait TaskRepo
                 $reward_info['ticket'] = $surplusTicket;
                 $task->reward          = $reward_info;
             }
-
         }
     }
 
@@ -510,9 +517,11 @@ trait TaskRepo
     {
         $tasks = $user->getCommonTasks($taskName);
         foreach ($tasks as $task) {
-            $task->checkTaskStatus($user);
             $assignment = $user->tasks()->where('task_id', $task->id)->first()->pivot;
-            $assignment->update(["current_count" => DB::raw("current_count+1")]); //次数加1
+            if ($assignment->current_count < $task->max_count) {
+                $assignment->update(["current_count" => DB::raw("current_count+1"), "progress" => DB::raw("current_count/" . $task->max_count)]); //次数加1
+            }
+            $task->checkTaskStatus($user);
         }
     }
 }
