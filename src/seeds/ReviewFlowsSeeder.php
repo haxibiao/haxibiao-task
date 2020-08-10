@@ -34,6 +34,10 @@ class ReviewFlowsSeeder extends Seeder
                 'check_functions' => null,
             ],
             [
+                'name'            => '高额抽奖',
+                'check_functions' => null,
+            ],
+            [
                 'name'            => '更换头像',
                 'check_functions' => ['checkUserIsUpdateAvatar'],
                 'review_class'    => 'User',

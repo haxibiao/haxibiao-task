@@ -83,40 +83,19 @@ class DMTasksSeeder extends Seeder
         $task->save();
 
 
-
-
-
-
         $task = $this->saveTask([
-            'name' => '每日邀请用户',
-            'type' => Task::DAILY_TASK,
+            'name' => '高额提现抽奖',
+            'type' => Task::CONTRIBUTE_TASK,
         ]);
         $task->reward = [
-            'gold'   => 20,
-            'ticket' => 0,
+            'gold'       => 0,
+            'ticket'     => 0,
+            'contribute' => 0,
         ];
-        $task->max_count      = 1;
-        $task->review_flow_id = ReviewFlow::whereName('每日邀请用户统计')->first()->id;
+        $task->review_flow_id = ReviewFlow::whereName('高额抽奖')->first()->id;
         $task->status         = true;
 
-        $task->group = "每日任务";
-        $task->save();
-
-
-
-        $task = $this->saveTask([
-            'name' => '热门标签视频',
-            'type' => Task::DAILY_TASK,
-        ]);
-        $task->reward = [
-            'gold'   => 20,
-            'contribute' => 1,
-        ];
-        $task->max_count      = 2;
-        $task->review_flow_id = ReviewFlow::whereName('粘贴热门标签视频')->first()->id;
-        $task->status         = true;
-
-        $task->group = "每日任务";
+        $task->group = "贡献任务";
         $task->save();
     }
 
@@ -241,6 +220,39 @@ class DMTasksSeeder extends Seeder
         $task->review_flow_id = ReviewFlow::whereName('刷视频')->first()->id;
         $task->status         = true;
         $task->resolve        = ["visits_type" => "posts", "route" => "学习"];
+
+        $task->group = "每日任务";
+        $task->save();
+
+
+        $task = $this->saveTask([
+            'name' => '每日邀请用户',
+            'type' => Task::DAILY_TASK,
+        ]);
+        $task->reward = [
+            'gold'   => 20,
+            'ticket' => 0,
+        ];
+        $task->max_count      = 1;
+        $task->review_flow_id = ReviewFlow::whereName('每日邀请用户统计')->first()->id;
+        $task->status         = true;
+
+        $task->group = "每日任务";
+        $task->save();
+
+
+
+        $task = $this->saveTask([
+            'name' => '热门标签视频',
+            'type' => Task::DAILY_TASK,
+        ]);
+        $task->reward = [
+            'gold'   => 20,
+            'contribute' => 1,
+        ];
+        $task->max_count      = 2;
+        $task->review_flow_id = ReviewFlow::whereName('粘贴热门标签视频')->first()->id;
+        $task->status         = true;
 
         $task->group = "每日任务";
         $task->save();
