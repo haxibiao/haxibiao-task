@@ -435,7 +435,6 @@ trait TaskRepo
 
             $assignment->save();
             //领取奖励
-
             Task::reward($user, $task, $assignment, $high);
         } else if ($task->type == Task::CONTRIBUTE_TASK) {
             //如果贡献任务有完成次数
@@ -449,13 +448,23 @@ trait TaskRepo
             Task::reward($user, $task, $assignment, $high);
         }
 
+        //没有任何奖励,要抛异常给前端,否则APP会崩溃
+        $attributes      = ['gold', 'gold_high', 'contribute', 'contribute_high', 'ticket', 'ticket_high'];
+        $isError         = false;
+        $nullRewardCount = 0;
+        foreach ($attributes as $attr) {
+            if (!Arr::get($task->reward, $attr, 0)) {
+                $nullRewardCount++;
+            }
+        }
+        throw_if(count($attributes) == $nullRewardCount, UserException::class, '领取失败,请勿重复领取哦!');
+
         return $task;
     }
 
     public static function reward($user, &$task, $assignment, $high)
     {
         // 判断奖励是否存在只需要判断 普通额度的奖励即可, 低额不一定有高额,但高额一定会有低额
-
         // 金币奖励
         $gold = $high ? $task->reward['gold_high'] : $task->reward['gold'] ?? 0;
 
