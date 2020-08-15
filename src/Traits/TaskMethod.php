@@ -273,7 +273,7 @@ trait TaskMethod
     //今日比赛获胜次数
     public function checkTodayGameWinnersCount($user, $task, $assignment)
     {
-        $current_count = $user->gameWinners()->whereDate('created_at', today())->count();
+        $current_count = $user->gameWinners()->whereBetWeen('created_at', [today(), today()->addDay()])->count();
         $status        = $current_count >= $task->max_count;
         return [
             'status'        => $status,
@@ -285,7 +285,7 @@ trait TaskMethod
     public function checkTodayVisitsCount($user, $task, $assignment)
     {
         $visits_type   = Arr::get($task->resolve, 'visits_type', 'videos');
-        $current_count = $user->visits()->ofType($visits_type)->whereDate('created_at', today())->count();
+        $current_count = $user->visits()->ofType($visits_type)->whereBetWeen('created_at', [today(), today()->addDay()])->count();
         $status        = $current_count >= $task->max_count;
         return [
             'status'        => $status,
@@ -299,21 +299,21 @@ trait TaskMethod
         $status = $user->wallet->total_withdraw_amount > 0;
         return
             [
-                'status'        => $status,
-                'current_count' => 0,
-            ];
+            'status'        => $status,
+            'current_count' => 0,
+        ];
     }
 
     //检查用户每日答题数
     public function checkAnswerQuestionCount($user, $task, $assignment)
     {
-        $current_count = $user->answers()->whereDate('created_at', today())->count();
+        $current_count = $user->answers()->whereBetWeen('created_at', [today(), today()->addDay()])->count();
         $status        = $current_count >= $task->max_count;
         return
             [
-                'status'        => $status,
-                'current_count' => $current_count,
-            ];
+            'status'        => $status,
+            'current_count' => $current_count,
+        ];
     }
 
     //检查用户是否更换过性别
@@ -346,9 +346,9 @@ trait TaskMethod
 
         return
             [
-                'status'        => !empty($user->avatar),
-                'current_count' => 0,
-            ];
+            'status'        => !empty($user->avatar),
+            'current_count' => 0,
+        ];
     }
 
     // 检查今日提现金额是否达标
@@ -395,7 +395,7 @@ trait TaskMethod
 
     public function checkUserProfile($user, $task, $assignment)
     {
-        $isUpdatedAge    = Arr::get($this->checkAgeIsUpdate($user, $task, $assignment), 'status', false);
+        $isUpdatedAge = Arr::get($this->checkAgeIsUpdate($user, $task, $assignment), 'status', false);
         // $isUpdatedAvatar = Arr::get($this->checkUserIsUpdateAvatar($user, $task, $assignment), 'status', false);
         $isUpdatedName   = Arr::get($this->checkUserIsUpdateName($user, $task, $assignment), 'status', false);
         $isUpdatedGender = Arr::get($this->checkUserIsUpdateGender($user, $task, $assignment), 'status', false);
@@ -416,7 +416,7 @@ trait TaskMethod
         $spiders = \App\Spider::query()
             ->select(['user_id', 'data']) //不需要其他无用字段
             ->where('user_id', $user->id)
-            ->whereDate('created_at', today())
+            ->whereBetWeen('created_at', [today(), today()->addDay()])
             ->where('status', 1)
             ->where('spider_type', 'videos')
             ->get();
