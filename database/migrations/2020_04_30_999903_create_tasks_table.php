@@ -13,9 +13,8 @@ class CreateTasksTable extends Migration
      */
     public function up()
     {
-        if (Schema::hasTable('tasks')) {
-            return;
-        }
+        Schema::dropIfExists('tasks');
+
         Schema::create('tasks', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->comment('任务名称');
