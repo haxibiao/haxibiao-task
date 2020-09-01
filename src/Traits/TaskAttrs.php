@@ -62,7 +62,17 @@ trait TaskAttrs
     public function getRewardInfoAttribute()
     {
         //这里可以控制奖励信息的特殊显示，比如激励视频的...
-        return $this->reward;
+        //这里可以控制奖励信息的特殊显示，比如激励视频的...
+        $reward    = $this->reward;
+        $isDazhuan = config('app.name') == 'datizhuanqian';
+        if ($this->name == '有趣小视频' && $isDazhuan) {
+            $user = checkUser();
+            if (!is_null($user) && array_key_exists('contribute_high', $reward)) {
+                $reward['contribute_high'] = $user->withdrawCount >= 7 ? 4 : $reward['contribute_high'];
+            }
+        }
+
+        return $reward;
     }
 
     /**
