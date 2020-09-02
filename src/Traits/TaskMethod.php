@@ -437,4 +437,13 @@ trait TaskMethod
             'current_count' => $count,
         ];
     }
+    public function  checkPublishDouyinVideo($user, $task, $assignment){
+        $count = $user->douyinPosts()->count();
+        return [
+            'status'        => $count >= $task->max_count,
+            'current_count' => $count,
+        ];
+    }
+
+
 }
