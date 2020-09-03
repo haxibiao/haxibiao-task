@@ -437,18 +437,22 @@ trait TaskMethod
             'current_count' => $count,
         ];
     }
+
     //审核用户当天粘贴的视频数量
-    public function  checkPublishDouyinVideo($user, $task, $assignment){
+    public function checkPublishDouyinVideo($user, $task, $assignment)
+    {
         $count = $user->douyinPosts()
-                ->whereBetween('created_at', [today(), today()->addDay()])
-                ->count();
+            ->whereBetween('created_at', [today(), today()->addDay()])
+            ->count();
         return [
             'status'        => $count >= $task->max_count,
             'current_count' => $count,
         ];
     }
+
     //审核用户发布的视频数-（当天）
-    public function  checkPublishPostWithVideo($user, $task, $assignment){
+    public function checkPublishPostWithVideo($user, $task, $assignment)
+    {
         $count = $user->posts()
             ->whereNull('spider_id')
             ->whereNotNull('video_id')
@@ -460,5 +464,13 @@ trait TaskMethod
         ];
     }
 
+    public function checkDailyShare($user, $task, $assignment)
+    {
+        $count = \App\Helpers\Redis\RedisSharedCounter::getCounter($user->id);
+        return [
+            'status'        => $count >= $task->max_count,
+            'current_count' => $count,
+        ];
+    }
 
 }
