@@ -214,6 +214,17 @@ trait TaskResolvers
 
         return Task::highPraise($user, $task, $args['content']);
     }
+    // 应用商店好评任务接口 -印象视频带审核版
+    public static function resolveReplyTaskWithCheck($root, array $args, $context, $info)
+    {
+        app_track_event('任务', '好评任务-带审核');
+        $user = checkUser();
+        $task = Task::whereName('应用商店好评')->first();
+        throw_if(is_null($task), UserException::class, '任务不存在哦~,请稍后再试');
+        throw_if(empty(Arr::get($args,'images')), UserException::class, '好评截图不能为空哦');
+
+        return Task::replyTaskWithCheck($user, $task, $args);
+    }
 
     //答复任务
     public static function resolveReply($root, array $args, $context = null, $info = null)

@@ -4,7 +4,9 @@ namespace Haxibiao\Task\Traits;
 
 use App\Contribute;
 use App\Exceptions\UserException;
+use App\Feedback;
 use App\Gold;
+use App\Image;
 use App\User;
 use Carbon\Carbon;
 use Haxibiao\Task\Assignment;
@@ -362,6 +364,36 @@ trait TaskRepo
         //无需审核，1分钟后任务自动完成
         dispatch(new DelayRewaredTask($assignment->id));
         return 1;
+    }
+    /**
+     * 应用商店好评-印象视频带审核版
+     */
+    public static function replyTaskWithCheck(User $user, Task $task, array $content)
+    {
+        $assignment = $task->getAssignment($user->id);
+        if ($assignment->status >= Assignment::TASK_REACH) {
+            throw new UserException('好评任务已经做过了哦~');
+        }
+
+        $assignment->status = Assignment::TASK_REVIEW; //提交回复后从未开始到审核中
+        $assignment->save();
+
+        $commentFeedback = Feedback::firstOrNew(
+            [
+                'user_id' => $user->id,
+                'type' => Feedback::COMMENT_TYPE,
+            ]
+        );
+        $commentFeedback->content = Arr::get($content, 'info');
+        $commentFeedback->contact = Arr::get($content, 'account');
+        $commentFeedback->status= Feedback::STATUS_PENDING;
+        $commentFeedback->save();
+        foreach ($content['images'] as $image) {
+            $image = Image::saveImage($image);
+            $imageIds[] = $image->id;
+        }
+        $commentFeedback->images()->attach($imageIds);
+        return $task;
     }
 
     /**
