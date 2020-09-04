@@ -11,7 +11,7 @@ trait TaskAttrs
 {
     public function getNextRewardVideoTimeAttribute()
     {
-        if ($this->name == '有趣小视频') {
+        if ($this->name == '有趣小视频' || $this->name == '看视频赚钱') {
             if ($user = checkUser()) {
                 $created_at = $user->profile->last_reward_video_time ?? now();
                 if (empty($created_at)) {
