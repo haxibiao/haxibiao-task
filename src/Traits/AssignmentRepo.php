@@ -13,7 +13,7 @@ trait AssignmentRepo
 
             $task = $assignment->task;
             //每日任务: 重置刷新状态和进度
-            if ($task->isContributeTask()) {
+            if (!is_null($task) && $task->isContributeTask()) {
                 //新的一天开始
                 if ($assignment->updated_at < today()) {
                     $assignment->progress      = 0;
@@ -70,7 +70,7 @@ trait AssignmentRepo
 
             $task = $assignment->task;
             //每日任务: 重置刷新状态和进度
-            if ($task->isWeekTask()) {
+            if (!is_null($task) && $task->isWeekTask()) {
                 //新的一周开始了
                 if ($assignment->updated_at < now()->startOfWeek()) {
                     $assignment->progress      = 0;
