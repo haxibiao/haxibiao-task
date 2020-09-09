@@ -13,13 +13,19 @@ trait TaskAttrs
     {
         if ($this->name == '有趣小视频' || $this->name == '看视频赚钱') {
             if ($user = checkUser()) {
-                $created_at = $user->profile->last_reward_video_time ?? now();
-                if (empty($created_at)) {
+                $last_reward_video_time = $user->profile->last_reward_video_time;
+                if ($last_reward_video_time){
+                    $created_at = $last_reward_video_time ?? now();
+                    if (empty($created_at)) {
+                        return 0;
+                    }
+                    $leftTime = now()->diffInSeconds($created_at);
+                    return $leftTime >= 30 ? 0 : 30 - $leftTime;
+                }
+                //没有上次观看记录的，下次观看间距时间为0
+                else{
                     return 0;
                 }
-                $leftTime = now()->diffInSeconds($created_at);
-
-                return $leftTime >= 30 ? 0 : 30 - $leftTime;
             }
             return 0;
         }
