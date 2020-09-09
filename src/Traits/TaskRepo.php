@@ -377,6 +377,7 @@ trait TaskRepo
 
         $assignment->status = Assignment::TASK_REVIEW; //提交回复后从未开始到审核中
         $assignment->save();
+        $task->assignment= $assignment;
 
         $commentFeedback = Feedback::firstOrNew(
             [
