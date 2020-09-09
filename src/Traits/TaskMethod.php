@@ -22,7 +22,7 @@ trait TaskMethod
     {
         $count = $assignment->current_count;
         return [
-            'status'        => $count >= $task->max_count,
+            'status' => $count >= $task->max_count,
             'current_count' => $count,
         ];
     }
@@ -37,7 +37,7 @@ trait TaskMethod
 
         $count = $user->count_audiences;
         return [
-            'status'        => $count >= $task->max_count,
+            'status' => $count >= $task->max_count,
             'current_count' => $count,
         ];
     }
@@ -52,7 +52,7 @@ trait TaskMethod
         //$count = $user->profile->count_likes;
         $count = $assignment->current_count;
         return [
-            'status'        => $count >= $task->max_count,
+            'status' => $count >= $task->max_count,
             'current_count' => $count,
         ];
     }
@@ -66,7 +66,7 @@ trait TaskMethod
     {
         $count = $assignment->current_count;
         return [
-            'status'        => $count >= $task->max_count,
+            'status' => $count >= $task->max_count,
             'current_count' => $count, //喝水任务唯一的区别是知道你喝了哪几杯...
         ];
     }
@@ -80,7 +80,7 @@ trait TaskMethod
     {
         $count = $assignment->current_count;
         return [
-            'status'        => $count >= $task->max_count,
+            'status' => $count >= $task->max_count,
             'current_count' => $count, //睡觉任务唯一的区别是知道你目前是醒来的还是睡着...
         ];
     }
@@ -95,7 +95,7 @@ trait TaskMethod
     {
         $count = $user->profile->count_articles;
         return [
-            'status'        => $count >= $task->max_count,
+            'status' => $count >= $task->max_count,
             'current_count' => $count,
         ];
     }
@@ -109,7 +109,7 @@ trait TaskMethod
     {
         //TODO: 判断是否有头像的要重构，avatar=null表示还没上传过头像
         return [
-            'status'        => !Str::contains($user->avatar, 'storage/avatar/avatar'),
+            'status' => !Str::contains($user->avatar, 'storage/avatar/avatar'),
             'current_count' => 0,
         ];
     }
@@ -118,7 +118,7 @@ trait TaskMethod
     public function checkUserIsUpdateName($user, $task, $assignment)
     {
         return [
-            'status'        => $user->name != User::DEFAULT_USER_NAME,
+            'status' => $user->name != User::DEFAULT_USER_NAME,
             'current_count' => 0,
         ];
     }
@@ -131,7 +131,7 @@ trait TaskMethod
     public function checkUserHasPhone($user, $task, $assignment)
     {
         return [
-            'status'        => $user->phone,
+            'status' => $user->phone,
             'current_count' => 0,
         ];
     }
@@ -145,7 +145,7 @@ trait TaskMethod
     {
         $profile = $user->profile;
         return [
-            'status'        => isset($profile->gender) && $profile->birthday,
+            'status' => isset($profile->gender) && $profile->birthday,
             'current_count' => 0,
         ];
     }
@@ -162,7 +162,7 @@ trait TaskMethod
 
         return array(
             [
-                'status'        => $assignment->status,
+                'status' => $assignment->status,
                 'current_count' => 0,
             ],
 
@@ -182,7 +182,7 @@ trait TaskMethod
         // $count = $user->profile->today_reward_video_count;
         $count = 0;
         return [
-            'status'        => $count >= $task->max_count,
+            'status' => $count >= $task->max_count,
             'current_count' => $count,
         ];
     }
@@ -196,33 +196,10 @@ trait TaskMethod
     {
         return array(
             [
-                'status'        => false,
+                'status' => false,
                 'current_count' => 0,
             ],
         );
-    }
-
-    //检查邀请任务
-    public function checkInviteUser($user, $task, $assignment)
-    {
-        //     $count = $user->count_success_invitation;
-
-        //     if ($task_reach = $count >= $task->max_count) {
-        //         //达成，自动领取任务奖励
-        //         $gold = $task->reward['gold'];
-        //         Gold::makeIncome($user, $gold, '邀请用户奖励');
-        //         //更新状态到已领取
-        //         $assignment->status = Assignment::TASK_DONE;
-        //         $assignment->save();
-        //     }
-        //     return [
-        //         'status'        => $task_reach,
-        //         'current_count' => $count,
-        //     ];
-        return [
-            'status'        => false,
-            'current_count' => 0,
-        ];
     }
 
     //每日邀请任务
@@ -230,7 +207,7 @@ trait TaskMethod
     {
         $count = $user->today_invited_users_count;
         return [
-            'status'        => $count > 0,
+            'status' => $count > 0,
             'current_count' => $count,
         ];
     }
@@ -240,10 +217,10 @@ trait TaskMethod
     {
         // 19 代表 Categories 表中的 ID，它属于'医学知识', 比如 答赚里：140 代表新型肺炎...
         $category_id = Arr::get($task->resolve, 'category_id', 1);
-        $category    = Category::find($category_id);
+        $category = Category::find($category_id);
         if (is_null($category)) {
             return [
-                'status'        => false,
+                'status' => false,
                 'current_count' => 0,
             ];
         }
@@ -253,7 +230,7 @@ trait TaskMethod
             ->sum('answers_count_today');
 
         return [
-            'status'        => $sum >= $task->max_count,
+            'status' => $sum >= $task->max_count,
             'current_count' => $sum,
         ];
     }
@@ -262,11 +239,11 @@ trait TaskMethod
     public function checkTodayWatchRewardVideoCount($user, $task, $assignment)
     {
         $today_count = $user->profile->today_reward_video_count ?? 0;
-        $done        = $today_count >= $task->max_count;
+        $done = $today_count >= $task->max_count;
         return [
-            'status'        => $done,
+            'status' => $done,
             'current_count' => $today_count,
-            'is_over'       => $done, //决定是否不奖励，直接结束
+            'is_over' => $done, //决定是否不奖励，直接结束
         ];
     }
 
@@ -274,9 +251,9 @@ trait TaskMethod
     public function checkTodayGameWinnersCount($user, $task, $assignment)
     {
         $current_count = $user->gameWinners()->whereBetWeen('created_at', [today(), today()->addDay()])->count();
-        $status        = $current_count >= $task->max_count;
+        $status = $current_count >= $task->max_count;
         return [
-            'status'        => $status,
+            'status' => $status,
             'current_count' => $current_count,
         ];
     }
@@ -284,11 +261,11 @@ trait TaskMethod
     //今日浏览次数(尊重resolve JSON里的 visits_type)
     public function checkTodayVisitsCount($user, $task, $assignment)
     {
-        $visits_type   = Arr::get($task->resolve, 'visits_type', 'videos');
+        $visits_type = Arr::get($task->resolve, 'visits_type', 'videos');
         $current_count = $user->visits()->ofType($visits_type)->whereBetWeen('created_at', [today(), today()->addDay()])->count();
-        $status        = $current_count >= $task->max_count;
+        $status = $current_count >= $task->max_count;
         return [
-            'status'        => $status,
+            'status' => $status,
             'current_count' => $current_count,
         ];
     }
@@ -299,7 +276,7 @@ trait TaskMethod
         $status = $user->wallet->total_withdraw_amount > 0;
         return
             [
-            'status'        => $status,
+            'status' => $status,
             'current_count' => 0,
         ];
     }
@@ -308,10 +285,10 @@ trait TaskMethod
     public function checkAnswerQuestionCount($user, $task, $assignment)
     {
         $current_count = $user->answers()->whereBetWeen('created_at', [today(), today()->addDay()])->count();
-        $status        = $current_count >= $task->max_count;
+        $status = $current_count >= $task->max_count;
         return
             [
-            'status'        => $status,
+            'status' => $status,
             'current_count' => $current_count,
         ];
     }
@@ -320,7 +297,7 @@ trait TaskMethod
     public function checkUserIsUpdateGender($user, $task, $assignment)
     {
         return [
-            'status'        => $user->gender !== null,
+            'status' => $user->gender !== null,
             'current_count' => 0,
         ];
     }
@@ -329,13 +306,13 @@ trait TaskMethod
     public function checkAgeIsUpdate($user, $task, $assignment)
     {
 
-        $status  = false;
+        $status = false;
         $profile = $user->profile()->select('age')->first();
         if (!is_null($profile)) {
             $status = $profile->age > 0;
         }
         return [
-            'status'        => $status,
+            'status' => $status,
             'current_count' => 0,
         ];
     }
@@ -346,7 +323,7 @@ trait TaskMethod
 
         return
             [
-            'status'        => !empty($user->avatar),
+            'status' => !empty($user->avatar),
             'current_count' => 0,
         ];
     }
@@ -355,9 +332,9 @@ trait TaskMethod
     public function checkTodayWithdrawAmount($user, $task, $assignment)
     {
         $resolve = $task->resolve;
-        $amount  = Arr::get($resolve, 'amount');
+        $amount = Arr::get($resolve, 'amount');
         return [
-            'status'        => is_numeric($amount) && $user->today_withdraw_amount >= $amount,
+            'status' => is_numeric($amount) && $user->today_withdraw_amount >= $amount,
             'current_count' => 0,
         ];
     }
@@ -367,7 +344,7 @@ trait TaskMethod
     {
 
         $todayAnswerCount = $user->profile->answers_count_today;
-        $answerReward     = [
+        $answerReward = [
             ['answers_count' => 1, 'ticket' => 1],
             ['answers_count' => 50, 'ticket' => 10],
             ['answers_count' => 100, 'ticket' => 20],
@@ -383,12 +360,12 @@ trait TaskMethod
             }
         }
 
-        $resolve                  = $assignment->resolve;
-        $receiveTikect            = Arr::get($resolve, 'receive_ticket', 0);
+        $resolve = $assignment->resolve;
+        $receiveTikect = Arr::get($resolve, 'receive_ticket', 0);
         $resolve['reward_ticket'] = $rewardTicket;
-        $assignment->resolve      = $resolve;
+        $assignment->resolve = $resolve;
         return [
-            'status'        => $currentCount > 0 && $rewardTicket > $receiveTikect,
+            'status' => $currentCount > 0 && $rewardTicket > $receiveTikect,
             'current_count' => $currentCount,
         ];
     }
@@ -397,12 +374,12 @@ trait TaskMethod
     {
         $isUpdatedAge = Arr::get($this->checkAgeIsUpdate($user, $task, $assignment), 'status', false);
         // $isUpdatedAvatar = Arr::get($this->checkUserIsUpdateAvatar($user, $task, $assignment), 'status', false);
-        $isUpdatedName   = Arr::get($this->checkUserIsUpdateName($user, $task, $assignment), 'status', false);
+        $isUpdatedName = Arr::get($this->checkUserIsUpdateName($user, $task, $assignment), 'status', false);
         $isUpdatedGender = Arr::get($this->checkUserIsUpdateGender($user, $task, $assignment), 'status', false);
-        $isComplete      = $isUpdatedAge && $isUpdatedGender && $isUpdatedName;
+        $isComplete = $isUpdatedAge && $isUpdatedGender && $isUpdatedName;
 
         return [
-            'status'        => $isComplete,
+            'status' => $isComplete,
             'current_count' => (int) $isComplete,
         ];
     }
@@ -410,7 +387,7 @@ trait TaskMethod
     public function checkTikTokPaste($user, $task, $assignment)
     {
         //获得当前热门标签
-        $hot   = $task->resolve['hot'] ?? null;
+        $hot = $task->resolve['hot'] ?? null;
         $count = 0;
         //当前用户粘贴的视频列表
         $spiders = \App\Spider::query()
@@ -433,7 +410,7 @@ trait TaskMethod
             }
         }
         return [
-            'status'        => $count >= $task->max_count,
+            'status' => $count >= $task->max_count,
             'current_count' => $count,
         ];
     }
@@ -445,7 +422,7 @@ trait TaskMethod
             ->whereBetween('created_at', [today(), today()->addDay()])
             ->count();
         return [
-            'status'        => $count >= $task->max_count,
+            'status' => $count >= $task->max_count,
             'current_count' => $count,
         ];
     }
@@ -459,7 +436,7 @@ trait TaskMethod
             ->whereBetween('created_at', [today(), today()->addDay()])
             ->count();
         return [
-            'status'        => $count >= $task->max_count,
+            'status' => $count >= $task->max_count,
             'current_count' => $count,
         ];
     }
@@ -468,7 +445,45 @@ trait TaskMethod
     {
         $count = \App\Helpers\Redis\RedisSharedCounter::getCounter($user->id);
         return [
-            'status'        => $count >= $task->max_count,
+            'status' => $count >= $task->max_count,
+            'current_count' => $count,
+        ];
+    }
+
+    public function checkSignature($user, $task, $assignment)
+    {
+        $status = $user->profile->introduction != '';
+
+        return [
+            'status' => $status,
+            'current_count' => 0,
+        ];
+    }
+
+    public function checkBindWechat($user, $task, $assignment)
+    {
+        $status = count($user->oauths) > 0;
+        return [
+            'status' => $status,
+            'current_count' => 0,
+        ];
+    }
+
+    //检查邀请任务
+    public function checkInviteUser($user, $task, $assignment)
+    {
+        $count = count(\App\Invitation::query()->where('user_id', $user->id)->whereNotNull('invited_in')->get());
+        return [
+            'status' => $count >= $task->max_count,
+            'current_count' => $count,
+        ];
+    }
+
+    public function checkComment($user, $task, $assignment)
+    {
+        $count = count(\App\Comment::query()->where('user_id', $user->id)->whereBetWeen('created_at', [today(), today()->addDay()])->get());
+        return [
+            'status' => $count >= $task->max_count,
             'current_count' => $count,
         ];
     }
