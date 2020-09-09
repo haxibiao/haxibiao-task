@@ -49,8 +49,9 @@ trait TaskMethod
      */
     public function checkLikesCount($user, $task, $assignment)
     {
-        //$count = $user->profile->count_likes;
-        $count = $assignment->current_count;
+        $count=$user->likes()
+            ->whereBetween('created_at', [today(), today()->addDay()])
+            ->count();
         return [
             'status' => $count >= $task->max_count,
             'current_count' => $count,
