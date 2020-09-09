@@ -50,6 +50,9 @@ trait TaskRepo
         //初始化有趣小视频任务状态(每日刷新)以后也是贡献任务
         Assignment::initContributeTask($assignments);
 
+        //更新新人任务状态
+        Assignment::initNewUserTask($assignments);
+
         //过滤
         $assignments = $assignments->filter(function ($assignment, $key) {
             $take = true;

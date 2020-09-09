@@ -103,4 +103,21 @@ trait AssignmentRepo
         }
         return true;
     }
+
+    /**
+     * @param $assignments
+     * 保证任务系统上线前已完成个人信息设置和手机号绑定的用户也可以领取奖励
+     */
+    public static function initNewUserTask($assignments)
+    {
+        foreach ($assignments as $assignment) {
+            $user = $assignment->user;
+            $profile = $user->profile;
+            $user->updated_at=now();
+            $user->save();
+            $profile->updated_at=now();
+            $profile->save();
+
+        }
+    }
 }
