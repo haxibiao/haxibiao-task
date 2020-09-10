@@ -11,6 +11,7 @@ class ReviewFlow extends Model
         'check_functions',
         'need_owner_review',
         'need_offical_review',
+        'review_class',
         'type',
     ];
 
