@@ -30,3 +30,17 @@
 ## GQL接口说明
 
 ## Api接口说明
+
+### 更新日志
+**1.2**
+
+_Released on 2020-09-11_
+
+2020-09-01~2020-09-11
+
+- 区分新老用户有趣小视频奖励 ([#993e3033](http://code.haxibiao.cn/packages/haxibiao-task/commit/993e3033b3017dadf7dbef25a54099999ea76552))
+- 添加采集视频任务检查 ([#571a8b4d](http://code.haxibiao.cn/packages/haxibiao-task/commit/571a8b4d0842a9e854f19aa3da6557f86141ed29))
+- 检查视频发布任务状态 ([#d540607e](http://code.haxibiao.cn/packages/haxibiao-task/commit/d540607e4b6d2f456d77cbbaf07e76161e2ff471))
+- 新增检查任务（评论 检查个性签名，绑定微信） ([#8c79b832](http://code.haxibiao.cn/packages/haxibiao-task/commit/8c79b8325b55825427e81c8608e21ad8d5a3ce7b))
+- 修复点赞任务检查 ([#4f31ded6](http://code.haxibiao.cn/packages/haxibiao-task/commit/4f31ded6c818697ab99bb7286a11044f6cdab4d2))
+- 修复初次进入任务界面看广告倒数计时问题  ([#702169da](http://code.haxibiao.cn/packages/haxibiao-task/commit/702169da8f46c78aa703654746ea15a0b4750ffa))
