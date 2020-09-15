@@ -334,7 +334,7 @@ trait TaskRepo
         // $user
         $task = Task::find($task_id);
         throw_if(is_null($task), UserException::class, '任务完成失败!');
-        throw_if(!Str::contains($task->name, '试玩'), UserException::class, '该任务不是有效的试玩任务!');
+        // throw_if(!Str::contains($task->name, '试玩'), UserException::class, '该任务不是有效的试玩任务!');
 
         $pivot = Assignment::where([
             'user_id' => $user->id,
