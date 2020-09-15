@@ -333,7 +333,7 @@ trait TaskRepo
     {
         // $user
         $task = Task::find($task_id);
-        throw_if(is_null($task) || !$task->isCustomTask(), UserException::class, '任务完成失败!');
+        throw_if(is_null($task), UserException::class, '任务完成失败!');
         throw_if(!Str::contains($task->name, '试玩'), UserException::class, '该任务不是有效的试玩任务!');
 
         $pivot = Assignment::where([
@@ -380,7 +380,7 @@ trait TaskRepo
 
         $assignment->status = Assignment::TASK_REVIEW; //提交回复后从未开始到审核中
         $assignment->save();
-        $task->assignment= $assignment;
+        $task->assignment = $assignment;
 
         $commentFeedback = Feedback::firstOrNew(
             [
@@ -390,7 +390,7 @@ trait TaskRepo
         );
         $commentFeedback->content = Arr::get($content, 'info');
         $commentFeedback->contact = Arr::get($content, 'account');
-        $commentFeedback->status= Feedback::STATUS_PENDING;
+        $commentFeedback->status = Feedback::STATUS_PENDING;
         $commentFeedback->save();
         foreach ($content['images'] as $image) {
             $image = Image::saveImage($image);
