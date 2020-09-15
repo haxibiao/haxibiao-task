@@ -18,7 +18,7 @@ trait AssignmentAttrs
      */
     public function getProgressAttribute()
     {
-        return $this->getAttributes()['progress'];
+        return data_get($this->getAttributes(),'progress');
     }
 
     /**
