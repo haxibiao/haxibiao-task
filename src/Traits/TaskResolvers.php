@@ -242,6 +242,22 @@ trait TaskResolvers
     public static function newUserReword($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         app_track_event('任务', '新手教程');
+        $user=getUser();
+        //yxsp 新人观看教学视频任务
+        if (data_get($args,'type')=='newUser'){
+            if(in_array(config('app.name'),['yinxiangshipin'])){
+                $task = Task::whereName('观看教学视频')->first();
+                $assignment = $task->getAssignment($user->id);
+                if ($assignment->status >= Assignment::TASK_REACH) {
+                    throw new UserException('新手教学任务已经完成了哦~');
+                }
+
+                $assignment->status = Assignment::TASK_REACH; //提交回复后从未开始到审核中
+                $assignment->save();
+                $task->assignment= $assignment;
+            }
+        }
+
 
         //TODO: 新人教程任务，抖音采集学习任务
         return 1;
