@@ -44,6 +44,12 @@ extend type Mutation {
   """
   highPraiseTask(id: Int, content: String): Boolean
     @field(resolver: "App\\Task@resolveHighPariseReply")
+
+
+  """
+  文章分享任务（ablm前端调用接口）
+  """
+  shareArticle:Int @field(resolver:"App\\Task@resolveShareArticle")
 }
 
 enum RewardType {

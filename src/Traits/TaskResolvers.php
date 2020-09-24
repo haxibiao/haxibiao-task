@@ -221,7 +221,7 @@ trait TaskResolvers
         $user = checkUser();
         $task = Task::whereName('应用商店好评')->first();
         throw_if(is_null($task), UserException::class, '任务不存在哦~,请稍后再试');
-        throw_if(empty(Arr::get($args,'images')), UserException::class, '好评截图不能为空哦');
+        throw_if(empty(Arr::get($args, 'images')), UserException::class, '好评截图不能为空哦');
 
         return Task::replyTaskWithCheck($user, $task, $args);
     }
@@ -242,10 +242,10 @@ trait TaskResolvers
     public static function newUserReword($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         app_track_event('任务', '新手教程');
-        $user=getUser();
+        $user = getUser();
         //yxsp 新人观看教学视频任务
-        if (data_get($args,'type')=='newUser'){
-            if(in_array(config('app.name'),['yinxiangshipin'])){
+        if (data_get($args, 'type') == 'newUser') {
+            if (in_array(config('app.name'), ['yinxiangshipin'])) {
                 $task = Task::whereName('观看教学视频')->first();
                 $assignment = $task->getAssignment($user->id);
                 if ($assignment->status >= Assignment::TASK_REACH) {
@@ -254,7 +254,7 @@ trait TaskResolvers
 
                 $assignment->status = Assignment::TASK_REACH; //提交回复后从未开始到审核中
                 $assignment->save();
-                $task->assignment= $assignment;
+                $task->assignment = $assignment;
             }
         }
 
@@ -284,5 +284,24 @@ trait TaskResolvers
         // }
 
         return $description;
+    }
+
+
+    public static function resolveShareArticle($root, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo = null)
+    {
+
+        //判断是否完成
+        $user = getUser();
+        $task = Task::query()->where('name', '分享学习或生活文章')->first()->id;
+        $qb = Assignment::query()->where('user_id', $user->id)->where('task_id', $task->id);
+        $assignment = $qb->first();
+
+        if ($assignment->current_count >= 2 && $assignment->status < Assignment::TASK_REACH) {
+            $qb->update(['status' => 2]);
+        } else if ($assignment->status == Assignment::TASK_DONE) {
+            return 1;
+        }
+        $qb->increment('current_count');
+        return 1;
     }
 }
