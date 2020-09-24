@@ -482,6 +482,16 @@ trait TaskRepo
                 }
             }
             Task::reward($user, $task, $assignment, $high);
+        } else if ($task->type == Task::DAILY_TASK && env('APP_NAME') == 'ablm') {
+            //如果贡献任务有完成次数
+            if ($task->max_count > 0) {
+                $is_done = $assignment->current_count >= $task->max_count;
+                if ($is_done) {
+                    $assignment->status = Assignment::TASK_DONE;
+                    $assignment->save();
+                }
+            }
+            Task::reward($user, $task, $assignment, $high);
         }
 
         //没有任何奖励,要抛异常给前端,否则APP会崩溃
