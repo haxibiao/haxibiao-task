@@ -4,8 +4,10 @@ namespace Haxibiao\Task\Traits;
 
 use App\Category;
 use App\CategoryUser;
+use App\Exceptions\GQLException;
 use App\Spider;
 use App\User;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
@@ -495,6 +497,25 @@ trait TaskMethod
         return [
             'status' => $status,
             'current_count' => 0
+        ];
+    }
+
+    //检查支持自定义操作行为和操作对象的任务
+    public function checkCustomTask($user, $task, $assignment)
+    {
+        $action = $task->task_action;
+        $object_ids = $task->task_object;
+        $class = $task->relation_class;
+
+        $modelString = Relation::getMorphedModel($class);
+        //拼接动作记录函数名
+        $taskMethod =  $action .basename(str_replace('\\', '/', $modelString));
+        throw_if(!$modelString||!method_exists($user, $taskMethod), GQLException::class, '没有找到匹配的检查函数哦');
+        //判断当天任务数据
+        $count =  $user->$taskMethod($class,$object_ids)->count();
+        return [
+            'status' => $count >= $task->max_count,
+            'current_count' => $count,
         ];
     }
 }

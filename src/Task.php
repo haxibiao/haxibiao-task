@@ -34,6 +34,9 @@ class Task extends Model
         'max_count',
         'group',
         'desciption',
+        'relation_class',
+        'task_action',
+        'task_object',
     ];
 
     protected $casts = [
@@ -42,6 +45,7 @@ class Task extends Model
         'reward'      => 'array',
         'resolve'     => 'array',
         'review_info' => 'array',
+        'task_object' => 'array',
     ];
 
     //任务类型
