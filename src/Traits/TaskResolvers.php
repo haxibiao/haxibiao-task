@@ -292,7 +292,7 @@ trait TaskResolvers
 
         //判断是否完成
         $user = getUser();
-        $task = Task::query()->where('name', '分享学习或生活文章')->first()->id;
+        $task = Task::query()->where('name', '分享学习或生活文章')->first();
         $qb = Assignment::query()->where('user_id', $user->id)->where('task_id', $task->id);
         $assignment = $qb->first();
 
