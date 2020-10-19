@@ -573,11 +573,14 @@ trait TaskRepo
     {
         $tasks = $user->getCommonTasks($taskName);
         foreach ($tasks as $task) {
-            $assignment = $user->tasks()->where('task_id', $task->id)->first()->pivot;
-            if ($assignment->current_count < $task->max_count) {
-                $assignment->update(["current_count" => DB::raw("current_count+1"), "progress" => DB::raw("current_count/" . $task->max_count)]); //次数加1
+            $assignment = $user->tasks()->where('task_id', $task->id)->first();
+            if ($assignment) {
+                $assignment_pivot = $assignment->pivot;
+                if ($assignment_pivot->current_count < $task->max_count) {
+                    $assignment_pivot->update(["current_count" => DB::raw("current_count+1"), "progress" => DB::raw("current_count/" . $task->max_count)]); //次数加1
+                }
+                $task->checkTaskStatus($user);
             }
-            $task->checkTaskStatus($user);
         }
     }
 }
