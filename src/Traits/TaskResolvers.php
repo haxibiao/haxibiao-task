@@ -36,9 +36,9 @@ trait TaskResolvers
 
         }else{
             if ($type == 'All') {
-                $noStatusTasks = Task::all();
+                $noStatusTasks = Task::where('status', Task::ENABLE)->get();
             } else {
-                $noStatusTasks = Task::whereType($type)->get();
+                $noStatusTasks = Task::where('status', Task::ENABLE)->whereType($type)->get();
             }
 
             foreach ($noStatusTasks as $noStatusTask) {
