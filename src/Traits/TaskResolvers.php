@@ -19,20 +19,33 @@ trait TaskResolvers
         if (!isset($args['refetch'])) {
             app_track_event('任务', '获取任务列表');
         }
-
-        $user = getUser();
-        //单次查询一个分类的
         $type        = $args['type'] ?? 'All';
-        $assignments = Task::getAssignments($user, $type);
         $tasks       = [];
-        foreach ($assignments as $assignment) {
-            $task = $assignment->task;
-            //指派的 属性alias 过去给gql用
-            $task->assignment = $assignment;
-            $task->user       = $assignment->user;
-            $tasks[]          = $task;
-        }
 
+        $user = getUser(false);
+        if($user){  
+            //单次查询一个分类的
+            $assignments = Task::getAssignments($user, $type);
+            foreach ($assignments as $assignment) {
+                $task = $assignment->task;
+                //指派的 属性alias 过去给gql用
+                $task->assignment = $assignment;
+                $task->user       = $assignment->user;
+                $tasks[]          = $task;
+            }
+
+        }else{
+            if ($type == 'All') {
+                $noStatusTasks = Task::all();
+            } else {
+                $noStatusTasks = Task::whereType($type)->get();
+            }
+
+            foreach ($noStatusTasks as $noStatusTask) {
+                $tasks[]          = $noStatusTask;
+            }
+        }
+        
         return array_reverse($tasks);
     }
 
