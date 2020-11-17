@@ -1,6 +1,6 @@
 <?php
 
-namespace Haxibiao\Task;
+namespace Haxibiao\Task\seeds;
 
 use App\ReviewFlow;
 use App\Task;
