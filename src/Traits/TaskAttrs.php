@@ -14,7 +14,7 @@ trait TaskAttrs
         if ($this->name == '有趣小视频' || $this->name == '看视频赚钱') {
             if ($user = checkUser()) {
                 $last_reward_video_time = $user->profile->last_reward_video_time;
-                if ($last_reward_video_time){
+                if ($last_reward_video_time) {
                     $created_at = $last_reward_video_time ?? now();
                     if (empty($created_at)) {
                         return 0;
@@ -23,7 +23,7 @@ trait TaskAttrs
                     return $leftTime >= 30 ? 0 : 30 - $leftTime;
                 }
                 //没有上次观看记录的，下次观看间距时间为0
-                else{
+                else {
                     return 0;
                 }
             }
@@ -156,7 +156,7 @@ trait TaskAttrs
         if ($this->max_count != 0 && isset($this->assignment)) {
             $count = $this->assignment->current_count;
             //如果当前完成进度等于最大完成次数 不超过计数  保证不出现 5/1 这种出现
-            $count >= $this->max_count ? $this->max_count : $count;
+            $count = $count >= $this->max_count ? $this->max_count : $count;
             return $count . " / " . $this->max_count;
         }
 
