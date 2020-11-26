@@ -512,7 +512,7 @@ trait TaskMethod
         $taskMethod = $action . basename(str_replace('\\', '/', $modelString));
         throw_if(!$modelString || !method_exists($user, $taskMethod), GQLException::class, '没有找到匹配的检查函数哦');
         //判断当天任务数据
-        $count = $user->$taskMethod($class, $object_ids)->count();
+        $count = $user->$taskMethod($class, $object_ids);
         return [
             'status'        => $count >= $task->max_count,
             'current_count' => $count,
