@@ -2,9 +2,9 @@
 
 namespace App;
 
-use Haxibiao\Task\Task as HXBTask;
+use Haxibiao\Task\Task as BaseTask;
 
-class Task extends HXBTask
+class Task extends BaseTask
 {
 
 }

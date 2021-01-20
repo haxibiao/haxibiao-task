@@ -34,17 +34,7 @@ class PublishCommand extends Command
         ]);
 
         $this->call('vendor:publish', [
-            '--tag'   => 'task-db',
-            '--force' => $this->option('force'),
-        ]);
-
-        $this->call('vendor:publish', [
             '--tag'   => 'task-graphql',
-            '--force' => $this->option('force'),
-        ]);
-
-        $this->call('vendor:publish', [
-            '--tag'   => 'task-tests',
             '--force' => $this->option('force'),
         ]);
 

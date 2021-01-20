@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Nova\Filters\Task;
+namespace Haxibiao\Task\Nova\Filters;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Filters\Filter;
 
-class TaskStatus extends Filter
+class TaskType extends Filter
 {
-    public $name = '任务状态';
+    public $name = '任务类型';
 
     public $component = 'select-filter';
     /**
@@ -20,7 +20,7 @@ class TaskStatus extends Filter
      */
     public function apply(Request $request, $query, $value)
     {
-        return $query->where('status', $value);
+        return $query->where('type', $value);
     }
 
     /**
@@ -32,8 +32,9 @@ class TaskStatus extends Filter
     public function options(Request $request)
     {
         return [
-            '已开启' => \App\Task::ENABLE,
-            '已禁用' => \App\Task::DISABLE,
+            '新人任务'  => \App\Task::NEW_USER_TASK,
+            '每日任务'  => \App\Task::DAILY_TASK,
+            '自定义任务' => \App\Task::CUSTOM_TASK,
         ];
     }
 }

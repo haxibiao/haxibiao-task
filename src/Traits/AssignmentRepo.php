@@ -3,7 +3,6 @@
 namespace Haxibiao\Task\Traits;
 
 use App\Task;
-
 trait AssignmentRepo
 {
 
@@ -111,11 +110,11 @@ trait AssignmentRepo
     public static function initNewUserTask($assignments)
     {
         foreach ($assignments as $assignment) {
-            $user = $assignment->user;
-            $profile = $user->profile;
-            $user->updated_at=now();
+            $user             = $assignment->user;
+            $profile          = $user->profile;
+            $user->updated_at = now();
             $user->save();
-            $profile->updated_at=now();
+            $profile->updated_at = now();
             $profile->save();
 
         }

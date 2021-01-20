@@ -2,15 +2,16 @@
 
 namespace Haxibiao\Task;
 
-use App\Traits\ContributeRepo;
-use App\Traits\ContributeResolvers;
 use Haxibiao\Breeze\UserProfile;
+use Haxibiao\Task\Traits\ContributeRepo;
+use Haxibiao\Task\Traits\ContributeResolvers;
 use Illuminate\Database\Eloquent\Model;
 
 class Contribute extends Model
 {
 
-    use ContributeResolvers, ContributeRepo;
+    use ContributeResolvers;
+    use ContributeRepo;
 
     // 发布有奖问答奖励贡献点汇率
     const ISSUE_CONVERSION_RATE = 10;
