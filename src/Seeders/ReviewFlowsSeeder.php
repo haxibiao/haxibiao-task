@@ -1,6 +1,6 @@
 <?php
 
-namespace Haxibiao\Task\seeds;
+namespace Haxibiao\Task\Seeders;
 
 use Haxibiao\Task\ReviewFlow;
 use Illuminate\Database\Seeder;
@@ -155,14 +155,14 @@ class ReviewFlowsSeeder extends Seeder
                 'review_class'    => 'Spider',
             ],
             [
-                'name'         => '每日答题任务(聚合)',
+                'name'            => '每日答题任务(聚合)',
                 'check_functions' => ['checkDaliyAnswer'],
-                'review_class' => 'Answer',
+                'review_class'    => 'Answer',
             ],
             [
-                'name'         => '完善个人资料',
+                'name'            => '完善个人资料',
                 'check_functions' => ['checkUserProfile'],
-                'review_class' => 'User',
+                'review_class'    => 'User',
             ],
 
         ];

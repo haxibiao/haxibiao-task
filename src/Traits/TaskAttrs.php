@@ -5,7 +5,6 @@ namespace Haxibiao\Task\Traits;
 use App\Assignment;
 use Haxibiao\Task\Task;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Storage;
 
 trait TaskAttrs
 {
@@ -127,7 +126,7 @@ trait TaskAttrs
     public function getBackgroundImgAttribute()
     {
         if (!$this && $this->background_img) {
-            return Storage::cloud()->url($this->background_img);
+            return cdnurl($this->background_img);
         }
     }
 
@@ -138,7 +137,7 @@ trait TaskAttrs
     public function getIconUrlAttribute()
     {
         if ($this && $this->icon) {
-            return Storage::cloud()->url($this->icon);
+            return cdnurl($this->icon);
         }
     }
 
