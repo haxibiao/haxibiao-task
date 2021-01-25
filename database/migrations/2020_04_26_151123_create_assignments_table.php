@@ -28,7 +28,7 @@ class CreateAssignmentsTable extends Migration
             //pivot上的属性
             $table->float('progress', 10, 2)->default(0)->comment('任务进度');
             $table->text('content')->nullable()->comment('内容');
-            $table->integer('status')->default(0)->comment('状态 0:未开始, 1:已指派/进行中 2:已达成 3:已奖励');
+            $table->integer('status')->default(1)->comment('状态 0:未开始, 1:已指派/进行中 2:已达成 3:已奖励');
             $table->timestamp('completed_at')->nullable()->comment('完成时间');
 
             //如喝水子任务[1,2,3]代表喝了1，2，3杯
