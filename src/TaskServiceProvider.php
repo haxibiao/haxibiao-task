@@ -41,7 +41,7 @@ class TaskServiceProvider extends ServiceProvider
                 __DIR__ . '/../graphql' => base_path('graphql'),
             ], 'task-graphql');
 
-            //注册 migrations paths
+            //注册 taks migrations paths
             $this->loadMigrationsFrom($this->app->make('path.haxibiao-task.migrations'));
         }
     }
@@ -72,6 +72,7 @@ class TaskServiceProvider extends ServiceProvider
      */
     public function provides()
     {
+        //FIXME: 这个可以不provide,都在 setup和tests才需要 seeders factories
         return [DZTasksSeeder::class];
     }
 }

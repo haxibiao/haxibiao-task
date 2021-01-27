@@ -41,14 +41,11 @@ class InstallCommand extends Command
     {
         $force = $this->option('force');
 
-        // $this->info('发布...');
-        // $this->callSilent('vendor:publish', ['--tag' => 'task-provider']);
+        $this->info('迁移数据库...');
+        $this->call('migrate');
 
         $this->info('发布 资源文件 ...');
         $this->callSilent('task:publish', ['--force' => $force]);
-
-        // $this->info("注册 TaskServiceProvider ...");
-        // $this->registerServiceProvider();
 
         $this->info("复制 stubs ...");
         copyStubs(__DIR__, false);
