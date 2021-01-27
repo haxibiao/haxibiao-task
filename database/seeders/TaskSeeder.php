@@ -1,5 +1,5 @@
 <?php
-namespace Haxibiao\Task\Seeders;
+namespace Database\Seeders;
 
 use Haxibiao\Task\Task;
 use Illuminate\Database\Seeder;

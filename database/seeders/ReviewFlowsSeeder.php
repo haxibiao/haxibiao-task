@@ -1,6 +1,6 @@
 <?php
 
-namespace Haxibiao\Task\Seeders;
+namespace Database\Seeders;
 
 use Haxibiao\Task\ReviewFlow;
 use Illuminate\Database\Seeder;

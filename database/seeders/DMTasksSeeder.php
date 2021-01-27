@@ -1,13 +1,14 @@
 <?php
 
-namespace Haxibiao\Task\Seeders;
+namespace Database\Seeders;
 
 use App\ReviewFlow;
 use App\Task;
 use Illuminate\Database\Seeder;
 
-class DZTasksSeeder extends Seeder
+class DMTasksSeeder extends Seeder
 {
+
     /**
      * Run the database seeds.
      *
@@ -17,19 +18,14 @@ class DZTasksSeeder extends Seeder
     {
         //需要清理
         // Assignment::truncate();
-        // Task::truncate();
+        //Task::truncate();
 
         $this->initNewUserTasks();
         $this->initDailyTasks();
+
         $this->initCustomTasks();
         $this->initContributeTasks();
-
-        //PK任务开关
-        // if ($task = Task::where('name', '每天胜利5场PK')->first()) {
-        //     // 每天胜利5场PK的任务...
-        //     $task->status = false;
-        //     $task->save();
-        // }
+        $this->initGroupTasks();
     }
 
     //这些以前是前端代码+rest API的，可以直接用新的数据库结构seed
@@ -51,8 +47,8 @@ class DZTasksSeeder extends Seeder
         $task->max_count      = 20;
         $task->review_flow_id = ReviewFlow::whereName('看激励视频')->first()->id;
         $task->status         = true;
-        $task->icon           = "task/task16_1592445997.png";
         $task->group          = "贡献任务";
+        $task->details        = '看完视频即可获取奖励，点击下载广告或查看详情才能获取更多贡献点奖励哦~';
         $task->save();
 
         $task = $this->saveTask([
@@ -67,9 +63,9 @@ class DZTasksSeeder extends Seeder
         ];
         $task->review_flow_id = ReviewFlow::whereName('在线出题')->first()->id;
         $task->status         = true;
-        $task->icon           = "task/task17_1592445960.png";
 
-        $task->group = "贡献任务";
+        $task->group   = "贡献任务";
+        $task->details = '每出1题消耗1精力点，只有成功通过审核的题目才能获得出题奖励。出图文视频题或添加详细的解析内容可以获得更多的奖励哦~';
         $task->save();
 
         $task = $this->saveTask([
@@ -83,9 +79,25 @@ class DZTasksSeeder extends Seeder
         ];
         $task->review_flow_id = ReviewFlow::whereName('抖音采集')->first()->id;
         $task->status         = true;
-        $task->icon           = "task/task18_1592445846.png";
 
-        $task->group = "贡献任务";
+        $task->group   = "贡献任务";
+        $task->details = '打开抖音视频-点击分享按钮-选择复制链接，返回答妹即可触发视频采集，采集成功将获得智慧点奖励，如果采集了热门标签视频，可以获得额外贡献点奖励哦~';
+        $task->save();
+
+        $task = $this->saveTask([
+            'name' => '高额提现抽奖',
+            'type' => Task::CONTRIBUTE_TASK,
+        ]);
+        $task->reward = [
+            'gold'       => 0,
+            'ticket'     => 0,
+            'contribute' => 0,
+        ];
+        $task->review_flow_id = ReviewFlow::whereName('高额抽奖')->first()->id;
+        $task->status         = true;
+
+        $task->group   = "贡献任务";
+        $task->details = '1. 首次免费参与，其他情况下完成所有福利任务后，可以参与报名；2. 奖金一共分为4档【1.1，2，4，8】；3. 中奖后，需要在结果公布当日申请提现，否则名额作废；4. 系统通知会通知中奖用户具体的中奖信息，另外官方公告中会有当日所有中奖用户的名单。';
         $task->save();
     }
 
@@ -102,7 +114,6 @@ class DZTasksSeeder extends Seeder
         ];
         $task->review_flow_id = ReviewFlow::whereName('更换昵称')->first()->id;
         $task->status         = true;
-        $task->icon           = "task/task1_1592443870.png";
 
         $task->group = "新人任务";
         $task->save();
@@ -118,7 +129,6 @@ class DZTasksSeeder extends Seeder
         ];
         $task->review_flow_id = ReviewFlow::whereName('更换头像')->first()->id;
         $task->status         = true;
-        $task->icon           = "task/task2_1592444819.png";
 
         $task->group = "新人任务";
         $task->save();
@@ -133,7 +143,6 @@ class DZTasksSeeder extends Seeder
         ];
         $task->review_flow_id = ReviewFlow::whereName('设置性别')->first()->id;
         $task->status         = true;
-        $task->icon           = "task/task3_1592444878.png";
 
         $task->group = "新人任务";
         $task->save();
@@ -148,41 +157,6 @@ class DZTasksSeeder extends Seeder
         ];
         $task->review_flow_id = ReviewFlow::whereName('设置年龄')->first()->id;
         $task->status         = true;
-        $task->icon           = "task/task4_1592444929.png";
-
-        $task->group = "新人任务";
-        $task->save();
-
-        $task = $this->saveTask([
-            'name'    => '新手答题',
-            'type'    => Task::NEW_USER_TASK,
-            'details' => '新人答10题可提现0.3元，秒到账',
-
-        ]);
-        $task->reward = [
-            'gold'   => 10,
-            'ticket' => 0,
-        ];
-        $task->max_count      = 10;
-        $task->review_flow_id = ReviewFlow::whereName('新手答题')->first()->id;
-        $task->status         = true;
-        $task->icon           = "task/task5_1592444990.png";
-
-        $task->group = "新人任务";
-        $task->save();
-
-        $task = $this->saveTask([
-            'name'    => '首次提现奖励',
-            'type'    => Task::NEW_USER_TASK,
-            'details' => '首次提现后可获得额外奖励，明日最高可提现10元',
-        ]);
-        $task->reward = [
-            'gold'   => 20,
-            'ticket' => 0,
-        ];
-        $task->review_flow_id = ReviewFlow::whereName('首次提现奖励')->first()->id;
-        $task->status         = true;
-        $task->icon           = "task/task6_1592446511.png";
 
         $task->group = "新人任务";
         $task->save();
@@ -191,22 +165,6 @@ class DZTasksSeeder extends Seeder
     //每日任务
     public function initDailyTasks()
     {
-        $task = $this->saveTask([
-            'name' => '每天答题200道',
-            'type' => Task::DAILY_TASK,
-        ]);
-        $task->reward = [
-            'gold'   => 0,
-            'ticket' => 40,
-        ];
-        $task->max_count      = 200;
-        $task->review_flow_id = ReviewFlow::whereName('答题总数')->first()->id;
-        $task->status         = true;
-        $task->icon           = "task/task5_1592444990.png";
-
-        $task->group = "每日任务";
-        $task->save();
-
         $task = $this->saveTask([
             'name' => '每天答题100道',
             'type' => Task::DAILY_TASK,
@@ -218,7 +176,6 @@ class DZTasksSeeder extends Seeder
         $task->max_count      = 100;
         $task->review_flow_id = ReviewFlow::whereName('答题总数')->first()->id;
         $task->status         = true;
-        $task->icon           = "task/task5_1592444990.png";
 
         $task->group = "每日任务";
         $task->save();
@@ -234,7 +191,6 @@ class DZTasksSeeder extends Seeder
         $task->max_count      = 50;
         $task->review_flow_id = ReviewFlow::whereName('答题总数')->first()->id;
         $task->status         = true;
-        $task->icon           = "task/task5_1592444990.png";
 
         $task->group = "每日任务";
         $task->save();
@@ -250,25 +206,8 @@ class DZTasksSeeder extends Seeder
         $task->max_count      = 1;
         $task->review_flow_id = ReviewFlow::whereName('答题总数')->first()->id;
         $task->status         = true;
-        $task->icon           = "task/task5_1592444990.png";
 
         $task->group = "每日任务";
-        $task->save();
-
-        $task = $this->saveTask([
-            'name' => '新型肺炎防治答10题',
-            'type' => Task::DAILY_TASK,
-        ]);
-        $task->reward = [
-            'gold'   => 5,
-            'ticket' => 5,
-        ];
-        $task->max_count      = 10;
-        $task->review_flow_id = ReviewFlow::whereName('新冠答题数')->first()->id;
-        $task->status         = true;
-        $task->resolve        = ["category_id" => 140, "submit_name" => "去答题"];
-        $task->icon           = "task/task5_1592444990.png";
-        $task->group          = "每日任务";
         $task->save();
 
         $task = $this->saveTask([
@@ -288,19 +227,32 @@ class DZTasksSeeder extends Seeder
         $task->save();
 
         $task = $this->saveTask([
-            'name' => '每天胜利5场PK',
+            'name' => '每日邀请用户',
             'type' => Task::DAILY_TASK,
         ]);
         $task->reward = [
-            'gold'   => 30,
+            'gold'   => 20,
             'ticket' => 0,
         ];
-        $task->max_count      = 5;
-        $task->review_flow_id = ReviewFlow::whereName('答题PK')->first()->id;
-        $task->icon           = "task/task13_1592446392.png";
+        $task->max_count      = 1;
+        $task->review_flow_id = ReviewFlow::whereName('每日邀请用户统计')->first()->id;
         $task->status         = true;
 
         $task->group = "每日任务";
+        $task->save();
+
+        $task = $this->saveTask([
+            'name' => '热门标签视频',
+            'type' => Task::DAILY_TASK,
+        ]);
+        $task->reward = [
+            'gold'       => 20,
+            'contribute' => 1,
+        ];
+        $task->max_count      = 2;
+        $task->review_flow_id = ReviewFlow::whereName('粘贴热门标签视频')->first()->id;
+        $task->status         = true;
+        $task->group          = "每日任务";
         $task->save();
     }
 
@@ -320,25 +272,64 @@ class DZTasksSeeder extends Seeder
         $task->review_flow_id = ReviewFlow::whereName('应用好评')->first()->id;
         $task->status         = true;
         $task->resolve        = ["router" => "SubmitTask", "submit_name" => "去评价"];
-        $task->icon           = "task/task15_1592446299.png";
-        $task->group          = "自定义任务";
-        $task->save();
-
-        $task = $this->saveTask([
-            'name'    => '试玩同款APP(答妹)',
-            'details' => "书中自有颜如玉，学知识领现金;点击“下载”按钮跳转至应用商店安装APP，并完成注册才能领取奖励。",
-            'type'    => Task::CUSTOM_TASK,
-        ]);
-        $task->reward = [
-            'gold'   => 50,
-            'ticket' => 0,
-        ];
-        $task->review_flow_id = ReviewFlow::whereName('试玩答妹')->first()->id;
-        $task->status         = true;
-        $task->icon           = "task/task15_1592446299.png";
-        $task->resolve        = ["package" => "com.damei", "post_id" => 15053];
 
         $task->group = "自定义任务";
+        $task->save();
+    }
+
+    public function initGroupTasks()
+    {
+        $task = $this->saveTask(
+            [
+                'name'    => '每天答题越多,奖励越多!',
+                'details' => '每天答题越多,奖励越多!',
+                'type'    => TASK::GROUP_TASK,
+            ]
+        );
+        $task->reward = [
+            [
+                'answers_count' => 1,
+                'ticket'        => 1,
+            ],
+            [
+                'answers_count' => 50,
+                'ticket'        => 10,
+            ],
+            [
+                'answers_count' => 100,
+                'ticket'        => 20,
+            ],
+            [
+                'answers_count' => 300,
+                'ticket'        => 40,
+            ],
+
+        ];
+        $task->review_flow_id = ReviewFlow::whereName('每日答题任务(聚合)')->first()->id;
+        $task->status         = 0;
+        $task->max_count      = 4;
+        $task->resolve        = [
+            'answers_count' => [1, 50, 100, 300],
+        ];
+
+        $task->group = "每日任务";
+        $task->save();
+
+        $task = $this->saveTask(
+            [
+                'name'    => '完善个人资料',
+                'details' => '只有当您上传头像、完善昵称、填写年龄、填写性别资料后才可以领取任务奖励哦。',
+                'type'    => Task::NEW_USER_TASK,
+            ]
+        );
+
+        $task->review_flow_id = ReviewFlow::whereName('完善个人资料')->first()->id;
+        $task->status         = true;
+        $task->max_count      = 1;
+        $task->reward         = [
+            'gold' => 20,
+        ];
+        $task->group = "新人任务";
         $task->save();
     }
 

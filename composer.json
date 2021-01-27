@@ -25,6 +25,8 @@
     },
     "autoload-dev": {
         "classmap": [
+            "database/factories/",
+            "database/seeder/",
             "tests/"
         ]
     },
