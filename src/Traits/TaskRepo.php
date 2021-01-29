@@ -54,8 +54,8 @@ trait TaskRepo
 
         //过滤
         $assignments = $assignments->filter(function ($assignment, $key) {
-            $take = !is_null($task);
             $task = $assignment->task;
+            $take = !is_null($task);
             if ($take) {
                 $user = $assignment->user;
                 //已领取的,新人和自定义任务不再返回前端显示
