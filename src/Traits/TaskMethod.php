@@ -509,10 +509,10 @@ trait TaskMethod
 
         $modelString = Relation::getMorphedModel($class);
         //拼接动作记录函数名
-        $taskMethod = $action . basename(str_replace('\\', '/', $modelString));
-        throw_if(!$modelString || !method_exists($user, $taskMethod), GQLException::class, '没有找到匹配的检查函数哦');
+        // $taskMethod = $action . basename(str_replace('\\', '/', $modelString));
+        throw_if(!$modelString || !method_exists($user, $action), GQLException::class, '没有找到匹配的检查函数哦');
         //判断当天任务数据
-        $count = $user->$taskMethod($class, $object_ids);
+        $count = $user->$action($class, $object_ids);
         return [
             'status'        => $count >= $task->max_count,
             'current_count' => $count,
