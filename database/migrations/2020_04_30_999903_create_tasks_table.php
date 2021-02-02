@@ -13,7 +13,9 @@ class CreateTasksTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('tasks');
+        if(Schema::hasTable('tasks')){
+            return;
+        }
 
         Schema::create('tasks', function (Blueprint $table) {
             $table->bigIncrements('id');
@@ -37,6 +39,10 @@ class CreateTasksTable extends Migration
             // $table->timestamp('start_at')->nullable()->comment('开始时间');
             $table->timestamp('end_at')->nullable()->comment('截止时间');
             $table->string('description')->default('');
+
+            $table->string('task_action')->nullable()->comment('任务对应的行为，如浏览，点赞，评论等');
+            $table->string('relation_class')->nullable()->comment('任务对应的类，如合集，动态等');
+            $table->json('task_object')->nullable()->comment('任务指定的对象，如collections,posts数组等');
 
             $table->timestamps();
 

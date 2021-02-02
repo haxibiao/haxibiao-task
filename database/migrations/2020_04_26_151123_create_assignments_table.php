@@ -13,7 +13,9 @@ class CreateAssignmentsTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('assignments');
+        if(Schema::hasTable('assignments')){
+            return;
+        }
 
         Schema::create('assignments', function (Blueprint $table) {
             $table->bigIncrements('id');

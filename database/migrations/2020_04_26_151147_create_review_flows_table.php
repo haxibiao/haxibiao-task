@@ -13,8 +13,9 @@ class CreateReviewFlowsTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('review_flows');
-
+        if(Schema::hasTable('review_flows')){
+            return;
+        }
         Schema::create('review_flows', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->comment('模版名');
