@@ -3,12 +3,12 @@
 namespace Haxibiao\Task\Traits;
 
 use App\Contribute;
-use App\Exceptions\UserException;
 use App\Feedback;
 use App\Gold;
 use App\Image;
 use App\User;
 use Carbon\Carbon;
+use Haxibiao\Breeze\Exceptions\UserException;
 use Haxibiao\Task\Assignment;
 use Haxibiao\Task\Jobs\DelayRewaredTask;
 use Haxibiao\Task\Task;

@@ -2,9 +2,9 @@
 
 namespace Haxibiao\Task\Traits;
 
-use App\Exceptions\UserException;
 use Carbon\Carbon;
 use GraphQL\Type\Definition\ResolveInfo;
+use Haxibiao\Breeze\Exceptions\UserException;
 use Haxibiao\Task\Assignment;
 use Haxibiao\Task\Task;
 use Illuminate\Support\Arr;
