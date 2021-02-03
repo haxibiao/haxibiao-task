@@ -3,6 +3,7 @@
 namespace Haxibiao\Task\Traits;
 
 use App\Assignment;
+use App\Collection;
 use Haxibiao\Task\Task;
 use Illuminate\Support\Arr;
 
@@ -180,5 +181,14 @@ trait TaskAttrs
             return $this->assignment->progress;
         }
         return 0;
+    }
+
+    public function getCollectionAttribute()
+    {
+
+        if ($this->relation_class == self::COLLECTION && isset($this->task_object)) {
+            return Collection::whereIn('id', $this->task_object)->first();
+        }
+        return null;
     }
 }

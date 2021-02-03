@@ -20,24 +20,20 @@ class Task extends Model
     use TaskResolvers;
     use TaskMethod;
 
-    protected $fillable = [
-        'id',
-        'name',
-        'details',
-        'logo',
-        'type',
-        'status',
-        'icon',
-        'reward',
-        'resolve',
-        'review_flow_id',
-        'max_count',
-        'group',
-        'desciption',
-        'relation_class',
-        'task_action',
-        'task_object',
-    ];
+    public $guarded  = [];
+
+    //任务操作行为
+    const VISIT_ACTION     = 'visited';
+    const LIKE_ACTION      = 'liked';
+    const COMMENT_ACTION   = 'commented';
+    const FAVORABLE_ACTION = 'favorable';
+
+    //任务操作类
+    const POST       = 'posts';
+    const COLLECTION = 'collections';
+    const USER       = 'users';
+    const MOVIE      = 'movies';
+    const ARTICLE    = 'articles';
 
     protected $casts = [
         'start_at'    => 'datetime',

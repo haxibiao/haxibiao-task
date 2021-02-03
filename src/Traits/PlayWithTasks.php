@@ -143,4 +143,47 @@ trait PlayWithTasks
         //分类答题任务
         return Task::whereName('新型肺炎防治答10题')->get();
     }
+
+    //每日浏览任务
+    public function task_visited($type, array $ids = null)
+    {
+        $duration = $this->visits()
+            ->where('visited_type', $type)
+            ->when(isset($ids), function ($q) use ($ids) {
+                return $q->whereIn('visited_id', $ids);
+            })
+            ->whereBetween('created_at', [today(), today()->addDay()])
+            ->sum('duration');
+
+        return floor($duration / 60);
+
+    }
+
+    //每日评论任务
+    public function task_commented($type, array $ids = null)
+    {
+        $comments = $this->comments()
+            ->where('commentable_type', $type)
+            ->when(isset($ids), function ($q) use ($ids) {
+                return $q->whereIn('commentable_id', $ids);
+            })->whereBetween('created_at', [today(), today()->addDay()])
+            ->get();
+        $comments = $comments->filter(function ($comment) {
+            return strlen($comment->body) > 30;
+        });
+        return $comments->count();
+    }
+
+    //新人收藏任务
+    public function task_favorable($type, array $ids = null)
+    {
+        $favorite = $this->favorites()
+            ->where('faved_type', $type)
+            ->when(isset($ids), function ($q) use ($ids) {
+                return $q->whereIn('faved_id', $ids);
+            })
+            ->get();
+
+        return $favorite->count();
+    }
 }
