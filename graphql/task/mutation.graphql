@@ -45,6 +45,16 @@ extend type Mutation {
   highPraiseTask(id: Int, content: String): Boolean
     @field(resolver: "App\\Task@resolveHighPariseReply")
 
+  """
+  应用商店好评任务回复-印象视频带审核
+  """
+  highPraiseTaskCheck(
+    user_id: Int
+    account: String!
+    images: [String!]!
+    info: String
+  ): Task @field(resolver: "App\\Task@resolveReplyTaskWithCheck")
+
 
   """
   文章分享任务（ablm前端调用接口）

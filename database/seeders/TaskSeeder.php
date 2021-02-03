@@ -25,6 +25,7 @@ class TaskSeeder extends Seeder
             'reward'         => array("gold" => "10"),
             'resolve'        => array('method' => 'checkUserIsUpdateAvatar', 'router' => 'editInformation'),
             'review_flow_id' => 5,
+            'max_count'      => rand(1,10),
         ]);
 
         Task::firstOrCreate([
@@ -46,6 +47,7 @@ class TaskSeeder extends Seeder
             'reward'         => array("gold" => "50"),
             'resolve'        => array('method' => 'checkUserIsUpdatePassAndPhone', 'router' => 'accountBinding'),
             'review_flow_id' => 6,
+            'max_count'      => rand(1,10),
         ]);
 
         Task::firstOrCreate([
@@ -56,6 +58,7 @@ class TaskSeeder extends Seeder
             'reward'         => array("gold" => "10"),
             'resolve'        => array('method' => 'checkUserIsUpdateGenderAndBirthday', 'router' => 'editInformation'),
             'review_flow_id' => 7,
+            'max_count'      => rand(1,10),
         ]);
 
         Task::firstOrCreate([
@@ -65,6 +68,7 @@ class TaskSeeder extends Seeder
             'status'         => Task::DISABLE,
             'resolve'        => array('method' => '', 'router' => 'GoDrinkWater'),
             'review_flow_id' => 0,
+            'max_count'      => rand(1,10),
         ]);
 
         //自定义任务
@@ -75,6 +79,7 @@ class TaskSeeder extends Seeder
             'status'         => Task::DISABLE,
             'resolve'        => array('method' => '', 'router' => 'ToComment'),
             'review_flow_id' => 8,
+            'max_count'      => rand(1,10),
         ]);
 
         Task::firstOrCreate([
@@ -109,6 +114,16 @@ class TaskSeeder extends Seeder
         Task::firstOrCreate([
             'name'           => '作品获赞',
             'details'        => '作品获赞1000+，可领取奖励',
+            'type'           => Task::DAILY_TASK,
+            'status'         => Task::ENABLE,
+            'reward'         => array("gold" => "600"),
+            'review_flow_id' => 10,
+            'max_count'      => 1000,
+        ]);
+
+        Task::firstOrCreate([
+            'name'           => 'DrinkWaterAll',
+            'details'        => '喝水任务。。。',
             'type'           => Task::DAILY_TASK,
             'status'         => Task::ENABLE,
             'reward'         => array("gold" => "600"),

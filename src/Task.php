@@ -3,6 +3,7 @@
 namespace Haxibiao\Task;
 
 use App\User;
+use Haxibiao\Breeze\Traits\HasFactory;
 use Haxibiao\Task\Assignment;
 use Haxibiao\Task\ReviewFlow;
 use Haxibiao\Task\Traits\TaskAttrs;
@@ -19,6 +20,7 @@ class Task extends Model
     use TaskOldAttrs;
     use TaskResolvers;
     use TaskMethod;
+    use HasFactory;
 
     public $guarded  = [];
 
