@@ -21,7 +21,7 @@ class TaskFactory extends Factory
     public function definition()
     {
         return [
-            'name'    => '测试试玩任务 - name',
+            'name'    => '应用商店好评 - name',
             'details' => '测试任务详情 - details',
             'max_count' => rand(1,10),
             'type'    => 0, //类型：0:新人任务 1:每日任务 2:成长任务(自定义任务)

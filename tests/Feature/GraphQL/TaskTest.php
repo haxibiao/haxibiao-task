@@ -37,11 +37,11 @@ class TaskTest extends GraphQLTestCase
             'Accept' => 'application/json',
         ];
 
-        $taskRewardMutation = file_get_contents(__DIR__ . '/Task/CompleteTaskMutation.gql');
+        $query = file_get_contents(__DIR__ . '/Task/CompleteTaskMutation.graphql');
         $variables = [
             'id' => $this->task->id,
         ];
-        $this->runGuestGQL($taskRewardMutation, $variables, $headers);
+        $this->startGraphQL($query, $variables, $headers);
     }
 
     /**
@@ -52,7 +52,7 @@ class TaskTest extends GraphQLTestCase
     public function testNewUserRewordMutation()
     {
         $token = $this->user->api_token;
-        $query = file_get_contents(__DIR__ . '/Task/newUserRewordMutation.gql');
+        $query = file_get_contents(__DIR__ . '/Task/newUserRewordMutation.graphql');
         $headers = [
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
@@ -71,7 +71,7 @@ class TaskTest extends GraphQLTestCase
     public function testReceiveTaskMutation()
     {
         $token = $this->user->api_token;
-        $query = file_get_contents(__DIR__ . '/Task/receiveTaskMutation.gql');
+        $query = file_get_contents(__DIR__ . '/Task/receiveTaskMutation.graphql');
         $headers = [
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
@@ -91,14 +91,13 @@ class TaskTest extends GraphQLTestCase
     // public function testHighPraiseTaskCheckMutation()
     // {
     //     $token = $this->user->api_token;
-    //     $query = file_get_contents(__DIR__ . '/Task/highPraiseTaskCheckMutation.gql');
+    //     $query = file_get_contents(__DIR__ . '/Task/highPraiseTaskCheckMutation.graphql');
     //     $headers = [
     //         'Authorization' => 'Bearer ' . $token,
     //         'Accept' => 'application/json',
     //     ];
-    //     $task = Task::whereName('应用商店好评')->first();
     //     //初始化为未提交...
-    //     $this->updateTaskStatus($task->id, 0);
+    //     $this->updateTaskStatus($this->task->id, 0);
 
     //     //提交好评
     //     $variables = [
@@ -119,19 +118,18 @@ class TaskTest extends GraphQLTestCase
      */
     public function testHighPraiseTaskMutation()
     {
-        $query = file_get_contents(__DIR__ . '/Task/highPraiseTaskMutation.gql');
+        $query = file_get_contents(__DIR__ . '/Task/highPraiseTaskMutation.graphql');
         $token = $this->user->api_token;
         $headers = [
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
         ];
-        $task = \App\Task::whereName('应用商店好评')->first();
         //初始化为未提交...
-        $this->updateTaskStatus($task->id, 0);
+        $this->updateTaskStatus($this->task->id, 0);
 
         //提交好评
         $variables = [
-            'id' => $task->id,
+            'id' => $this->task->id,
             'content' => '测试好评回复',
         ];
 
@@ -156,11 +154,11 @@ class TaskTest extends GraphQLTestCase
         $this->user->tasks()->detach($this->task->id);
         $this->user->tasks()->attach($this->task->id, ['status' => Task::NEW_USER_TASK]);
 
-        $taskRewardMutation = file_get_contents(__DIR__ . '/Task/ReplyTaskMutation.gql');
+        $query = file_get_contents(__DIR__ . '/Task/ReplyTaskMutation.graphql');
         $variables = [
             'id' => $this->task->id,
         ];
-        $this->startGraphQL($taskRewardMutation, $variables, $headers);
+        $this->startGraphQL($query, $variables, $headers);
     }
 
     /**
@@ -172,7 +170,7 @@ class TaskTest extends GraphQLTestCase
     {
 
         $token = $this->user->api_token;
-        $query = file_get_contents(__DIR__ . '/Task/tasksQuery.gql');
+        $query = file_get_contents(__DIR__ . '/Task/tasksQuery.graphql');
         $headers = [
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
@@ -183,20 +181,10 @@ class TaskTest extends GraphQLTestCase
         ];
         $this->startGraphQL($query, $variables, $headers);
 
-        //每日任务
-        $variables = [
-            'type' => 'DAILY_TASK',
-        ];
-
-        //奖励任务
-        $variables = [
-            'type' => 'CUSTOM_TASK',
-        ];
         $variables = [
             'type' => 'All',
         ];
-        $response = $this->startGraphQL($query, $variables, $headers);
-        $response->assertJsonFragment(['type' => Task::DAILY_TASK]);
+        $this->startGraphQL($query, $variables, $headers);
     }
 
     /**
