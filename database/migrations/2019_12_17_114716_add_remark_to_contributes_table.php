@@ -13,6 +13,9 @@ class AddRemarkToContributesTable extends Migration
      */
     public function up()
     {
+        if(!Schema::hasTable('tasks')){
+            return;
+        }
         Schema::table('contributes', function (Blueprint $table) {
             if (!Schema::hasColumn('contributes', 'remark')) {
                 $table->string('remark')->nullable()->comment('备注');

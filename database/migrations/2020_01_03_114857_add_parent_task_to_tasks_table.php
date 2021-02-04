@@ -13,6 +13,9 @@ class AddParentTaskToTasksTable extends Migration
      */
     public function up()
     {
+        if(!Schema::hasTable('tasks')){
+            return;
+        }
         Schema::table('tasks', function (Blueprint $table) {
             if (!Schema::hasColumn('user_task', 'parent_task')) {
                 $table->integer('parent_task')->nullable()->comment('父任务');

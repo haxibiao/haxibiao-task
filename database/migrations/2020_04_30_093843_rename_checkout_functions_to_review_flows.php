@@ -13,6 +13,9 @@ class RenameCheckoutFunctionsToReviewFlows extends Migration
      */
     public function up()
     {
+        if(!Schema::hasTable('review_flows')){
+            return;
+        }
         Schema::table('review_flows', function (Blueprint $table) {
             if (Schema::hasColumn('review_flows', 'checkout_functions')) {
                 $table->renameColumn('checkout_functions', 'check_functions');

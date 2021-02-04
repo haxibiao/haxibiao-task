@@ -34,6 +34,7 @@ class CreateTasksTable extends Migration
 
             $table->integer('review_flow_id')->nullable()->commit('任务模版ID');
             $table->integer('max_count')->default(0)->commit('最多完成的次数');
+            $table->integer('parent_task')->nullable()->comment('父任务');
 
             //FIXME: 这两个时间只有喝水睡觉的 assignment 上有用
             // $table->timestamp('start_at')->nullable()->comment('开始时间');
