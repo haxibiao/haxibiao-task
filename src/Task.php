@@ -4,6 +4,7 @@ namespace Haxibiao\Task;
 
 use App\User;
 use Haxibiao\Breeze\Traits\HasFactory;
+use Haxibiao\Content\Collection;
 use Haxibiao\Task\Assignment;
 use Haxibiao\Task\ReviewFlow;
 use Haxibiao\Task\Traits\TaskAttrs;
@@ -22,7 +23,7 @@ class Task extends Model
     use TaskMethod;
     use HasFactory;
 
-    public $guarded  = [];
+    public $guarded = [];
 
     //任务操作行为
     const VISIT_ACTION     = 'visited';
@@ -52,8 +53,8 @@ class Task extends Model
     const CUSTOM_TASK     = 2;
     const TIME_TASK       = 3; //喝水8次（限制频率），睡觉无限次（限制频率）
     const CONTRIBUTE_TASK = 4; //看激励视频，出题等有贡献获取的任务
-    const WEEK_TASK = 5; //新增周任务
-    const GROUP_TASK = 6; //复合任务
+    const WEEK_TASK       = 5; //新增周任务
+    const GROUP_TASK      = 6; //复合任务
 
     //任务状态
     const ENABLE  = 1;
@@ -98,5 +99,33 @@ class Task extends Model
             self::ENABLE  => '已展示',
             self::DISABLE => '未展示',
         ];
+    }
+
+    public static function getActions()
+    {
+        return [
+            self::LIKE_ACTION      => '点赞',
+            self::COMMENT_ACTION   => '评论',
+            self::VISIT_ACTION     => '浏览',
+            self::FAVORABLE_ACTION => '收藏',
+        ];
+    }
+    public static function getActionClasses()
+    {
+        return [
+            self::POST       => '动态',
+            self::USER       => '用户',
+            self::COLLECTION => '集合',
+            self::MOVIE      => '电影',
+        ];
+    }
+
+    public function getCollectionAttribute()
+    {
+
+        if ($this->relation_class == self::COLLECTION && isset($this->task_object)) {
+            return Collection::whereIn('id', $this->task_object)->first();
+        }
+        return null;
     }
 }
