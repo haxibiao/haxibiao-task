@@ -7,7 +7,7 @@ use Haxibiao\Task\Contribute;
 
 trait ContributeRepo
 {
-	public static function rewardUserComment($user,$comment,$remark){
+	public static function rewardUserComment($user,$comment,$remark=null){
 		$contribute = self::firstOrNew(
 			[
 				'user_id'          => $user->id,
