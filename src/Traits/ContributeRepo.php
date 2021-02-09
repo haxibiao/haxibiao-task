@@ -7,6 +7,21 @@ use Haxibiao\Task\Contribute;
 
 trait ContributeRepo
 {
+	public static function rewardUserComment($user,$comment,$remark){
+		$contribute = self::firstOrNew(
+			[
+				'user_id'          => $user->id,
+				'remark'           => $remark,
+				'contributed_id'   => $comment->id,
+				'contributed_type' => 'comments',
+			]
+		);
+		$contribute->amount = self::COMMENTED_AMOUNT;
+		$contribute->recountUserContribute();
+		$contribute->save();
+		return $contribute;
+	}
+
     public static function rewardUserAction($user, $amount)
     {
         $contribute = Contribute::create(
