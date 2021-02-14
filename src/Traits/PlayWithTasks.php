@@ -130,7 +130,8 @@ trait PlayWithTasks
     public function getAnswerTasksAttribute()
     {
         $tasks = [];
-        //答题类任务 //FIXME: 还有新冠答题...
+        //答题类任务
+        //FIXME: 还有新冠答题...
         $flow = ReviewFlow::whereName('答题总数')->first();
         if ($flow) {
             $tasks = Task::where('review_flow_id', $flow->id)->get();
