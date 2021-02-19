@@ -67,6 +67,11 @@ class Assignment extends Model
         return $this->belongsTo(\App\ReviewFlow::class);
     }
 
+    public function scopeCompleted($query)
+    {
+        return $query->where('status', '>=', self::TASK_REACH);
+    }
+
     public function getStatus()
     {
         $status     = $this->status;
@@ -143,5 +148,4 @@ class Assignment extends Model
             self::TASK_DONE   => '已完成',
         ];
     }
-
 }

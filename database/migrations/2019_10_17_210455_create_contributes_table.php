@@ -13,14 +13,16 @@ class CreateContributesTable extends Migration
      */
     public function up()
     {
-        Schema::create('contributes', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('user_id')->index()->comment('用户id');
-            $table->integer('amount')->comment('贡献数量');
-            $table->string('remark')->nullable()->comment('备注');
-            $table->morphs('contributed');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('contributes')) {
+            Schema::create('contributes', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->integer('user_id')->index()->comment('用户id');
+                $table->integer('amount')->comment('贡献数量');
+                $table->string('remark')->nullable()->comment('备注');
+                $table->morphs('contributed');
+                $table->timestamps();
+            });
+        }
     }
 
     /**
