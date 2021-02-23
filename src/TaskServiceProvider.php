@@ -38,7 +38,7 @@ class TaskServiceProvider extends ServiceProvider
             ], 'task-config');
 
             $this->publishes([
-                __DIR__ . '/../graphql' => base_path('graphql'),
+                __DIR__ . '/../graphql' => base_path('graphql/store'),
             ], 'task-graphql');
 
             //注册 taks migrations paths
