@@ -179,9 +179,9 @@ trait PlayWithTasks
     public function task_favorable($type, array $ids = null)
     {
         $favorite = $this->favorites()
-            ->where('faved_type', $type)
+            ->where('favorable_type', $type)
             ->when(isset($ids), function ($q) use ($ids) {
-                return $q->whereIn('faved_id', $ids);
+                return $q->whereIn('favorable_id', $ids);
             })
             ->get();
 
