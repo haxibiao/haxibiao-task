@@ -163,11 +163,12 @@ trait PlayWithTasks
     //每日评论任务
     public function task_commented($type, array $ids = null)
     {
-        $comments = $this->comments()
+        $comments = $this->hasComments()
             ->where('commentable_type', $type)
             ->when(isset($ids), function ($q) use ($ids) {
                 return $q->whereIn('commentable_id', $ids);
-            })->whereBetween('created_at', [today(), today()->addDay()])
+            })
+            ->whereBetween('created_at', [today(), today()->addDay()])
             ->get();
         $comments = $comments->filter(function ($comment) {
             return strlen($comment->body) > 30;
@@ -178,7 +179,7 @@ trait PlayWithTasks
     //新人收藏任务
     public function task_favorable($type, array $ids = null)
     {
-        $favorite = $this->favorites()
+        $favorite = $this->hasFavorites()
             ->where('favorable_type', $type)
             ->when(isset($ids), function ($q) use ($ids) {
                 return $q->whereIn('favorable_id', $ids);
