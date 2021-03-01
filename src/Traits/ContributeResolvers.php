@@ -4,7 +4,7 @@ namespace Haxibiao\Task\Traits;
 
 use App\User;
 use Carbon\Carbon;
-use Haxibiao\Config\Version;
+use Haxibiao\Breeze\Version;
 use Haxibiao\Task\Contribute;
 use Haxibiao\Wallet\Gold;
 use Illuminate\Support\Str;
@@ -122,7 +122,7 @@ trait ContributeResolvers
     {
         if ($user = checkUser()) {
             if (\App\Contribute::getToDayCountByTypeAndId(self::AD_FEED_CONTRIBUTED_TYPE, self::AD_FEED_CONTRIBUTED_ID,
-                    $user) <= 10) {
+                $user) <= 10) {
                 $contribute = Contribute::rewardUserContribute($user->id, self::AD_FEED_CONTRIBUTED_ID,
                     self::AD_AMOUNT,
                     self::AD_FEED_CONTRIBUTED_TYPE, "看发现页面广告奖励");
