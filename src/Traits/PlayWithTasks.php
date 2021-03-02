@@ -153,7 +153,7 @@ trait PlayWithTasks
             ->when(isset($ids), function ($q) use ($ids) {
                 return $q->whereIn('visited_id', $ids);
             })
-            ->whereBetween('created_at', [today(), today()->addDay()])
+            ->whereBetween('updated_at', [today(), today()->addDay()])
             ->sum('duration');
 
         return floor($duration / 60);
