@@ -137,6 +137,9 @@ trait TaskAttrs
      */
     public function getIconUrlAttribute()
     {
+        if (\Str::contains($this->icon, "http")) {
+            return $this->icon;
+        }
         if ($this && $this->icon) {
             return cdnurl($this->icon);
         }
