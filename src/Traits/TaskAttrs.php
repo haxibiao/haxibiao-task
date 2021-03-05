@@ -6,6 +6,7 @@ use App\Assignment;
 use App\Collection;
 use Haxibiao\Task\Task;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 trait TaskAttrs
 {
@@ -137,7 +138,7 @@ trait TaskAttrs
      */
     public function getIconUrlAttribute()
     {
-        if (\Str::contains($this->icon, "http")) {
+        if (Str::contains($this->icon, "http")) {
             return $this->icon;
         }
         if ($this && $this->icon) {
