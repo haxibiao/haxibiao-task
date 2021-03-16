@@ -110,9 +110,9 @@ trait TaskMethod
      */
     public function checkUserHasAvatar($user, $task, $assignment)
     {
-        //TODO: 判断是否有头像的要重构，avatar=null表示还没上传过头像
+
         return [
-            'status'        => !Str::contains($user->avatar, 'storage/avatar/avatar'),
+            'status'        => isset($user->avatar) ?!Str::contains($user->avatar, 'storage/avatar/avatar'): 0,
             'current_count' => 0,
         ];
     }
@@ -509,7 +509,7 @@ trait TaskMethod
 
         $modelString = Relation::getMorphedModel($class);
         //拼接动作记录函数名
-        $taskMethod = 'task_'.$action ;
+        $taskMethod = 'task_' . $action;
         throw_if(!$modelString || !method_exists($user, $taskMethod), GQLException::class, '没有找到匹配的检查函数哦');
         //判断当天任务数据
         $count = $user->$taskMethod($class, $object_ids);
