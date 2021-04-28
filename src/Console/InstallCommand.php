@@ -48,7 +48,7 @@ class InstallCommand extends Command
         $this->callSilent('task:publish', ['--force' => $force]);
 
         $this->info("复制 stubs ...");
-        copyStubs(__DIR__, false);
+        copyStubs(__DIR__, $force);
     }
 
     protected function resolveStubPath($stub)
