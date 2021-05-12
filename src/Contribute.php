@@ -3,6 +3,7 @@
 namespace Haxibiao\Task;
 
 use Haxibiao\Breeze\UserProfile;
+use Haxibiao\Task\Traits\ContributeAttrs;
 use Haxibiao\Task\Traits\ContributeRepo;
 use Haxibiao\Task\Traits\ContributeResolvers;
 use Illuminate\Database\Eloquent\Model;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 class Contribute extends Model
 {
 
+    use ContributeAttrs;
     use ContributeResolvers;
     use ContributeRepo;
 
@@ -57,14 +59,13 @@ class Contribute extends Model
     // 最大feed点击次数
     const MAX_FEED_CLICK = 5;
 
-    protected $guarded  = [];
-    protected $fillable = [
-        'user_id',
-        'remark',
-        'amount',
-        'contributed_id',
-        'contributed_type',
-    ];
+    const REWARD_GOLD = 10;
+
+    //每元/提现贡献点
+    const TODAY_WITHDRAW_CONTRIBUTE  = 60;
+    const RANDOM_WITHDRAW_CONTRIBUTE = 36;
+
+    protected $guarded = [];
 
     protected $cast = [
         'created_at' => 'timestamp',

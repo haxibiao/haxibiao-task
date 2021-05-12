@@ -6,13 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class ReviewFlow extends Model
 {
+
     protected $fillable = [
         'name',
         'check_functions',
         'need_owner_review',
         'need_offical_review',
-        'review_class',
         'type',
+        'review_class',
     ];
 
     protected $casts = [
