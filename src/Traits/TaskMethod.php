@@ -7,6 +7,7 @@ use App\CategoryUser;
 use App\Exceptions\GQLException;
 use App\Spider;
 use App\User;
+use Haxibiao\Question\Helpers\Redis\RedisSharedCounter;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -112,7 +113,7 @@ trait TaskMethod
     {
 
         return [
-            'status'        => isset($user->avatar) ?!Str::contains($user->avatar, 'storage/avatar/avatar'): 0,
+            'status'        => isset($user->avatar) ? !Str::contains($user->avatar, 'storage/avatar/avatar') : 0,
             'current_count' => 0,
         ];
     }
@@ -446,7 +447,7 @@ trait TaskMethod
 
     public function checkDailyShare($user, $task, $assignment)
     {
-        $count = \App\Helpers\Redis\RedisSharedCounter::getCounter($user->id);
+        $count = RedisSharedCounter::getCounter($user->id);
         return [
             'status'        => $count >= $task->max_count,
             'current_count' => $count,
