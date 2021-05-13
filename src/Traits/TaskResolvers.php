@@ -19,11 +19,11 @@ trait TaskResolvers
         if (!isset($args['refetch'])) {
             app_track_event('任务', '获取任务列表');
         }
-        $type        = $args['type'] ?? 'All';
-        $tasks       = [];
+        $type  = $args['type'] ?? 'All';
+        $tasks = [];
 
         $user = getUser(false);
-        if($user){  
+        if ($user) {
             //单次查询一个分类的
             $assignments = Task::getAssignments($user, $type);
             foreach ($assignments as $assignment) {
@@ -34,7 +34,7 @@ trait TaskResolvers
                 $tasks[]          = $task;
             }
 
-        }else{
+        } else {
             if ($type == 'All') {
                 $noStatusTasks = Task::where('status', Task::ENABLE)->get();
             } else {
@@ -42,10 +42,10 @@ trait TaskResolvers
             }
 
             foreach ($noStatusTasks as $noStatusTask) {
-                $tasks[]          = $noStatusTask;
+                $tasks[] = $noStatusTask;
             }
         }
-        
+
         return array_reverse($tasks);
     }
 
@@ -220,7 +220,7 @@ trait TaskResolvers
     {
         app_track_event('任务', '回复好评任务');
 
-        $user = checkUser();
+        $user = currentUser();
         $task = Task::find($args['id']);
         throw_if(is_null($task), UserException::class, '任务不存在哦~,请稍后再试');
         throw_if(empty(trim($args['content'])), UserException::class, '账号不能为空哦~');
@@ -231,7 +231,7 @@ trait TaskResolvers
     public static function resolveReplyTaskWithCheck($root, array $args, $context, $info)
     {
         app_track_event('任务', '好评任务-带审核');
-        $user = checkUser();
+        $user = currentUser();
         $task = Task::whereName('应用商店好评')->first();
         throw_if(is_null($task), UserException::class, '任务不存在哦~,请稍后再试');
         throw_if(empty(Arr::get($args, 'images')), UserException::class, '好评截图不能为空哦');
@@ -259,7 +259,7 @@ trait TaskResolvers
         //yxsp 新人观看教学视频任务
         if (data_get($args, 'type') == 'newUser') {
             if (in_array(config('app.name'), ['yinxiangshipin'])) {
-                $task = Task::whereName('观看教学视频')->first();
+                $task       = Task::whereName('观看教学视频')->first();
                 $assignment = $task->getAssignment($user->id);
                 if ($assignment->status >= Assignment::TASK_REACH) {
                     throw new UserException('新手教学任务已经完成了哦~');
@@ -270,7 +270,6 @@ trait TaskResolvers
                 $task->assignment = $assignment;
             }
         }
-
 
         //TODO: 新人教程任务，抖音采集学习任务
         return 1;
@@ -299,14 +298,13 @@ trait TaskResolvers
         return $description;
     }
 
-
     public static function resolveShareArticle($root, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo = null)
     {
 
         //判断是否完成
-        $user = getUser();
-        $task = Task::query()->where('name', '分享学习或生活文章')->first();
-        $qb = Assignment::query()->where('user_id', $user->id)->where('task_id', $task->id);
+        $user       = getUser();
+        $task       = Task::query()->where('name', '分享学习或生活文章')->first();
+        $qb         = Assignment::query()->where('user_id', $user->id)->where('task_id', $task->id);
         $assignment = $qb->first();
 
         if ($assignment->current_count >= 2 && $assignment->status < Assignment::TASK_REACH) {

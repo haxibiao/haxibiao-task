@@ -13,7 +13,7 @@ trait TaskAttrs
     public function getNextRewardVideoTimeAttribute()
     {
         if ($this->name == '有趣小视频' || $this->name == '看视频赚钱') {
-            if ($user = checkUser()) {
+            if ($user = currentUser()) {
                 $last_reward_video_time = $user->profile->last_reward_video_time;
                 if ($last_reward_video_time) {
                     $created_at = $last_reward_video_time ?? now();
@@ -73,7 +73,7 @@ trait TaskAttrs
         $reward    = $this->reward;
         $isDazhuan = config('app.name') == 'datizhuanqian';
         if ($this->name == '有趣小视频' && $isDazhuan) {
-            $user = checkUser();
+            $user = currentUser();
             if (!is_null($user) && array_key_exists('contribute_high', $reward)) {
                 $reward['contribute_high'] = $user->withdrawCount >= 7 ? 4 : $reward['contribute_high'];
             }

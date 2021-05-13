@@ -23,7 +23,7 @@ trait ContributeResolvers
      */
     public function clickDraw($rootValue, array $args, $context, $resolveInfo)
     {
-        if ($user = checkUser()) {
+        if ($user = currentUser()) {
 //            今日draw广告点击次数
             $count = self::getToDayCountByTypeAndId(self::DRAW_AD_CONTRIBUTED_TYPE, self::DRAW_AD_CONTRIBUTED_ID, $user);
             if ($count <= self::MAX_DRAW_CLICK) {
@@ -59,7 +59,7 @@ trait ContributeResolvers
      */
     public function clickRewardVideo($rootValue, array $args, $context, $resolveInfo)
     {
-        if ($user = checkUser()) {
+        if ($user = currentUser()) {
 
             //激励视频奖励只允许最新版本的用户获得
             //http://pm.haxibiao.com:8080/browse/DDZ-488
@@ -120,7 +120,7 @@ trait ContributeResolvers
 //    兼容旧版本Feed
     public function clickFeedAD($rootValue, array $args, $context, $resolveInfo)
     {
-        if ($user = checkUser()) {
+        if ($user = currentUser()) {
             if (\App\Contribute::getToDayCountByTypeAndId(self::AD_FEED_CONTRIBUTED_TYPE, self::AD_FEED_CONTRIBUTED_ID,
                 $user) <= 10) {
                 $contribute = Contribute::rewardUserContribute($user->id, self::AD_FEED_CONTRIBUTED_ID,
@@ -145,7 +145,7 @@ trait ContributeResolvers
      */
     public function clickFeedAD2($rootValue, array $args, $context, $resolveInfo)
     {
-        if ($user = checkUser()) {
+        if ($user = currentUser()) {
             if (\App\Contribute::getToDayCountByTypeAndId(self::AD_FEED_CONTRIBUTED_TYPE, self::AD_FEED_CONTRIBUTED_ID, $user) <= self::MAX_FEED_CLICK) {
                 $contribute = Contribute::rewardUserContribute($user->id, self::AD_FEED_CONTRIBUTED_ID, self::AD_AMOUNT,
                     self::AD_FEED_CONTRIBUTED_TYPE, "发现页广告奖励");
