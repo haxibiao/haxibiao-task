@@ -7,6 +7,7 @@ use App\User;
 use Exception;
 use Haxibiao\Question\Question;
 use Haxibiao\Task\Contribute;
+use Haxibiao\Wallet\BanUser;
 use Illuminate\Support\Facades\Redis;
 
 trait ContributeRepo
@@ -370,4 +371,42 @@ trait ContributeRepo
         ])->whereDate('created_at', today())->count();
     }
 
+    /**
+     *  记录是否异常用户 4s内连续获得两次贡献? 太费性能，直接检查today_contributes属性超过600(提现10元都够了)
+     */
+    public static function detectBadUser($contribute)
+    {
+        $user = $contribute->user;
+        $date = today();
+
+        if ($user->today_contributes > 600) {
+            $reason = "异常日期: {$date->toDateString()}，日贡献超过600";
+            BanUser::record($user, $reason, false);
+        }
+
+        if ($user->profile->today_reward_video_count > 100) {
+            $reason = "异常日期: {$date->toDateString()}，日激励视频次数超过100";
+            BanUser::record($user, $reason);
+        }
+
+        // //每次created 贡献记录的时候 获取上一条的
+        // $pre_data = \App\Contribute::query()
+        //     ->where('user_id', $user->id)
+        //     ->whereDate('created_at', $date)
+        //     ->latest('id')
+        //     ->skip(1)
+        //     ->first();
+
+        // if ($pre_data) {
+        //     //如果两次获得贡献相差4s
+        //     $diffSecond = $pre_data->created_at->diffInSeconds($contribute->created_at);
+        //     if ($diffSecond <= 3) {
+        //         $reason = "异常日期: {$date->toDateString()}，两次获得贡献时间相差：{$diffSecond} 秒";
+        //         BanUser::create([
+        //             'user_id' => $contribute->user_id,
+        //             'reason'  => $reason,
+        //         ]);
+        //     }
+        // }
+    }
 }
