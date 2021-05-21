@@ -159,18 +159,6 @@ class Contribute extends Model
         return Contribute::where('id', '<', $this->id)->where('user_id', $this->user_id)->sum('amount');
     }
 
-    public static function rewardAssignmentContribute($user, $assignment, $amount)
-    {
-        Contribute::create(
-            [
-                'user_id'          => $user->id,
-                'contributed_id'   => $assignment->id,
-                'contributed_type' => 'assignments',
-                'amount'           => $amount,
-            ]
-        );
-    }
-
     public static function rewardSignInAdditional($user, $amount = 10)
     {
         $contribute = self::create(
