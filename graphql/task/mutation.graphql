@@ -1,68 +1,57 @@
 extend type Mutation {
-  """
-  新用户奖励接口
-  """
-  newUserReword(type: RewardType!): Int
-    @field(resolver: "App\\Task@newUserReword")
-  """
-  喝水任务上报打卡
-  """
-  DrinkWater(id: Int!): [Task!] @field(resolver: "App\\Task@resolveDrinkWater")
-  """
-  喝水打卡任务获取奖励
-  """
-  DrinkWaterReward: Assignment
-    @field(resolver: "App\\Task@resolveDrinkWaterReward")
-  """
-  睡觉打卡奖励
-  """
-  SleepReward(id: Int!): Assignment
-    @field(resolver: "App\\Task@resolveSleepReward")
-  """
-  领取任务(ID!兼容工厂APP)
-  """
-  receiveTask(id: ID!): Task @field(resolver: "App\\Task@resolveReceive")
-  """
-  答复任务(content JSON 可选)
-  """
-  replyTask(id: Int!, content: String): Int
-    @field(resolver: "App\\Task@resolveReply")
+    """
+    新用户奖励接口
+    """
+    newUserReword(type: RewardType!): Int @field(resolver: "App\\Task@newUserReword")
+    """
+    喝水任务上报打卡
+    """
+    DrinkWater(id: Int!): [Task!] @field(resolver: "App\\Task@resolveDrinkWater")
+    """
+    喝水打卡任务获取奖励
+    """
+    DrinkWaterReward: Assignment @field(resolver: "App\\Task@resolveDrinkWaterReward")
+    """
+    睡觉打卡奖励
+    """
+    SleepReward(id: Int!): Assignment @field(resolver: "App\\Task@resolveSleepReward")
+    """
+    领取任务(ID!兼容工厂APP)
+    """
+    receiveTask(id: Int!): Task @field(resolver: "App\\Task@resolveReceive")
+    """
+    答复任务(content JSON 可选)
+    """
+    replyTask(id: Int!, content: String): Int @field(resolver: "App\\Task@resolveReply")
 
-  """
-  完成任务
-  """
-  completeTask(id: Int!): Int @field(resolver: "App\\Task@resolveComplete")
+    """
+    完成任务
+    """
+    completeTask(id: Int!): Int @field(resolver: "App\\Task@resolveComplete")
 
-  """
-  领取奖励(ID!兼容工厂APP, high:兼容高额奖励,比如激励视频点了详情的，奖励高一点...)
-  """
-  rewardTask(id: ID!, high: Boolean = false): Task
-    @field(resolver: "App\\Task@resolveReward")
+    """
+    领取奖励(ID!兼容工厂APP, high:兼容高额奖励,比如激励视频点了详情的，奖励高一点...)
+    """
+    rewardTask(id: Int!, high: Boolean = false): Task @field(resolver: "App\\Task@resolveReward")
 
-  """
-  应用商店好评任务回复
-  """
-  highPraiseTask(id: Int, content: String): Boolean
-    @field(resolver: "App\\Task@resolveHighPariseReply")
+    """
+    应用商店好评任务回复
+    """
+    highPraiseTask(id: Int, content: String): Boolean @field(resolver: "App\\Task@resolveHighPariseReply")
 
-  """
-  应用商店好评任务回复-印象视频带审核
-  """
-  highPraiseTaskCheck(
-    user_id: Int
-    account: String!
-    images: [String!]!
-    info: String
-  ): Task @field(resolver: "App\\Task@resolveReplyTaskWithCheck")
+    """
+    应用商店好评任务回复-印象视频带审核
+    """
+    highPraiseTaskCheck(user_id: Int, account: String!, images: [String!]!, info: String): Task
+        @field(resolver: "App\\Task@resolveReplyTaskWithCheck")
 
-
-  """
-  文章分享任务（ablm前端调用接口）
-  """
-  shareArticle:Int @field(resolver:"App\\Task@resolveShareArticle")
+    """
+    文章分享任务（ablm前端调用接口）
+    """
+    shareArticle: Int @field(resolver: "App\\Task@resolveShareArticle")
 }
 
 enum RewardType {
-  DOUYIN @enum(value: "douyin")
-  VIDEO @enum(value: "newUser")
+    DOUYIN @enum(value: "douyin")
+    VIDEO @enum(value: "newUser")
 }
