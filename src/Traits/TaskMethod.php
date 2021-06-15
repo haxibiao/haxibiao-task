@@ -508,10 +508,9 @@ trait TaskMethod
         $object_ids = $task->task_object;
         $class      = $task->relation_class;
 
-        $modelString = Relation::getMorphedModel($class);
         //拼接动作记录函数名
         $taskMethod = 'task_' . $action;
-        throw_if(!$modelString || !method_exists($user, $taskMethod), GQLException::class, '没有找到匹配的检查函数哦');
+        throw_if(!method_exists($user, $taskMethod), GQLException::class, '没有找到匹配的检查函数哦');
         //判断当天任务数据
         $count = $user->$taskMethod($class, $object_ids);
         return [
