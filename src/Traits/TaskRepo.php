@@ -609,24 +609,5 @@ trait TaskRepo
         ];
     }
 
-    public static function getActions()
-    {
-        return [
-            self::LIKE_ACTION      => '点赞',
-            self::COMMENT_ACTION   => '评论',
-            self::VISIT_ACTION     => '浏览',
-            self::FAVORABLE_ACTION => '收藏',
-        ];
-    }
-    public static function getActionClasses()
-    {
-        return [
-            self::POST       => '动态',
-            self::USER       => '用户',
-            self::COLLECTION => '集合',
-            self::MOVIE      => '电影',
-        ];
-    }
-
 
 }
