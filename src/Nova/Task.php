@@ -41,6 +41,7 @@ class Task extends Resource
             Select::make('目标类', 'relation_class')
                 ->options(\App\Task::getActionClasses())
                 ->displayUsingLabels()
+                ->nullable()
                 ->hideFromIndex(),
             Code::make('目标对象', 'task_object')->json(JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE)->hideFromIndex(),
             Select::make('类型', 'type')->options(\App\Task::getTypes())->displayUsingLabels(),

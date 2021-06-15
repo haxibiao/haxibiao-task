@@ -149,7 +149,10 @@ trait PlayWithTasks
     public function task_visited($type, array $ids = null)
     {
         $duration = $this->visits()
-            ->where('visited_type', $type)
+            ->when(isset($type), function ($q) use ($type) {
+                return $q->where('visited_type', $type);
+
+            })
             ->when(isset($ids), function ($q) use ($ids) {
                 return $q->whereIn('visited_id', $ids);
             })
@@ -164,7 +167,10 @@ trait PlayWithTasks
     public function task_commented($type, array $ids = null)
     {
         $comments = $this->hasComments()
-            ->where('commentable_type', $type)
+            ->when(isset($type), function ($q) use ($type) {
+                return $q->where('commentable_type', $type);
+
+            })
             ->when(isset($ids), function ($q) use ($ids) {
                 return $q->whereIn('commentable_id', $ids);
             })
@@ -180,7 +186,10 @@ trait PlayWithTasks
     public function task_favorable($type, array $ids = null)
     {
         $favorite = $this->hasFavorites()
-            ->where('favorable_type', $type)
+            ->when(isset($type), function ($q) use ($type) {
+                return $q->where('favorable_type', $type);
+
+            })
             ->when(isset($ids), function ($q) use ($ids) {
                 return $q->whereIn('favorable_id', $ids);
             })
