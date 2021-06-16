@@ -1,134 +1,139 @@
 type Task {
-  id: Int!
-  user: User
+    id: Int!
+    user: User
 
-  """
-  任务的名称
-  """
-  name: String
+    """
+    任务的名称
+    """
+    name: String
 
-  review_flow_id: Int
+    review_flow_id: Int
 
-  """
-  任务定义(做什么事情，到什么程度)
-  """
-  review_flow: ReviewFlow
+    """
+    任务定义(做什么事情，到什么程度)
+    """
+    review_flow: ReviewFlow
 
-  """
-  任务的说明文本(nova)
-  """
-  details: String
+    """
+    任务的说明文本(nova)
+    """
+    details: String
 
-  """
-  任务的分组Int
-  """
-  type: Int
-  """
-  任务的分组(日常，新人...)
-  """
-  group: String
-  """
-  任务的图标
-  """
-  icon: String @rename(attribute: "icon_url")
-  """
-  任务的背景图
-  """
-  background_img: String
+    """
+    任务描述
+    """
+    description: String
 
-  """
-  用户的指派的进度百分比（目前：喝水的杯子UI显示用）
-  """
-  assignment_progress: Float @rename(attribute: "task_progress")
-  """
-  用户的指派的进度描述(1/8)
-  """
-  progress_details: String
+    """
+    任务的分组Int
+    """
+    type: Int
+    """
+    任务的分组(日常，新人...)
+    """
+    group: String
+    """
+    任务的图标
+    """
+    icon: String @rename(attribute: "icon_url")
+    """
+    任务的背景图
+    """
+    background_img: String
 
-  """
-  指派的状态(0:未开始，1:已指派/进行中/审核中，2:已达成，3:已奖励)
-  """
-  assignment_status: Int @rename(attribute: "task_status")
-  """
-  睡觉任务的状态
-  """
-  sleep_status: Boolean
+    """
+    用户的指派的进度百分比（目前：喝水的杯子UI显示用）
+    """
+    assignment_progress: Float @rename(attribute: "task_progress")
+    """
+    用户的指派的进度描述(1/8)
+    """
+    progress_details: String
 
-  """
-  任务的奖励设置
-  """
-  reward_info: RewardInfo
-  """
-  前端存nova里的 resolve 字段json
-  """
-  resolve: ResolveInfo @deprecated(reason: "3.x后前端逻辑依赖的数据不存nova")
-  collection: Collection
+    """
+    指派的状态(0:未开始，1:已指派/进行中/审核中，2:已达成，3:已奖励)
+    """
+    assignment_status: Int @rename(attribute: "task_status")
+    """
+    睡觉任务的状态
+    """
+    sleep_status: Boolean
 
-  start_at: DateTime @deprecated(reason: "睡觉任务用的")
-  end_at: DateTime @deprecated(reason: "睡觉任务用的")
+    """
+    任务的奖励设置
+    """
+    reward_info: RewardInfo
+    """
+    前端存nova里的 resolve 字段json
+    """
+resolve: ResolveInfo @deprecated(reason: "3.x后前端逻辑依赖的数据不存nova")
+    collection: Collection
 
-  start_time: String @deprecated(reason: "喝水任务用的")
-  end_time: String @deprecated(reason: "喝水任务用的")
+    start_at: DateTime @deprecated(reason: "睡觉任务用的")
+    end_at: DateTime @deprecated(reason: "睡觉任务用的")
 
-  created_at: DateTime
-  updated_at: DateTime
+    start_time: String @deprecated(reason: "喝水任务用的")
+    end_time: String @deprecated(reason: "喝水任务用的")
 
-  """
-  从当前计算与下次激励视频的间隔时间
-  """
-  next_reward_video_time: Int
+    created_at: DateTime
+    updated_at: DateTime
+
+    """
+    从当前计算与下次激励视频的间隔时间
+    """
+    next_reward_video_time: Int
 }
 
 type RewardInfo {
-  """
-  普通金币奖励
-  """
-  gold: Int
-  """
-  高额金币奖励
-  """
-  gold_high: Int
-  """
-  普通贡献奖励
-  """
-  contribute: Int
-  """
-  高额贡献奖励
-  """
-  contribute_high: Int
-  """
-  普通精力奖励
-  """
-  ticket: Int
-  """
-  高额精力奖励
-  """
-  ticket_high: Int
+    """
+    普通金币奖励
+    """
+    gold: Int
+    """
+    高额金币奖励
+    """
+    gold_high: Int
+    """
+    普通贡献奖励
+    """
+    contribute: Int
+    """
+    高额贡献奖励
+    """
+    contribute_high: Int
+    """
+    普通精力奖励
+    """
+    ticket: Int
+    """
+    高额精力奖励
+    """
+    ticket_high: Int
 }
 
 type ResolveInfo {
-  submit_name: String
+    submit_name: String
 }
 
 extend type Query {
-  """
-  喝水打卡任务列表
-  """
-  DrinkWaterTasks: [Task!] @field(resolver: "App\\Task@resolveDrinkWaterTasks")
-  """
-  睡觉打卡玩法获取
-  """
-  SleepTask: Task @field(resolver: "App\\Task@resolveSleepTask")
-  """
-  获取任务列表（type空取全部任务）
-  """
-  tasks(type: TaskType): [Task!] @field(resolver: "App\\Task@resolveTasks")
+    """
+    喝水打卡任务列表
+    """
+    DrinkWaterTasks: [Task!] @field(resolver: "App\\Task@resolveDrinkWaterTasks")
+    """
+    睡觉打卡玩法获取
+    """
+    SleepTask: Task @field(resolver: "App\\Task@resolveSleepTask")
+    """
+    获取任务列表（type空取全部任务）
+    """
+    tasks(type: TaskType, refetch: Int): [Task!] @field(resolver: "App\\Task@resolveTasks")
 }
 
 enum TaskType {
-  NEW_USER_TASK @enum(value: "0")
-  DAILY_TASK @enum(value: "1")
-  CUSTOM_TASK @enum(value: "2")
-  CONTRIBUTE_TASK @enum(value: "4")
-  All @enum(value: "All")
+    NEW_USER_TASK @enum(value: "0")
+    DAILY_TASK @enum(value: "1")
+    CUSTOM_TASK @enum(value: "2")
+    CONTRIBUTE_TASK @enum(value: "4")
+    All @enum(value: "All")
 }
