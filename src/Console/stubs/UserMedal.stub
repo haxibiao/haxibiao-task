@@ -1,0 +1,10 @@
+<?php
+
+namespace App;
+
+use Haxibiao\Content\UserMedal as BaseUserMedal;
+
+class UserMedal extends BaseUserMedal
+{
+
+}

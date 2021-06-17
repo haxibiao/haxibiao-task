@@ -1,0 +1,15 @@
+type ItemUser {
+    id: Int
+    user: User @belongsTo
+    item_id: Int
+    args: String
+    end_at: String @rename(attribute: "end_time")
+    created_at: String @rename(attribute: "created_time")
+}
+
+type Item {
+    id: ID
+    name: String
+    description: String
+    alias: String
+}

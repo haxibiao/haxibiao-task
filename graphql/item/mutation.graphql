@@ -1,0 +1,16 @@
+extend type Mutation {
+    freeRandomItem: Item @field(resolver: "App\\Item@resolveFreeRandomItem")
+    dailyFreeItem(alias: ItemAlias!): Item @field(resolver: "App\\Item@resolveDailyFreeItem")
+}
+
+enum ItemAlias {
+    """
+    提示
+    """
+    QUESTION_TIPS
+    
+    """
+    换一换
+    """
+    NEXT_QUESTION
+}
