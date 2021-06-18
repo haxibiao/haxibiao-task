@@ -13,6 +13,9 @@ class CreateItemsTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('items')) {
+            return;
+        }
         Schema::create('items', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->comment('名称');
