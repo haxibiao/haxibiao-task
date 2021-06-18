@@ -1,0 +1,10 @@
+<?php
+
+namespace App;
+
+use Haxibiao\Task\StageInvitation as BaseStageInvitation;
+
+class StageInvitation extends BaseStageInvitation
+{
+
+}

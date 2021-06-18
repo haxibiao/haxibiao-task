@@ -1,12 +1,11 @@
-
 <?php
 
 namespace Haxibiao\Task;
 
-use Haxibiao\Task\Traits\MedalRepo;
 use Haxibiao\Task\Traits\MedalAttrs;
-use Illuminate\Database\Eloquent\Model;
+use Haxibiao\Task\Traits\MedalRepo;
 use Haxibiao\Task\Traits\MedalResolvers;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Medal extends Model
