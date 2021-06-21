@@ -2,6 +2,7 @@
 
 namespace Haxibiao\Task;
 
+use App\User;
 use Haxibiao\Breeze\Traits\ModelHelpers;
 use Haxibiao\Task\Traits\InvitationAttrs;
 use Haxibiao\Task\Traits\InvitationRepo;
