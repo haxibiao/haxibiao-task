@@ -16,7 +16,7 @@ extend type Mutation {
     """
     SleepReward(id: Int!): Assignment @field(resolver: "App\\Task@resolveSleepReward")
     """
-    领取任务(ID!兼容工厂APP)
+    领取任务
     """
     receiveTask(id: Int!): Task @field(resolver: "App\\Task@resolveReceive")
     """
@@ -32,7 +32,14 @@ extend type Mutation {
     """
     领取奖励(ID!兼容工厂APP, high:兼容高额奖励,比如激励视频点了详情的，奖励高一点...)
     """
-    rewardTask(id: Int!, high: Boolean = false): Task @field(resolver: "App\\Task@resolveReward")
+    rewardTask(id: ID!, high: Boolean = false): Task
+        @field(resolver: "App\\Task@resolveReward")
+        @deprecated(reason: "答赚4.0.3更新后淘汰掉")
+
+    """
+    领取奖励(high:兼容高额奖励,比如激励视频点了详情的，奖励高一点...)
+    """
+    rewardForTask(id: Int!, high: Boolean = false): Task @field(resolver: "App\\Task@resolveReward")
 
     """
     应用商店好评任务回复
