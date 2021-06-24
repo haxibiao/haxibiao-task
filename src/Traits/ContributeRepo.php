@@ -5,6 +5,7 @@ namespace Haxibiao\Task\Traits;
 use App\Invitation;
 use App\User;
 use Exception;
+use Haxibiao\Question\Notifications\ReportSucceedNotification;
 use Haxibiao\Question\Question;
 use Haxibiao\Task\Contribute;
 use Haxibiao\Wallet\BanUser;
@@ -85,7 +86,7 @@ trait ContributeRepo
         $contribute->amount = 2; //举报成功贡献+2
         $contribute->save();
         $user = $report->user;
-        $user->notify(new \App\Notifications\ReportSucceedNotification($report));
+        $user->notify(new ReportSucceedNotification($report));
     }
 
     public static function rewardUserAudit($user, $audit)
