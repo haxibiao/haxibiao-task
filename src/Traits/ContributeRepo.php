@@ -5,7 +5,7 @@ namespace Haxibiao\Task\Traits;
 use App\Invitation;
 use App\User;
 use Exception;
-use Haxibiao\Question\Notifications\ReportSucceedNotification;
+use Haxibiao\Breeze\Notifications\ReportSucceedNotification;
 use Haxibiao\Question\Question;
 use Haxibiao\Task\Contribute;
 use Haxibiao\Wallet\BanUser;
