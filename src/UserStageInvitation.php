@@ -26,14 +26,6 @@ class UserStageInvitation extends Pivot
 
     const MIN_STAGE_ID = 1;
 
-    public function __get($key)
-    {
-        if (isset($this->cacheable) && array_key_exists($key, $this->cacheable)) {
-            return $this->getCachedAttribute($key, [$this, $this->cacheable[$key]]);
-        }
-        return $this->getAttribute($key);
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class);
