@@ -2,7 +2,7 @@
 
 namespace App;
 
-use Haxibiao\Content\UserMedal as BaseUserMedal;
+use Haxibiao\Task\UserMedal as BaseUserMedal;
 
 class UserMedal extends BaseUserMedal
 {
