@@ -13,6 +13,9 @@ class CreateUserMedalTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('user_medal')) {
+            return;
+        }
         Schema::create('user_medal', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id')->index();

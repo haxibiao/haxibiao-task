@@ -13,6 +13,9 @@ class CreateMedalsTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('medals')) {
+            return;
+        }
         Schema::create('medals', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->comment('名称');
