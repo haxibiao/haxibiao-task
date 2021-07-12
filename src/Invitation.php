@@ -57,7 +57,7 @@ class Invitation extends Model
 
     public function transaction()
     {
-        return $this->belongsTo(Transaction::class, 'id', 'relate_id')->where('type', 'invitations');
+        return $this->belongsTo('App\Transaction', 'id', 'relate_id')->where('type', 'invitations');
     }
 
     public function scopeActive($query)

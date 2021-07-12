@@ -4,12 +4,12 @@ namespace Haxibiao\Task\Traits;
 
 use App\BanUser;
 use App\Invitation;
-use App\Transaction;
 use App\User;
 use App\UserProfile;
 use App\UserStageInvitation;
 use App\Wallet;
 use Haxibiao\Breeze\Exceptions\UserException;
+use Haxibiao\Wallet\Transaction;
 
 trait InvitationRepo
 {
