@@ -72,6 +72,7 @@ trait AssignmentRepo
             $task = $assignment->task;
             //每周任务: 重置刷新状态和进度
             if (!is_null($task)) {
+                $startOfWeek = null;
                 //新的一周开始了
                 if ($task->isWeekTask()) {
                     $startOfWeek = now()->startOfWeek();
