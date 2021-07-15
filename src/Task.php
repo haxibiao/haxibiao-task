@@ -53,7 +53,8 @@ class Task extends Model
     const CUSTOM_TASK     = 2;
     const TIME_TASK       = 3; //喝水8次（限制频率），睡觉无限次（限制频率）
     const CONTRIBUTE_TASK = 4; //看激励视频，出题等有贡献获取的任务
-    const WEEK_TASK       = 5; //新增周任务
+    const WEEK_TASK       = 5; //周任务（now startOfWeek）
+    const LOOP_WEEK_TASK  = 7; //周任务(now subWeek)
     const GROUP_TASK      = 6; //复合任务
 
     //任务状态

@@ -386,8 +386,12 @@ trait ContributeRepo
         }
 
         if ($user->profile->today_reward_video_count > 100) {
-            $reason = "异常日期: {$date->toDateString()}，日激励视频次数超过100";
-            BanUser::record($user, $reason);
+            //今天被封过的话直接跳过不检查
+            $item = BanUser::where('user_id', $user->id)->where('updated_at', '>=', today())->first();
+            if (empty($item)) {
+                $reason = "异常日期: {$date->toDateString()}，日激励视频次数超过100";
+                BanUser::record($user, $reason);
+            }
         }
 
         // //每次created 贡献记录的时候 获取上一条的

@@ -2,13 +2,13 @@
 
 namespace Haxibiao\Task\Traits;
 
+use App\Audit;
 use App\Category;
 use App\CategoryUser;
 use App\Exceptions\GQLException;
 use App\Spider;
 use App\User;
 use Haxibiao\Question\Helpers\Redis\RedisSharedCounter;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
@@ -386,6 +386,22 @@ trait TaskMethod
             'status'        => $isComplete,
             'current_count' => (int) $isComplete,
         ];
+    }
+
+    //检查审题任务
+    public function checkAuditCount($user, $task, $assignment)
+    {
+        $audit_count = Audit::where('user_id', $user->id)
+            ->where('created_at', '>', $assignment->updated_at)
+            ->count();
+
+        $done = $audit_count >= $task->max_count;
+        return [
+            'status'        => $done,
+            'current_count' => $audit_count,
+            'is_over'       => true, //决定是否不奖励，直接结束
+        ];
+
     }
 
     public function checkTikTokPaste($user, $task, $assignment)

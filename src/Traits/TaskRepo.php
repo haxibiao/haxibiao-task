@@ -94,6 +94,11 @@ trait TaskRepo
         return $this->type == Task::WEEK_TASK;
     }
 
+    public function isLoopWeekTask()
+    {
+        return $this->type == Task::LOOP_WEEK_TASK;
+    }
+
     public function isTimeTask()
     {
         return $this->type == Task::TIME_TASK;
@@ -608,6 +613,5 @@ trait TaskRepo
             'current_count' => $count,
         ];
     }
-
 
 }
