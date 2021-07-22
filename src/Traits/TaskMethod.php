@@ -370,7 +370,7 @@ trait TaskMethod
         $assignment->resolve      = $resolve;
         return [
             'status'        => $currentCount > 0 && $rewardTicket > $receiveTikect,
-            'current_count' => $currentCount,
+            'current_count' => $todayAnswerCount,
         ];
     }
 
