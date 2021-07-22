@@ -18,4 +18,20 @@ trait ItemResolvers
         $user = getUser();
         return Item::dailyFreeItem($user, $args['alias']);
     }
+
+    /**
+     * 领取道具
+     */
+    public function resolveReceiveItem($root, array $args, $context, $info)
+    {
+        return Item::receiveItem(getUser(), $args['id']);
+    }
+
+    /**
+     * 我的道具
+     */
+    public function resolveMyItems($root, array $args, $context, $info)
+    {
+        return Item::myItems();
+    }
 }
