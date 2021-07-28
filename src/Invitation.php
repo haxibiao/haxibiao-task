@@ -22,6 +22,7 @@ class Invitation extends Model
         'account',
         'user_id',
         'invited_in',
+        'be_inviter_id',
         'invited_user_id',
         'rewarded',
         'patriarch_id',
