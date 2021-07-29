@@ -21,18 +21,14 @@ trait TaskRepo
 
     public static function getAssignments($user, $type)
     {
-        //类型
-        if ($type == 'All') {
-            if (getAppVersion() < "3.0") {
-                $qb = Task::where('type', '<>', Task::CONTRIBUTE_TASK); //贡献任务以前没进入后端任务列表
-                //3.0之前的任务不显示新手答题和首次提现任务
-                $qb->where('name', '<>', '新手答题')->where('name', '<>', '首次提现奖励');
-            } else {
-                $qb = Task::all();
-            }
-        } else {
-            $qb = Task::whereType($type);
-        }
+        $qb = Task::enabled()->when($type != 'All', function ($query) use ($type) {
+            return $query->where('type', $type);
+        })->when($type == 'All' && getAppVersion() < "3.0", function ($query) {
+            //贡献任务以前没进入后端任务列表
+            //3.0之前的任务不显示新手答题和首次提现任务
+            return $query->where('type', '<>', Task::CONTRIBUTE_TASK)
+                ->whereNotIn('name', ['新手答题', '首次提现奖励']);
+        });
         $task_ids = $qb->pluck('id');
 
         //确保指派数据正常

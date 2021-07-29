@@ -35,18 +35,15 @@ trait TaskResolvers
             }
 
         } else {
-            if ($type == 'All') {
-                $noStatusTasks = Task::where('status', Task::ENABLE)->get();
-            } else {
-                $noStatusTasks = Task::where('status', Task::ENABLE)->whereType($type)->get();
-            }
-
-            foreach ($noStatusTasks as $noStatusTask) {
+            Task::enabled()->when($type != 'All', function ($query) use ($type) {
+                return $query->where('type', $type);
+            })->get()->each(function ($noStatusTask) use (&$tasks) {
                 $tasks[] = $noStatusTask;
-            }
+            });
         }
 
-        return array_reverse($tasks);
+
+        return collect($tasks)->sortByDesc('rank')->toArray();
     }
 
     // 喝水打卡任务列表

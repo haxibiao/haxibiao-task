@@ -13,7 +13,7 @@ class CreateTasksTable extends Migration
      */
     public function up()
     {
-        if(Schema::hasTable('tasks')){
+        if (Schema::hasTable('tasks')) {
             return;
         }
 
@@ -44,6 +44,7 @@ class CreateTasksTable extends Migration
             $table->string('task_action')->nullable()->comment('任务对应的行为，如浏览，点赞，评论等');
             $table->string('relation_class')->nullable()->comment('任务对应的类，如合集，动态等');
             $table->json('task_object')->nullable()->comment('任务指定的对象，如collections,posts数组等');
+            $table->unsignedInteger('rank')->default(0)->comment('排名,默认降序排列');
 
             $table->timestamps();
 
