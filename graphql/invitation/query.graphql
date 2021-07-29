@@ -79,6 +79,11 @@ extend type Query {
 
     invitations(status: InvitationStatusFilter!): [Invitation]
         @paginate(builder: "App\\Invitation@resolveInvitations", defaultCount: 10)
+
+    """
+    受邀者
+    """
+    invitees(inviter_id:Int,first:Int=10,count:Int=1): UserPaginator @field(resolver: "App\\Invitation@resolveInvitees")
 }
 
 enum InvitationStatusFilter {

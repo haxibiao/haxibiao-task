@@ -7,4 +7,17 @@ extend type Mutation {
     绑定邀请
     """
     bindInvitation(invite_code: String!): Invitation @field(resolver: "App\\Invitation@resolveBindInvitation")
+
+    redeemInviteCode(invite_code: String!,invite_code_type:InviteCodeType=USER_ID): Invitation @field(resolver: "App\\Invitation@resolveRedeemInviteCode")
+}
+
+enum InviteCodeType {
+    """
+    用户ID
+    """
+    USER_ID
+    """
+    随机码
+    """
+    RANDOM
 }
