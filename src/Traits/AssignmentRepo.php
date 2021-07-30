@@ -2,7 +2,6 @@
 
 namespace Haxibiao\Task\Traits;
 
-use App\Jobs\AuditTaskCheck;
 use App\Task;
 
 trait AssignmentRepo
@@ -77,11 +76,11 @@ trait AssignmentRepo
                 if ($task->isWeekTask()) {
                     $startOfWeek = now()->startOfWeek();
                 } else if ($task->isLoopWeekTask()) {
-                    $startOfWeek = now()->subWeek();
-                    if (str_contains($task->name, '审题任务')) {
-                        //七天后没有完成降级
-                        dispatch(new AuditTaskCheck($assignment))->delay(now()->addWeek());
-                    }
+                    // $startOfWeek = now()->subWeek();
+                    // if (str_contains($task->name, '审题任务')) {
+                    //     //七天后没有完成降级
+                    //     dispatch(new AuditTaskCheck($assignment))->delay(now()->addWeek());
+                    // }
                 }
 
                 if ($startOfWeek && $assignment->updated_at < $startOfWeek) {
