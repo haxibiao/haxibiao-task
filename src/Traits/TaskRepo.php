@@ -202,12 +202,12 @@ trait TaskRepo
 
                         // 2. $result['current_count']: 当前进度
                         //检查结果1：任务进度
-                        $assignment->current_count = Arr::get($result, 'current_count', 0);
+                        $assignment->current_count = Arr::get($result, 'current_count', 0) ?? 0;
                         if ($task->max_count > 0) {
                             $assignment->progress = $assignment->current_count / $task->max_count;
                         }
 
-                        // 3. $result['is_over']: 是否直接结束任务
+                        // 3. $result['is_over']: /data/www/datizhuanqian.com/packages/haxibiao/task/src/Traits/TaskRepo.php
                         if (data_get($result, 'is_over') === true) {
                             $assignment->status = Assignment::TASK_DONE;
                         }
