@@ -42,8 +42,7 @@ trait TaskResolvers
             });
         }
 
-
-        return collect($tasks)->sortByDesc('rank')->toArray();
+        return collect($tasks)->sortByDesc('rank')->all();
     }
 
     // 喝水打卡任务列表
