@@ -35,7 +35,7 @@ type Task {
     """
     任务的图标
     """
-    icon: String @rename(attribute: "icon_url")
+    icon: String
     """
     任务的背景图
     """

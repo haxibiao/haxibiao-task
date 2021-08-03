@@ -146,6 +146,20 @@ trait TaskAttrs
         }
     }
 
+    /**
+     * 获取任务Icon
+     * @return false|string
+     */
+    public function getIconAttribute($value)
+    {
+        if (Str::contains($value, "http")) {
+            return $value;
+        }
+        if ($this && $value) {
+            return cdnurl($value);
+        }
+    }
+
     /* --------------------------------------------------------------------- */
     /* ----------- 下列函数可以随着GQL中答赚TaskType的丢弃而移除 ------------------- */
     /* --------------------------------------------------------------------- */
