@@ -60,19 +60,20 @@ trait InvitationRepo
         $data = [];
 
         //取前面100提现量较高的用户,暂时1天已更新吧
-        $profiles = Cache::remember('top:withdraw:userids', 60 * 60 * 24, function () use ($limit) {
-            return UserProfile::select(['user_id', 'transaction_sum_amount'])->with('user')
+        $data = Cache::remember('top:withdraw:data', 60 * 60 * 24, function () use ($limit) {
+            $profiles = UserProfile::select(['user_id', 'transaction_sum_amount'])->with('user')
                 ->latest('transaction_sum_amount')
                 ->take($limit)
                 ->get();
-        });
+            $profiles->each(function ($item) use (&$data) {
+                $user   = $item->user;
+                $data[] = sprintf('%s又邀请了一位好友,累计提现%s元', $user->name, $item->transaction_sum_amount);
+            });
 
-        $profiles->each(function ($item) use (&$data) {
-            $user   = $item->user;
-            $data[] = sprintf('%s又邀请了一位好友,累计提现%s元', $user->name, $item->transaction_sum_amount);
-        });
+            shuffle($data);
 
-        shuffle($data);
+            return $data;
+        });
 
         return $data;
     }
