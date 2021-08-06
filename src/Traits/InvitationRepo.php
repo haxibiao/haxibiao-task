@@ -10,6 +10,7 @@ use App\UserStageInvitation;
 use App\Wallet;
 use Haxibiao\Breeze\Exceptions\UserException;
 use Haxibiao\Wallet\Transaction;
+use Illuminate\Support\Facades\Cache;
 
 trait InvitationRepo
 {
