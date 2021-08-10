@@ -104,6 +104,22 @@ trait ContributeRepo
         return $contribute;
     }
 
+    //通用贡献奖励方法
+    public static function makeInCome($user, $model, $amount)
+    {
+        $contribute = self::firstOrNew(
+            [
+                'user_id'          => $user->id,
+                'contributed_id'   => $model->id,
+                'contributed_type' => $model->getMorphClass(),
+            ]
+        );
+        $contribute->amount = $amount;
+        $contribute->save();
+
+        return $contribute;
+    }
+
     public static function whenRemoveComment($user, $comment)
     {
         $contribute = self::create(
