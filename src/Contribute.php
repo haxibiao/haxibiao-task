@@ -84,7 +84,7 @@ class Contribute extends Model
 
     public function question()
     {
-        return $this->belongsTo(Article::class, 'contributed_id');
+        return $this->belongsTo(Question::class, 'contributed_id');
     }
 
     public static function rewardUserVideoPost($user, $article, $remark)
