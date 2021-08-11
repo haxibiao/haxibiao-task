@@ -3,11 +3,11 @@
 namespace Haxibiao\Task;
 
 use App\User;
-use GraphQL\Type\Definition\ResolveInfo;
-use Haxibiao\Breeze\Exceptions\UserException;
-use Haxibiao\Breeze\Traits\ModelHelpers;
-use Haxibiao\Task\StageInvitation;
 use Haxibiao\Wallet\Wallet;
+use Haxibiao\Task\StageInvitation;
+use GraphQL\Type\Definition\ResolveInfo;
+use Haxibiao\Breeze\Traits\ModelHelpers;
+use Haxibiao\Breeze\Exceptions\UserException;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class UserStageInvitation extends Pivot
@@ -55,8 +55,9 @@ class UserStageInvitation extends Pivot
         $inviteWallet       = $this->wallet;
         $stage              = $this->stage;
         $progress           = 0;
+        $totalIncome        = $inviteWallet->totalIncomeWithInvitation();
         $historyStageAmount = StageInvitation::where('id', '<', $this->stage_id)->sum('amount');
-        $currentStageIncome = bcsub($inviteWallet->totalIncome, $historyStageAmount, 4);
+        $currentStageIncome = bcsub($totalIncome, $historyStageAmount, 4);
         if ($currentStageIncome > 0) {
             $progress = bcdiv($currentStageIncome, $stage->amount, 2);
             $progress = $progress >= 1 ? 1 : $progress;

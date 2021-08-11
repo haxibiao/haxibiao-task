@@ -149,23 +149,23 @@ trait InvitationRepo
         //师傅
         $mentor = $user->mentor;
         //师傅的师傅
-        $patriarch = data_get($mentor, 'mentor');
+        $boss      = data_get($mentor, 'mentor');
         $adRevenue = 0.01;
 
         if (!is_null($mentor)) {
             $mentorWallet = Wallet::findOrCreate($mentor->id, Wallet::INVITATION_TYPE);
             $mentorSatge  = UserStageInvitation::findOrCreate($mentor->id);
             $reawrdRate   = $mentorSatge->stage->reward_rate;
-            Transaction::makeInCome($mentorWallet, bcmul($adRevenue, $reawrdRate, 4), '徒弟看视频收益');
+            Transaction::makeInCome($mentorWallet, bcmul($adRevenue, $reawrdRate, 4), '徒弟看视频收益', ['type' => $user->getMorphClass(), 'relate_id' => $user->id]);
         }
 
-        if (!is_null($patriarch)) {
-            $patriarchWallet = Wallet::findOrCreate($patriarch->id, Wallet::INVITATION_TYPE);
-            $patriarchSatge  = UserStageInvitation::findOrCreate($patriarch->id);
-            $reawrdRate      = $patriarchSatge->stage->reward_rate;
+        if (!is_null($boss)) {
+            $bossWallet = Wallet::findOrCreate($boss->id, Wallet::INVITATION_TYPE);
+            $bossSatge  = UserStageInvitation::findOrCreate($boss->id);
+            $reawrdRate = $bossSatge->stage->reward_rate;
             // 徒孙收益 50%
             $adRevenue /= 2;
-            Transaction::makeInCome($patriarchWallet, bcmul($adRevenue, $reawrdRate, 4), '徒孙看视频收益');
+            Transaction::makeInCome($bossWallet, bcmul($adRevenue, $reawrdRate, 4), '徒孙看视频收益', ['type' => $user->getMorphClass(), 'relate_id' => $user->id]);
         }
     }
 }
