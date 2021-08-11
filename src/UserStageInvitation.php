@@ -4,7 +4,9 @@ namespace Haxibiao\Task;
 
 use App\User;
 use GraphQL\Type\Definition\ResolveInfo;
+use Haxibiao\Breeze\Exceptions\UserException;
 use Haxibiao\Breeze\Traits\ModelHelpers;
+use Haxibiao\Task\StageInvitation;
 use Haxibiao\Wallet\Wallet;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
@@ -50,16 +52,14 @@ class UserStageInvitation extends Pivot
 
     public function inviteProgress()
     {
-        $inviteWallet = $this->wallet;
-        $stage        = $this->stage;
-        $balance      = $inviteWallet->balance;
-        if ($balance == 0) {
-            $progress = 0;
-        } else {
-            $historyStageAmount = StageInvitation::where('id', '<', $this->stage_id)->sum('amount');
-            $currentStageIncome = bcsub($inviteWallet->totalIncome, $historyStageAmount, 4);
-            $progress           = bcdiv($currentStageIncome, $stage->amount, 2);
-            $progress           = $progress >= 1 ? 1 : $progress;
+        $inviteWallet       = $this->wallet;
+        $stage              = $this->stage;
+        $progress           = 0;
+        $historyStageAmount = StageInvitation::where('id', '<', $this->stage_id)->sum('amount');
+        $currentStageIncome = bcsub($inviteWallet->totalIncome, $historyStageAmount, 4);
+        if ($currentStageIncome > 0) {
+            $progress = bcdiv($currentStageIncome, $stage->amount, 2);
+            $progress = $progress >= 1 ? 1 : $progress;
         }
 
         return $progress * 100;
@@ -72,11 +72,10 @@ class UserStageInvitation extends Pivot
 
     public function levelUp($wallet)
     {
-        $isLevelUp   = false;
-        $balance     = $wallet->balance;
-        $stageAmount = data_get($this->stage, 'amount', 0);
-        if ($balance >= $stageAmount) {
-            $nextStageId = data_get(StageInvitation::select('id')->where('amount', '<=', $balance)->latest('id')->first(), 'id');
+        $isLevelUp = false;
+        // 邀请进度满了
+        if ($this->invite_progress >= 100) {
+            $nextStageId = data_get(StageInvitation::select('id')->where('id', '>', $this->stage_id)->first(), 'id');
             if ($nextStageId) {
                 $this->stage_id = $nextStageId;
                 $this->save();
