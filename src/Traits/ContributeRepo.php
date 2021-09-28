@@ -66,7 +66,7 @@ trait ContributeRepo
                     'user_id'          => $userId,
                     'contributed_id'   => 0,
                     'contributed_type' => 'reward_videos', //标记是激励视频产生的贡献行为记录
-                    'amount'           => $amount,
+                    'amount' => $amount,
                 ]
             );
 
@@ -206,7 +206,7 @@ trait ContributeRepo
                     'user_id'          => $userId,
                     'contributed_id'   => 0,
                     'contributed_type' => 'reward_videos', //标记是激励视频产生的贡献行为记录
-                    'amount'           => $amount,
+                    'amount' => $amount,
                 ]
             );
 
@@ -401,14 +401,14 @@ trait ContributeRepo
             BanUser::record($user, $reason, false);
         }
 
-        // if ($user->profile->today_reward_video_count > 100) {
-        //     //今天被封过的话直接跳过不检查
-        //     $item = BanUser::where('user_id', $user->id)->where('updated_at', '>=', today())->first();
-        //     if (empty($item)) {
-        //         $reason = "异常日期: {$date->toDateString()}，日激励视频次数超过100";
-        //         BanUser::record($user, $reason);
-        //     }
-        // }
+        if ($user->profile->today_reward_video_count > 100) {
+            //今天被封过的话直接跳过不检查
+            $item = BanUser::where('user_id', $user->id)->where('updated_at', '>=', today())->first();
+            if (empty($item)) {
+                $reason = "异常日期: {$date->toDateString()}，日激励视频次数超过100";
+                BanUser::record($user, $reason);
+            }
+        }
 
         // //每次created 贡献记录的时候 获取上一条的
         // $pre_data = \App\Contribute::query()
