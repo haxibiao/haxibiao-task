@@ -5,6 +5,7 @@ namespace Haxibiao\Task\Traits;
 use App\Invitation;
 use App\User;
 use Exception;
+use Haxibiao\Breeze\Exceptions\GQLException;
 use Haxibiao\Breeze\Notifications\ReportSucceedNotification;
 use Haxibiao\Question\Question;
 use Haxibiao\Task\Contribute;
@@ -201,15 +202,16 @@ trait ContributeRepo
         $userId = $user->id;
         //这里限制了激励视频奖励最大次数
         if (self::canGetReward($userId)) {
+            $type = "reward_videos";
+            Contribute::checkContributeTime($user, 45, "reward_videos");
             $contribute = Contribute::create(
                 [
                     'user_id'          => $userId,
                     'contributed_id'   => 0,
-                    'contributed_type' => 'reward_videos', //标记是激励视频产生的贡献行为记录
+                    'contributed_type' => $type, //标记是激励视频产生的贡献行为记录
                     'amount' => $amount,
                 ]
             );
-
             return $contribute;
         }
     }
@@ -268,6 +270,8 @@ trait ContributeRepo
             if (!self::canGetReward($user->id)) {
                 return;
             }
+            //检查两次看任务激励视频间隔
+            Contribute::checkContributeTime($user, 15, $type);
         }
         Contribute::create(
             [
@@ -401,7 +405,7 @@ trait ContributeRepo
             BanUser::record($user, $reason, false);
         }
 
-        if ($user->profile->today_reward_video_count > 100) {
+        if ($user->profile->today_reward_video_count >= 90) {
             //今天被封过的话直接跳过不检查
             $item = BanUser::where('user_id', $user->id)->where('updated_at', '>=', today())->first();
             if (empty($item)) {
@@ -409,25 +413,30 @@ trait ContributeRepo
                 BanUser::record($user, $reason);
             }
         }
+    }
 
-        // //每次created 贡献记录的时候 获取上一条的
-        // $pre_data = \App\Contribute::query()
-        //     ->where('user_id', $user->id)
-        //     ->whereDate('created_at', $date)
-        //     ->latest('id')
-        //     ->skip(1)
-        //     ->first();
+    //检查获得贡献值时间间隔
+    public static function checkContributeTime($user, $second = 15, $type = null)
+    {
+        //每次created 贡献记录的时候 获取上一条的
+        $pre_data = \App\Contribute::query()
+            ->where('user_id', $user->id)
+            ->when(!empty($type), function ($qb) use ($type) {
+                $qb->where('contributed_type', $type);
+            })
+            ->latest('id')
+            ->first();
 
-        // if ($pre_data) {
-        //     //如果两次获得贡献相差4s
-        //     $diffSecond = $pre_data->created_at->diffInSeconds($contribute->created_at);
-        //     if ($diffSecond <= 3) {
-        //         $reason = "异常日期: {$date->toDateString()}，两次获得贡献时间相差：{$diffSecond} 秒";
-        //         BanUser::create([
-        //             'user_id' => $contribute->user_id,
-        //             'reason'  => $reason,
-        //         ]);
-        //     }
-        // }
+        if ($pre_data) {
+            //如果两次获得贡献相差 xxs
+            $diffSecond = $pre_data->created_at->diffInSeconds(now());
+            if ($diffSecond <= $second) {
+                $reason = "异常日期: " . now() . "，两次获得贡献时间相差：{$diffSecond} 秒";
+                //封禁用户
+                BanUser::record($user, $reason);
+                throw new GQLException("涉嫌恶意刷广告违规操作，账号已封禁，请联系工作人员");
+            }
+        }
+
     }
 }
