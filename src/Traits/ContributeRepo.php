@@ -5,7 +5,6 @@ namespace Haxibiao\Task\Traits;
 use App\Invitation;
 use App\User;
 use Exception;
-use Haxibiao\Breeze\Exceptions\GQLException;
 use Haxibiao\Breeze\Notifications\ReportSucceedNotification;
 use Haxibiao\Question\Question;
 use Haxibiao\Task\Contribute;
@@ -434,7 +433,7 @@ trait ContributeRepo
                 $reason = "异常日期: " . now() . "，两次获得贡献时间相差：{$diffSecond} 秒";
                 //封禁用户
                 BanUser::record($user, $reason);
-                throw new GQLException("涉嫌恶意刷广告违规操作，账号已封禁，请联系工作人员");
+                // throw new GQLException("您因违规刷取广告奖励已被系统封禁");
             }
         }
 
