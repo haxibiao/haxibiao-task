@@ -202,7 +202,7 @@ trait ContributeRepo
         //这里限制了激励视频奖励最大次数
         if (self::canGetReward($userId)) {
             $type = "reward_videos";
-            Contribute::checkContributeTime($user, 45, "reward_videos");
+            Contribute::checkContributeTime($user, 15, "reward_videos");
             $contribute = Contribute::create(
                 [
                     'user_id'          => $userId,
@@ -270,7 +270,7 @@ trait ContributeRepo
                 return;
             }
             //检查两次看任务激励视频间隔
-            Contribute::checkContributeTime($user, 15, $type);
+            Contribute::checkContributeTime($user, 45, $type);
         }
         Contribute::create(
             [
