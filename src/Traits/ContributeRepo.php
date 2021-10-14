@@ -66,7 +66,7 @@ trait ContributeRepo
                     'user_id'          => $userId,
                     'contributed_id'   => 0,
                     'contributed_type' => 'reward_videos', //标记是激励视频产生的贡献行为记录
-                    'amount' => $amount,
+                    'amount'           => $amount,
                 ]
             );
 
@@ -202,13 +202,13 @@ trait ContributeRepo
         //这里限制了激励视频奖励最大次数
         if (self::canGetReward($userId)) {
             $type = "reward_videos";
-            Contribute::checkContributeTime($user, 15, "reward_videos");
+            Contribute::checkContributeTime($user, 10, "reward_videos");
             $contribute = Contribute::create(
                 [
                     'user_id'          => $userId,
                     'contributed_id'   => 0,
                     'contributed_type' => $type, //标记是激励视频产生的贡献行为记录
-                    'amount' => $amount,
+                    'amount'           => $amount,
                 ]
             );
             return $contribute;
@@ -270,7 +270,7 @@ trait ContributeRepo
                 return;
             }
             //检查两次看任务激励视频间隔
-            Contribute::checkContributeTime($user, 45, $type);
+            Contribute::checkContributeTime($user, 40, $type);
         }
         Contribute::create(
             [
