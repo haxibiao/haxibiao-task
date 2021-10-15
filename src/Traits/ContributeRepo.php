@@ -270,7 +270,7 @@ trait ContributeRepo
                 return;
             }
             //检查两次看任务激励视频间隔
-            Contribute::checkContributeTime($user, 40, $type);
+            Contribute::checkContributeTime($user, 10, $type);
         }
         Contribute::create(
             [
