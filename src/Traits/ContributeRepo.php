@@ -201,8 +201,7 @@ trait ContributeRepo
         $userId = $user->id;
         //这里限制了激励视频奖励最大次数
         if (self::canGetReward($userId)) {
-            $type = "reward_videos";
-            Contribute::checkContributeTime($user, 10, "reward_videos");
+            $type       = "reward_videos";
             $contribute = Contribute::create(
                 [
                     'user_id'          => $userId,
@@ -211,6 +210,7 @@ trait ContributeRepo
                     'amount'           => $amount,
                 ]
             );
+            Contribute::checkContributeTime($user, 10, $type);
             return $contribute;
         }
     }
@@ -270,9 +270,9 @@ trait ContributeRepo
                 return;
             }
             //检查两次看任务激励视频间隔
-            Contribute::checkContributeTime($user, 10, $type);
+
         }
-        Contribute::create(
+        $contribute = Contribute::create(
             [
                 'user_id'          => $user->id,
                 'contributed_id'   => $assignment->id,
@@ -280,6 +280,10 @@ trait ContributeRepo
                 'amount'           => $amount,
             ]
         );
+        if ($type == "reward_videos") {
+            Contribute::checkContributeTime($user, 10, "reward_videos");
+        }
+
     }
 
     public static function rewardClickDrawFeed($user, $amount)
@@ -418,22 +422,23 @@ trait ContributeRepo
     public static function checkContributeTime($user, $second = 15, $type = null)
     {
         //每次created 贡献记录的时候 获取上一条的
-        $pre_data = \App\Contribute::query()
+        $pre_datas = \App\Contribute::query()
             ->where('user_id', $user->id)
             ->when(!empty($type), function ($qb) use ($type) {
                 $qb->where('contributed_type', $type);
             })
             ->latest('id')
-            ->first();
+            ->take(3)
+            ->get();
 
-        if ($pre_data) {
+        if (count($pre_datas) > 2) {
             //如果两次获得贡献相差 xxs
-            $diffSecond = $pre_data->created_at->diffInSeconds(now());
-            if ($diffSecond <= $second) {
-                $reason = "异常日期: " . now() . "，两次获得贡献时间相差：{$diffSecond} 秒";
+            $diffSecond1 = $pre_datas[0]->created_at->diffInSeconds($pre_datas[1]->created_at);
+            $diffSecond2 = $pre_datas[1]->created_at->diffInSeconds($pre_datas[2]->created_at);
+            if ($diffSecond1 <= $second && $diffSecond2 <= $second) {
                 //封禁用户
+                $reason = "异常日期: " . now() . "，连续两次获得贡献时间相差小于：{$second} 秒";
                 BanUser::record($user, $reason);
-                // throw new GQLException("您因违规刷取广告奖励已被系统封禁");
             }
         }
 
