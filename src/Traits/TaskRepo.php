@@ -24,10 +24,13 @@ trait TaskRepo
         $qb = Task::enabled()->when($type != 'All', function ($query) use ($type) {
             return $query->where('type', $type);
         })->when($type == 'All' && getAppVersion() < "3.0", function ($query) {
-            //贡献任务以前没进入后端任务列表
-            //3.0之前的任务不显示新手答题和首次提现任务
-            return $query->where('type', '<>', Task::CONTRIBUTE_TASK)
-                ->whereNotIn('name', ['新手答题', '首次提现奖励']);
+            if (config('app.name') == "datizhuanqian") {
+                //贡献任务以前没进入后端任务列表
+                //3.0之前的任务不显示新手答题和首次提现任务
+                return $query->where('type', '<>', Task::CONTRIBUTE_TASK)
+                    ->whereNotIn('name', ['新手答题', '首次提现奖励']);
+
+            }
         });
         $task_ids = $qb->pluck('id');
 
