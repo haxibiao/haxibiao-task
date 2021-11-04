@@ -2,12 +2,13 @@
 
 namespace Haxibiao\Task\Traits;
 
+use App\User;
 use Carbon\Carbon;
-use GraphQL\Type\Definition\ResolveInfo;
-use Haxibiao\Breeze\Exceptions\UserException;
-use Haxibiao\Task\Assignment;
 use Haxibiao\Task\Task;
 use Illuminate\Support\Arr;
+use Haxibiao\Task\Assignment;
+use GraphQL\Type\Definition\ResolveInfo;
+use Haxibiao\Breeze\Exceptions\UserException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 trait TaskResolvers
@@ -19,7 +20,7 @@ trait TaskResolvers
         if (!isset($args['refetch'])) {
             app_track_event('任务', '获取任务列表');
         }
-        $type  = $args['type'] ?? 'All';
+        $type = $args['type'] ?? 'All';
         $tasks = [];
 
         $user = getUser(false);
@@ -30,8 +31,8 @@ trait TaskResolvers
                 $task = $assignment->task;
                 //指派的 属性alias 过去给gql用
                 $task->assignment = $assignment;
-                $task->user       = $assignment->user;
-                $tasks[]          = $task;
+                $task->user = $assignment->user;
+                $tasks[] = $task;
             }
 
         } else {
@@ -48,8 +49,8 @@ trait TaskResolvers
     // 喝水打卡任务列表
     public static function resolveDrinkWaterTasks($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $user       = getUser();
-        $task       = Task::where('name', 'DrinkWaterAll')->first();
+        $user = getUser();
+        $task = Task::where('name', 'DrinkWaterAll')->first();
         $assignment = $task->getAssignment($user->id);
         if (!$assignment) {
             $assignment = Assignment::create([
@@ -65,23 +66,23 @@ trait TaskResolvers
     // 睡觉打卡玩法获取
     public static function resolveSleepTask($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $user      = getUser();
+        $user = getUser();
         $sleepTask = Task::where('resolve->task_en', 'Sleep')->first();
 
         throw_if(is_null($sleepTask), UserException::class, '睡觉任务不存在!');
 
-        $task       = $sleepTask;
+        $task = $sleepTask;
         $assignment = Assignment::firstOrCreate([
             'task_id' => $task->id,
             'user_id' => $user->id,
         ]);
         $sleepCompletedAt = $assignment->completed_at;
-        $status           = 1;
+        $status = 1;
 
         if ($sleepCompletedAt >= today()) {
 
-            $minutes       = $sleepTask->resolve['minutes'] ?? 15;
-            $diffMinus     = Carbon::parse($sleepCompletedAt)->diffInMinutes();
+            $minutes = $sleepTask->resolve['minutes'] ?? 15;
+            $diffMinus = Carbon::parse($sleepCompletedAt)->diffInMinutes();
             $toastDiffTime = Task::toastDiffTime($sleepCompletedAt, $minutes);
             $task->details = empty($toastDiffTime) ? $task->details : $toastDiffTime;
 
@@ -89,9 +90,9 @@ trait TaskResolvers
             if ($diffMinus < $minutes) {
                 $status = 3;
             } else {
-                $wakeUpTask          = Task::where('resolve->task_en', 'Wake')->first();
+                $wakeUpTask = Task::where('resolve->task_en', 'Wake')->first();
                 $currrentIsSleepTask = $sleepTask->status == 1;
-                $task                = $currrentIsSleepTask ? $sleepTask : $wakeUpTask;
+                $task = $currrentIsSleepTask ? $sleepTask : $wakeUpTask;
             }
         }
         $assignment = Assignment::firstOrCreate([
@@ -113,8 +114,8 @@ trait TaskResolvers
     // 所有喝水完成后的奖励
     public static function resolveDrinkWaterReward($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $userId     = getUserId();
-        $task       = Task::where('name', 'DrinkWaterAll')->first();
+        $userId = getUserId();
+        $task = Task::where('name', 'DrinkWaterAll')->first();
         $assignment = $task->getAssignment($userId);
 
         throw_if($assignment->status == Assignment::TASK_DONE, UserException::class, '奖励已经领取');
@@ -129,16 +130,16 @@ trait TaskResolvers
     // 睡觉打卡奖励接口（老接口）
     public static function resolveSleepReward($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $user       = getUser();
-        $task       = Task::find($args['id']);
+        $user = getUser();
+        $task = Task::find($args['id']);
         $assignment = $task->getAssignment($user->id);
         $isWakeCard = Arr::get($task->resolve, 'task_en') == "Wake";
 
-        $sleepTask       = Task::where('resolve->task_en', 'Sleep')->first();
+        $sleepTask = Task::where('resolve->task_en', 'Sleep')->first();
         $sleepAssignment = $sleepTask->getAssignment($user->id);
 
         $intervalMinutes = $sleepTask->resolve['minutes'] ?? 15;
-        $wakeTask        = Task::where('resolve->task_en', 'Wake')->first();
+        $wakeTask = Task::where('resolve->task_en', 'Wake')->first();
 
         $taskOutOfTime = true;
         if ($sleepAssignment->completed_at) {
@@ -147,9 +148,9 @@ trait TaskResolvers
         $taskInReview = $assignment->status == Assignment::TASK_REVIEW;
 
         if ($taskOutOfTime && $taskInReview) {
-            $assignment->status       = Assignment::TASK_DONE;
+            $assignment->status = Assignment::TASK_DONE;
             $assignment->completed_at = now();
-            $assignment->content      = $isWakeCard ? $task->getTaskContent() : $task->name . "打卡成功,等待下次" . $wakeTask->name . "时领取奖励";
+            $assignment->content = $isWakeCard ? $task->getTaskContent() : $task->name . "打卡成功,等待下次" . $wakeTask->name . "时领取奖励";
             $assignment->save();
         }
 
@@ -167,7 +168,7 @@ trait TaskResolvers
         app_track_event('任务', '领取任务奖励');
 
         $task_id = $args['id'];
-        $high    = $args['high'] ?? false;
+        $high = $args['high'] ?? false;
 
         return Task::rewardTask($task_id, $high);
     }
@@ -195,7 +196,7 @@ trait TaskResolvers
         throw_if($subTaskHasDone, UserException::class, '已经完成了');
 
         // 校验第$position杯水是否已经开始
-        $hour           = Carbon::now()->hour;
+        $hour = Carbon::now()->hour;
         $taskIsNotStart = ($position + 8 > $hour);
         throw_if($taskIsNotStart, UserException::class, '还未开始');
 
@@ -204,7 +205,7 @@ trait TaskResolvers
         } else {
             $resolve[] = $position;
         }
-        $assignment->resolve       = $resolve;
+        $assignment->resolve = $resolve;
         $assignment->current_count = count($resolve);
         $assignment->save();
 
@@ -240,7 +241,7 @@ trait TaskResolvers
     {
         app_track_event('任务', '答复任务');
 
-        $user    = getUser();
+        $user = getUser();
         $task_id = $args['id'];
         $content = $args['content'] ?? '';
 
@@ -255,7 +256,7 @@ trait TaskResolvers
         //yxsp 新人观看教学视频任务
         if (data_get($args, 'type') == 'newUser') {
             if (in_array(config('app.name'), ['yinxiangshipin'])) {
-                $task       = Task::whereName('观看教学视频')->first();
+                $task = Task::whereName('观看教学视频')->first();
                 $assignment = $task->getAssignment($user->id);
                 if ($assignment->status >= Assignment::TASK_REACH) {
                     throw new UserException('新手教学任务已经完成了哦~');
@@ -276,7 +277,7 @@ trait TaskResolvers
     {
         app_track_event('任务', '完成任务');
 
-        $user    = getUser();
+        $user = getUser();
         $task_id = $args['id'];
 
         return Task::completeTask($user, $task_id);
@@ -284,7 +285,7 @@ trait TaskResolvers
 
     public static function resolveTaskDesc($root, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo = null)
     {
-        $task        = $root;
+        $task = $root;
         $description = $task->description;
         // 前端无需截取
         // if (empty($description)) {
@@ -296,11 +297,10 @@ trait TaskResolvers
 
     public static function resolveShareArticle($root, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo = null)
     {
-
         //判断是否完成
-        $user       = getUser();
-        $task       = Task::query()->where('name', '分享学习或生活文章')->first();
-        $qb         = Assignment::query()->where('user_id', $user->id)->where('task_id', $task->id);
+        $user = getUser();
+        $task = Task::query()->where('name', '分享学习或生活文章')->first();
+        $qb = Assignment::query()->where('user_id', $user->id)->where('task_id', $task->id);
         $assignment = $qb->first();
 
         if ($assignment->current_count >= 2 && $assignment->status < Assignment::TASK_REACH) {
@@ -310,5 +310,30 @@ trait TaskResolvers
         }
         $qb->increment('current_count');
         return 1;
+    }
+
+    /**
+     * 领取奖励(包括新人/新年/任务等奖励),合并之前多个的领取奖励接口
+     */
+    public function resolveReceiveAward($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
+    {
+        $user = getUser();
+        $id = data_get($args, 'id');
+        $high = data_get($args, 'high') ?? 'false';
+        $reason = data_get($args, 'reason');
+
+        //领取任务奖励
+        if ($id) {
+            app_track_event("领取奖励", "领取任务奖励", $id);
+            return Task::rewardTask($task_id = $id, $high);
+        }
+
+        //领取用户奖励
+        if ($reason) {
+            $rewardValues = data_get(User::getUserRewardEnum(), $reason . '.value');
+            $rewardReason = data_get(User::getUserRewardEnum(), $reason . '.description');
+            app_track_event("领取奖励", "领取用户奖励", $rewardReason);
+            return User::userReward($user, $rewardValues);
+        }
     }
 }

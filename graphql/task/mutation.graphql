@@ -56,6 +56,12 @@ extend type Mutation {
     文章分享任务（ablm前端调用接口）
     """
     shareArticle: Int @field(resolver: "App\\Task@resolveShareArticle")
+
+    """
+    领取奖励(包括新人/新年/任务等奖励),合并之前多个的领取奖励接口
+    """
+    receiveAward(id: Int, high: Boolean = false, reason: RewardEnum): UserReward
+        @field(resolver: "App\\Task@resolveReceiveAward")
 }
 
 enum RewardType {
