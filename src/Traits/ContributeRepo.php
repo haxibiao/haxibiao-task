@@ -408,11 +408,11 @@ trait ContributeRepo
             BanUser::record($user, $reason, false);
         }
 
-        if ($user->profile->today_reward_video_count >= 90) {
+        if ($user->profile->today_reward_video_count >= 70) {
             //今天被封过的话直接跳过不检查
             $item = BanUser::where('user_id', $user->id)->where('updated_at', '>=', today())->first();
             if (empty($item)) {
-                $reason = "异常日期: {$date->toDateString()}，日激励视频次数超过100";
+                $reason = "异常日期: {$date->toDateString()}，日激励视频次数超过70";
                 BanUser::record($user, $reason);
             }
         }
