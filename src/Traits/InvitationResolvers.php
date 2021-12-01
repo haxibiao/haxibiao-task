@@ -76,41 +76,43 @@ trait InvitationResolvers
         return $qb;
     }
 
-    public function resolveRedeemInviteCode($rootValue, $args, $context, $resolveInfo){
+    public function resolveRedeemInviteCode($rootValue, $args, $context, $resolveInfo)
+    {
         // 校验类型
-        $invitee    = getUser();
-        $inviteCode = data_get($args,'invite_code');
-        $inviteCodeType = data_get($args,'invite_code_type');
-        if($inviteCodeType == 'USER_ID'){
+        $invitee        = getUser();
+        $inviteCode     = data_get($args, 'invite_code');
+        $inviteCodeType = data_get($args, 'invite_code_type');
+        if ($inviteCodeType == 'USER_ID') {
 
             // 判断模型是否找到
             $inviter = User::find($inviteCode);
-            throw_if(blank($inviter),new UserException('邀请号格式有问题!'));
-            throw_if($invitee->id==$inviter->id ,new UserException('不能绑定自己的邀请号!'));
+            throw_if(blank($inviter), new UserException('邀请号格式有问题!'));
+            throw_if($invitee->id == $inviter->id, new UserException('不能绑定自己的邀请号!'));
 
             $hasInvitation = static::withoutGlobalScope('hasInvitedUser')->where('be_inviter_id', $invitee->id)->exists();
             throw_if($hasInvitation, UserException::class, '绑定失败,您的账号已绑定过邀请!');
 
-            return static::withoutEvents(function () use ($inviter,$invitee) {
+            return static::withoutEvents(function () use ($inviter, $invitee) {
                 return static::create([
-                    'user_id'           => $inviter->id,
-                    'invited_in'        => now(),
-                    'be_inviter_id'     => $invitee->id
+                    'user_id'       => $inviter->id,
+                    'invited_in'    => now(),
+                    'be_inviter_id' => $invitee->id,
                 ]);
             });
         }
     }
 
-    public function resolveInvitees($rootValue, $args, $context, $resolveInfo){
-        $user_id = data_get($args,'inviter_id');
-        $perPage     = data_get($args,'first');
-        $currentPage = data_get($args,'page');
-        $inviter = User::findOrFail($user_id);
+    public function resolveInvitees($rootValue, $args, $context, $resolveInfo)
+    {
+        $user_id     = data_get($args, 'inviter_id');
+        $perPage     = data_get($args, 'first');
+        $currentPage = data_get($args, 'page');
+        $inviter     = User::findOrFail($user_id);
 
-        $inviteeIDs = static::withoutGlobalScope('hasInvitedUser')->where('user_id',$inviter->id)->get()->pluck('be_inviter_id');
-        $qb = User::whereIn('id',$inviteeIDs);
+        $inviteeIDs = static::withoutGlobalScope('hasInvitedUser')->where('user_id', $inviter->id)->get()->pluck('be_inviter_id');
+        $qb         = User::whereIn('id', $inviteeIDs);
 
-        $total = $qb->count();
+        $total   = $qb->count();
         $meetups = $qb->skip(($currentPage * $perPage) - $perPage)
             ->take($perPage)
             ->get();

@@ -103,7 +103,7 @@ trait InvitationRepo
         return $isInvitedNewUser;
     }
 
-    public function inviteCodeBind(User $user, $code)
+    public static function inviteCodeBind(User $user, $code)
     {
         // 这里可能是邀请口令
         preg_match_all('#【.*?】#', $code, $match);
@@ -116,7 +116,7 @@ trait InvitationRepo
             ->first();
 
         throw_if($hasInvitation, UserException::class, '绑定失败,您的账号已绑定过邀请!');
-        throw_if($user->created_at->diffInHours(now()) >= 24, UserException::class, '绑定失败,您的账号已注册超过24小时');
+        // throw_if($user->created_at->diffInHours(now()) >= 24, UserException::class, '绑定失败,您的账号已注册超过24小时');
         $mentorUserId = User::deInviteCode($code);
         throw_if(!is_numeric($mentorUserId) || ($mentorUserId <= 0), UserException::class, '绑定失败,邀请码错误!');
 
@@ -131,15 +131,21 @@ trait InvitationRepo
         }
 
         throw_if($mentorUserId == $user->id, UserException::class, '绑定失败,不能绑定自己的邀请码!');
+
         $invitation = Invitation::create([
             'account'         => $user->account,
             'invited_user_id' => $user->id,
             'user_id'         => $mentorUserId,
             'patriarch_id'    => $patriarchId,
+            'be_inviter_id'   => $user->id,
         ]);
-
         // 如果是已经提现的用户 && 直接发放奖励,邀请成功
-        $user->inviteReward();
+        //答题场景处理
+        if (config('app.name') == "datizhuanqian") {
+            $user->inviteReward();
+        } else {
+            $user->adFreeReward($invitation);
+        }
 
         return $invitation;
     }

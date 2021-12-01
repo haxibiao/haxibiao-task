@@ -18,14 +18,8 @@ class Invitation extends Model
     use InvitationResolvers;
     use ModelHelpers;
 
-    protected $fillable = [
-        'account',
-        'user_id',
-        'invited_in',
-        'be_inviter_id',
-        'invited_user_id',
-        'rewarded',
-        'patriarch_id',
+    protected $guarded = [
+
     ];
 
     protected $casts = [
