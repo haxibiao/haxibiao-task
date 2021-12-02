@@ -118,7 +118,9 @@ trait InvitationRepo
         throw_if($hasInvitation, UserException::class, '绑定失败,您的账号已绑定过邀请!');
         // throw_if($user->created_at->diffInHours(now()) >= 24, UserException::class, '绑定失败,您的账号已注册超过24小时');
         $mentorUserId = User::deInviteCode($code);
+        $mentorUser   = User::find($mentorUserId);
         throw_if(!is_numeric($mentorUserId) || ($mentorUserId <= 0), UserException::class, '绑定失败,邀请码错误!');
+        throw_if(empty($mentorUser), UserException::class, "绑定失败,邀请人不存在");
 
         $patriarchId = data_get(Invitation::select('user_id')->where('invited_user_id', $mentorUserId)->first(), 'user_id', 0);
 
@@ -144,7 +146,8 @@ trait InvitationRepo
         if (config('app.name') == "datizhuanqian") {
             $user->inviteReward();
         } else {
-            $user->adFreeReward($invitation);
+            //应该是奖励邀请码的主人
+            $mentorUser->adFreeReward($invitation);
         }
 
         return $invitation;
