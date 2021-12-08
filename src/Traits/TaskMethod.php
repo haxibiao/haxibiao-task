@@ -6,8 +6,10 @@ use App\Audit;
 use App\Category;
 use App\CategoryUser;
 use App\Exceptions\GQLException;
-use App\Spider;
 use App\User;
+use Facebook\WebDriver\Chrome\ChromeOptions;
+use Facebook\WebDriver\Remote\DesiredCapabilities;
+use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Haxibiao\Question\Helpers\Redis\RedisSharedCounter;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -318,6 +320,45 @@ trait TaskMethod
         return [
             'status'        => $status,
             'current_count' => 0,
+        ];
+    }
+
+    //剧好看 - 效验外链是否包含域名
+    public function checkLinkContainsDomain($user, $task, $assignment)
+    {
+        $shareLink = $user->shareLinks()->latest('id')->first();
+        try {
+            $userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36';
+            $options   = new ChromeOptions();
+            $options->addArguments([
+                '--no-sandbox',
+                '--headless',
+                '--disable-dev-shm-usage',
+                '--user-agent=' . $userAgent,
+                '--accept=text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+                '--accept-language=zh-CN,zh;q=0.9,en;q=0.8',
+                '--accept-encoding=gzip, deflate, br',
+                '--cache-control=no-cache',
+            ]);
+            $desiredCapabilities = DesiredCapabilities::chrome();
+            $desiredCapabilities->setCapability(ChromeOptions::CAPABILITY, $options);
+            $driver = RemoteWebDriver::create(env('CHROME_HOST', config('media.chrome_port')), $desiredCapabilities);
+            $driver->get($shareLink->url);
+            $body   = $driver->getPageSource();
+            $result = Str::contains($body, config('app.url'));
+        } catch (\Throwable$th) {
+            $result = false;
+        } finally {
+            if (isset($driver)) {
+                $driver->close();
+                $driver->quit();
+            }
+        }
+        $currentCount = $user->shareLinks()->whereDate('created_at', today())->count();
+        return
+            [
+            'status'        => $result,
+            'current_count' => $currentCount,
         ];
     }
 

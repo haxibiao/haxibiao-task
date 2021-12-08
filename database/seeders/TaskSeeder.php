@@ -1,6 +1,7 @@
 <?php
 namespace Database\Seeders;
 
+use Haxibiao\Task\ReviewFlow;
 use Haxibiao\Task\Task;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +27,17 @@ class TaskSeeder extends Seeder
             'reward'         => array("gold" => "10"),
             'resolve'        => array("method" => "checkUserIsUpdateAvatar", "router" => "editInformation", "submit_name" => "去修改"),
             'review_flow_id' => 5,
+        ]);
+
+        Task::firstOrCreate([
+            'name'           => '分享外链',
+            'status'         => Task::ENABLE,
+            'details'        => '分享网站地址',
+            'group'          => '每日任务',
+            'type'           => Task::DAILY_TASK,
+            'reward'         => array("gold" => "100"),
+            'resolve'        => array("method" => "checkLinkContainsDomain", "router" => "shareLink", "submit_name" => "去分享"),
+            'review_flow_id' => ReviewFlow::where('name', '分享外链')->first()->id,
         ]);
 
         Task::firstOrCreate([

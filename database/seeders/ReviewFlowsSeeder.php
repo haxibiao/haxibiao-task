@@ -43,6 +43,11 @@ class ReviewFlowsSeeder extends Seeder
                 'review_class'    => 'User',
             ],
             [
+                'name'            => '分享外链',
+                'check_functions' => ['checkLinkContainsDomain'],
+                'review_class'    => 'User',
+            ],
+            [
                 'name'            => '答题总数',
                 'check_functions' => ['checkAnswerQuestionCount'],
                 'review_class'    => 'Answer',
