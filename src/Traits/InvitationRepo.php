@@ -116,7 +116,7 @@ trait InvitationRepo
             ->first();
 
         throw_if($hasInvitation, UserException::class, '绑定失败,您的账号已绑定过邀请!');
-        // throw_if($user->created_at->diffInHours(now()) >= 24, UserException::class, '绑定失败,您的账号已注册超过24小时');
+        throw_if($user->created_at->diffInHours(now()) >= 24, UserException::class, '绑定失败,您的账号已注册超过24小时');
         $mentorUserId = User::deInviteCode($code);
         $mentorUser   = User::find($mentorUserId);
         throw_if(!is_numeric($mentorUserId) || ($mentorUserId <= 0), UserException::class, '绑定失败,邀请码错误!');
