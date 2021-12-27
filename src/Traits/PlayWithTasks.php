@@ -2,9 +2,9 @@
 
 namespace Haxibiao\Task\Traits;
 
-use App\Assignment;
-use App\Task;
+use Haxibiao\Task\Assignment;
 use Haxibiao\Task\ReviewFlow;
+use Haxibiao\Task\Task;
 
 trait PlayWithTasks
 {
@@ -47,7 +47,7 @@ trait PlayWithTasks
         //这这里采用ignore 并发情况下会造成大量死锁,改成insert
         try {
             Assignment::insert($insertData);
-        } catch (\Exception $ex) {
+        } catch (\Exception$ex) {
             //添加重试机制
         }
 
